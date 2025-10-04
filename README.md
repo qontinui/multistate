@@ -49,7 +49,7 @@ assert manager.get_active_states() == {dashboard, toolbar, sidebar}
 
 ## Documentation
 
-Full documentation available at [https://multistate.readthedocs.io](https://multistate.readthedocs.io)
+Full documentation available at [https://jspinak.github.io/multistate/](https://jspinak.github.io/multistate/)
 
 ## Research
 

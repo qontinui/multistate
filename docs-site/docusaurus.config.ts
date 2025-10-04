@@ -14,14 +14,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://multistate.dev',
-  baseUrl: '/',
+  url: 'https://jspinak.github.io',
+  baseUrl: '/multistate/',
+  trailingSlash: false,
 
   // GitHub pages deployment config
-  organizationName: 'multistate',
+  organizationName: 'jspinak',
   projectName: 'multistate',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -35,7 +36,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/multistate/multistate/tree/main/docs-site/',
+          editUrl: 'https://github.com/jspinak/multistate/tree/main/docs-site/',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
@@ -45,7 +46,7 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl: 'https://github.com/multistate/multistate/tree/main/docs-site/',
+          editUrl: 'https://github.com/jspinak/multistate/tree/main/docs-site/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -84,7 +85,7 @@ const config: Config = {
         {to: '/playground', label: 'Playground', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/multistate/multistate',
+          href: 'https://github.com/jspinak/multistate',
           label: 'GitHub',
           position: 'right',
         },
@@ -98,36 +99,7 @@ const config: Config = {
           items: [
             {
               label: 'Introduction',
-              to: '/docs/introduction',
-            },
-            {
-              label: 'Formal Model',
-              to: '/docs/theory/formal-model',
-            },
-            {
-              label: 'API Reference',
-              to: '/docs/api/state-manager',
-            },
-            {
-              label: 'Quick Start',
-              to: '/docs/guides/quick-start',
-            },
-          ],
-        },
-        {
-          title: 'Resources',
-          items: [
-            {
-              label: 'Academic Paper',
-              href: '/papers/multistate-2024.pdf',
-            },
-            {
-              label: 'Examples',
-              to: '/docs/examples/gui-automation',
-            },
-            {
-              label: 'Playground',
-              to: '/playground',
+              to: '/docs/intro',
             },
           ],
         },
@@ -136,15 +108,15 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/multistate/multistate',
+              href: 'https://github.com/jspinak/multistate',
             },
             {
               label: 'Discussions',
-              href: 'https://github.com/multistate/multistate/discussions',
+              href: 'https://github.com/jspinak/multistate/discussions',
             },
             {
               label: 'Issues',
-              href: 'https://github.com/multistate/multistate/issues',
+              href: 'https://github.com/jspinak/multistate/issues',
             },
           ],
         },
