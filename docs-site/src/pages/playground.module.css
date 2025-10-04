@@ -1,0 +1,64 @@
+.stateNode {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 4px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stateNode:hover {
+  border-color: #0066cc;
+  background: #f0f7ff;
+}
+
+.stateNodeActive {
+  background: #d4f4dd;
+  border-color: #28a745;
+  font-weight: bold;
+}
+
+.stateNodeOccluded {
+  opacity: 0.5;
+  text-decoration: line-through;
+  background: #ffebee;
+  border-color: #dc3545;
+}
+
+.transitionButton {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.transitionButton:hover {
+  background: #f0f7ff;
+  border-color: #0066cc;
+}
+
+.executionLog {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 12px;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.targetSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0;
+}

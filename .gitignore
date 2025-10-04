@@ -1,0 +1,130 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# pyenv
+.python-version
+
+# pytest
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Documentation (internal development tracking)
+docs/
+
+# Docusaurus
+docs-site/node_modules/
+docs-site/.docusaurus/
+docs-site/.cache/
+docs-site/build/
+docs-site/.DS_Store
+docs-site/yarn.lock
+docs-site/package-lock.json
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.swp
+*.swo
+*~
+.tmp/
+tmp/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Generated documentation markdown files (keep only in docs-site/docs/)
+# If you auto-generate docs, add the output directory here
+# e.g., api-docs/
+
+# Benchmark results (optional - keep if you want to track performance)
+# benchmarks/results/
+
+# Paper drafts (optional - keep if you want version control)
+# paper/drafts/
+
+# Test coverage reports
+coverage.xml
+*.cover
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Temporary markdown files in root (auto-generated summaries)
+STRING_ID_CONVERSION_SUMMARY.md
+
+# Paper drafts and notes
+paper/
