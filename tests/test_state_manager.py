@@ -391,11 +391,14 @@ def test_history_tracking():
     # Try invalid (we're at c, need to be at c for this, so it works)
     manager.execute_transition("invalid")
     
-    # Check history
+    # Check history (updated format: tuple with metadata dict)
     assert len(manager.transition_history) == 3
-    assert manager.transition_history[0] == ("a_to_b", True)
-    assert manager.transition_history[1] == ("b_to_c", True)
-    assert manager.transition_history[2] == ("invalid", True)
+    assert manager.transition_history[0][0] == "a_to_b"
+    assert manager.transition_history[0][1] == True
+    assert manager.transition_history[1][0] == "b_to_c"
+    assert manager.transition_history[1][1] == True
+    assert manager.transition_history[2][0] == "invalid"
+    assert manager.transition_history[2][1] == True
     
     print(f"History: {manager.transition_history}")
     print("✓ History tracked correctly")

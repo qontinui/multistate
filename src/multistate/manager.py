@@ -117,7 +117,7 @@ class StateManager:
         self.callbacks = TransitionCallbacks()
         
         # History
-        self.transition_history: List[Tuple[str, bool]] = []  # (transition_id, success)
+        self.transition_history: List[Tuple[str, bool, Dict[str, Any]]] = []  # (transition_id, success, metadata)
         
         # Setup logging
         self._setup_logging()
@@ -343,52 +343,76 @@ class StateManager:
     
     def execute_transition(self, transition_id: str) -> bool:
         """Execute a transition.
-        
+
         Args:
             transition_id: Transition to execute
-            
+
         Returns:
             True if successful
-            
+
         Raises:
             InvalidTransitionError: If transition cannot execute
         """
         transition = self.get_transition(transition_id)
-        
+
         # Check if can execute
         if not self.config.allow_invalid_transitions:
             if not self.can_execute(transition_id):
                 raise InvalidTransitionError(
                     f"Cannot execute '{transition_id}' from current state"
                 )
-        
+
         # Execute with callbacks
         initial_states = self.active_states.copy()
-        
-        success = self.executor.execute(
+
+        result = self.executor.execute(
             transition,
             self.active_states,
             self.callbacks
         )
-        
+
         # Update active states if successful
-        if success:
+        if result.success:
             self.active_states = self.executor.get_result_states(
                 transition,
                 initial_states
             )
-        elif self.config.auto_rollback_on_failure:
-            # Rollback to initial state
-            self.active_states = initial_states
-        
-        # Log history
-        self.transition_history.append((transition_id, success))
-        
-        if self.config.log_transitions:
-            status = "succeeded" if success else "failed"
-            self.logger.info(f"Transition '{transition_id}' {status}")
-        
-        return success
+
+            # Log detailed phase information
+            if self.config.log_transitions:
+                self.logger.info(f"Transition '{transition_id}' succeeded")
+                for phase_result in result.phase_results:
+                    self.logger.debug(
+                        f"  {phase_result.phase.value}: "
+                        f"{'✓' if phase_result.success else '✗'} {phase_result.message}"
+                    )
+        else:
+            # Log failure information
+            failed_phase = result.get_failed_phase()
+            if self.config.log_transitions:
+                self.logger.warning(
+                    f"Transition '{transition_id}' failed at phase: "
+                    f"{failed_phase.value if failed_phase else 'unknown'}"
+                )
+
+            if self.config.auto_rollback_on_failure:
+                # Rollback to initial state
+                self.active_states = initial_states
+                self.logger.debug(f"Rolled back to initial state")
+
+        # Log history with additional metadata
+        self.transition_history.append((
+            transition_id,
+            result.success,
+            {
+                'failed_phase': result.get_failed_phase().value if result.get_failed_phase() else None,
+                'activated': len(result.activated_states),
+                'deactivated': len(result.deactivated_states),
+                'error': str(result.error) if result.error else None
+            }
+        ))
+
+        return result.success
     
     def execute_sequence(self, transition_ids: List[str]) -> bool:
         """Execute a sequence of transitions.
