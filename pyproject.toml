@@ -1,17 +1,13 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "multistate"
 version = "0.1.0"
 description = "A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions"
+authors = ["Josip Spiñak <jspinak@example.com>"]
+license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10"
-license = {text = "MIT"}
-authors = [
-    {name = "Josip Spiñak", email = "jspinak@example.com"}
-]
+homepage = "https://github.com/jspinak/multistate"
+repository = "https://github.com/jspinak/multistate"
+documentation = "https://jspinak.github.io/multistate/"
 keywords = [
     "state-machine",
     "fsm",
@@ -31,40 +27,34 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+packages = [{include = "multistate", from = "src"}]
 
-dependencies = [
-    "typing-extensions>=4.0.0",
-    "dataclasses-json>=0.6.0",
-]
+[tool.poetry.dependencies]
+python = "^3.10"
+typing-extensions = ">=4.0.0"
+dataclasses-json = ">=0.6.0"
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "hypothesis>=6.0.0",
-    "black>=23.0.0",
-    "mypy>=1.0.0",
-    "ruff>=0.1.0",
-]
-examples = [
-    "jupyter>=1.0.0",
-    "matplotlib>=3.0.0",
-    "networkx>=3.0.0",
-]
-docs = [
-    "sphinx>=6.0.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "myst-parser>=1.0.0",
-]
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.0.0"
+pytest-cov = ">=4.0.0"
+hypothesis = ">=6.0.0"
+black = ">=23.0.0"
+mypy = ">=1.0.0"
+ruff = ">=0.1.0"
 
-[project.urls]
-Homepage = "https://github.com/jspinak/multistate"
-Documentation = "https://multistate.readthedocs.io"
-Repository = "https://github.com/jspinak/multistate"
-Issues = "https://github.com/jspinak/multistate/issues"
+[tool.poetry.group.examples.dependencies]
+jupyter = ">=1.0.0"
+matplotlib = ">=3.0.0"
+networkx = ">=3.0.0"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=6.0.0"
+sphinx-rtd-theme = ">=1.0.0"
+myst-parser = ">=1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
