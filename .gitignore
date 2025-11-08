@@ -63,6 +63,9 @@ dmypy.json
 # Documentation (internal development tracking)
 docs/
 
+# Claude development guidelines (local only)
+CLAUDE.md
+
 # Docusaurus
 docs-site/node_modules/
 docs-site/.docusaurus/
