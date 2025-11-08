@@ -1,5 +1,10 @@
 # MultiState
 
+[![PyPI version](https://badge.fury.io/py/multistate.svg)](https://badge.fury.io/py/multistate)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://jspinak.github.io/multistate/)
+
 A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions.
 
 ## Overview
@@ -60,8 +65,10 @@ This library is based on research extending Model-based GUI Automation theory. S
 
 ## Contributing
 
-We welcome contributions! Please see CONTRIBUTING.md for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Please note that this project is released with a [Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## License
 
-MIT License - See LICENSE file for details.
+MIT License - See [LICENSE](LICENSE) file for details.

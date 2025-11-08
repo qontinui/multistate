@@ -98,8 +98,8 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Introduction',
-              to: '/docs/intro',
+              label: 'Integrations',
+              to: '/docs/integrations/transitions-library',
             },
           ],
         },

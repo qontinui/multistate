@@ -5,8 +5,8 @@ description = "A Python library for managing multiple simultaneous active states
 authors = ["Josip Spiñak <jspinak@example.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/jspinak/multistate"
-repository = "https://github.com/jspinak/multistate"
+homepage = "https://github.com/qontinui/multistate"
+repository = "https://github.com/qontinui/multistate"
 documentation = "https://jspinak.github.io/multistate/"
 keywords = [
     "state-machine",
