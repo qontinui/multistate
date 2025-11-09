@@ -98,8 +98,16 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Integrations',
-              to: '/docs/integrations/transitions-library',
+              label: 'Introduction',
+              to: '/docs/introduction',
+            },
+            {
+              label: 'Formal Model',
+              to: '/docs/theory/formal-model',
+            },
+            {
+              label: 'Quick Start',
+              to: '/docs/guides/quick-start',
             },
           ],
         },

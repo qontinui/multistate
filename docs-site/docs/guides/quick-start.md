@@ -178,13 +178,13 @@ if path:
 
 ## Next Steps
 
-- Learn about [Multi-Target Pathfinding](/docs/guides/pathfinding)
-- Explore [State Groups and Coordination](/docs/guides/state-groups)
-- Understand the [Formal Model](/docs/theory/formal-model)
-- Try the [Interactive Playground](/playground)
+- Understand the [Formal Model](/docs/theory/formal-model) - Mathematical foundations
+- Read the [Introduction](/docs/introduction) - Core concepts and use cases
+- Try the [Interactive Playground](/playground) - Hands-on experimentation
+- View the [Research Paper](https://link.springer.com/article/10.1007/s10270-025-01319-9) - Academic publication
 
 ## Need Help?
 
-- Check the [API Reference](/docs/api/state-manager)
 - Join our [Discussion Forum](https://github.com/qontinui/multistate/discussions)
 - Report issues on [GitHub](https://github.com/qontinui/multistate/issues)
+- Browse the [GitHub Repository](https://github.com/qontinui/multistate) - Source code and examples
