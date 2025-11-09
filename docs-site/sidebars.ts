@@ -13,14 +13,20 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // Start with simplified sidebars using only existing documents
   docsSidebar: [
-    'intro',
+    'introduction',
     {
       type: 'category',
-      label: 'Integrations',
+      label: 'Theory',
       items: [
-        'integrations/transitions-library',
+        'theory/formal-model',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/quick-start',
       ],
     },
   ],
