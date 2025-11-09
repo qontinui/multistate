@@ -21,7 +21,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/integrations/transitions-library">
+            to="/docs/introduction">
             Get Started →
           </Link>
           <Link
@@ -176,8 +176,8 @@ function MathematicalFoundation() {
               <div className="text--center margin-top--md">
                 <Link
                   className="button button--primary"
-                  to="/docs/integrations/transitions-library">
-                  Explore Integration →
+                  to="/docs/theory/formal-model">
+                  Explore Formal Model →
                 </Link>
               </div>
             </div>
