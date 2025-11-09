@@ -10,7 +10,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/jspinak/multistate/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/qontinui/multistate/issues)
 2. If not, create a new issue with:
    - Clear title describing the problem
    - Steps to reproduce
@@ -20,7 +20,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
 
 ### Suggesting Features
 
-1. Check existing [Issues](https://github.com/jspinak/multistate/issues) and [Discussions](https://github.com/jspinak/multistate/discussions)
+1. Check existing [Issues](https://github.com/qontinui/multistate/issues) and [Discussions](https://github.com/qontinui/multistate/discussions)
 2. Create a new discussion or issue describing:
    - The problem you're trying to solve
    - Your proposed solution
@@ -129,9 +129,9 @@ multistate/
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/jspinak/multistate/discussions)
+- Open a [Discussion](https://github.com/qontinui/multistate/discussions)
 - Ask in an issue
-- Check the [documentation](https://jspinak.github.io/multistate/)
+- Check the [documentation](https://qontinui.github.io/multistate/)
 
 ## License
 

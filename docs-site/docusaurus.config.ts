@@ -14,12 +14,12 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://jspinak.github.io',
+  url: 'https://qontinui.github.io',
   baseUrl: '/multistate/',
   trailingSlash: false,
 
   // GitHub pages deployment config
-  organizationName: 'jspinak',
+  organizationName: 'qontinui',
   projectName: 'multistate',
 
   onBrokenLinks: 'warn',
@@ -36,7 +36,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/jspinak/multistate/tree/main/docs-site/',
+          editUrl: 'https://github.com/qontinui/multistate/tree/main/docs-site/',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
@@ -46,7 +46,7 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl: 'https://github.com/jspinak/multistate/tree/main/docs-site/',
+          editUrl: 'https://github.com/qontinui/multistate/tree/main/docs-site/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -85,7 +85,7 @@ const config: Config = {
         {to: '/playground', label: 'Playground', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/jspinak/multistate',
+          href: 'https://github.com/qontinui/multistate',
           label: 'GitHub',
           position: 'right',
         },
@@ -108,15 +108,15 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/jspinak/multistate',
+              href: 'https://github.com/qontinui/multistate',
             },
             {
               label: 'Discussions',
-              href: 'https://github.com/jspinak/multistate/discussions',
+              href: 'https://github.com/qontinui/multistate/discussions',
             },
             {
               label: 'Issues',
-              href: 'https://github.com/jspinak/multistate/issues',
+              href: 'https://github.com/qontinui/multistate/issues',
             },
           ],
         },

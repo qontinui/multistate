@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/qontinui/multistate"
 repository = "https://github.com/qontinui/multistate"
-documentation = "https://jspinak.github.io/multistate/"
+documentation = "https://qontinui.github.io/multistate/"
 keywords = [
     "state-machine",
     "fsm",

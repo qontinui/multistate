@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/multistate.svg)](https://badge.fury.io/py/multistate)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://jspinak.github.io/multistate/)
+[![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://qontinui.github.io/multistate/)
 
 A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions.
 
@@ -54,14 +54,22 @@ assert manager.get_active_states() == {dashboard, toolbar, sidebar}
 
 ## Documentation
 
-Full documentation available at [https://jspinak.github.io/multistate/](https://jspinak.github.io/multistate/)
+**📚 Full documentation with interactive playground: [qontinui.github.io/multistate](https://qontinui.github.io/multistate/)**
+
+Features:
+- Complete API reference
+- Mathematical formulas and proofs
+- Interactive playground to try MultiState in your browser
+- Usage examples and tutorials
 
 ## Research
 
-This library is based on research extending Model-based GUI Automation theory. See the `paper/` directory for:
-- Formal mathematical model
-- Related work analysis
-- Implementation details
+This library is based on research extending Model-based GUI Automation theory:
+
+- **Paper**: [Model-based GUI Automation](https://link.springer.com/article/10.1007/s10270-025-01319-9) - Springer SoSyM (October 2025)
+- **Mathematical model**: Formal proofs of complexity reduction
+- **Related work**: Analysis of state machine approaches
+- **Implementation details**: See `paper/` directory
 
 ## Contributing
 
