@@ -60,7 +60,6 @@ assert manager.get_active_states() == {dashboard, toolbar, sidebar}
 - [Introduction](/docs/introduction) - Core concepts and use cases
 - [Formal Model](/docs/theory/formal-model) - Mathematical foundations
 - [GitHub Repository](https://github.com/qontinui/multistate) - Source code and examples
-- [Research Paper](https://link.springer.com/article/10.1007/s10270-025-01319-9) - Academic publication
 
 ## Resources
 

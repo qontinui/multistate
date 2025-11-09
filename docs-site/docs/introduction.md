@@ -151,15 +151,6 @@ success = manager.execute_path(path)
 
 - 📐 [Formal Model](/docs/theory/formal-model) - Understand the mathematical foundations
 
-## 🎓 Academic Contribution
-
-MultiState represents a significant theoretical contribution to state management, with:
-
-- ✨ Novel multi-target pathfinding algorithm with proven optimality
-- 📝 Formal semantics for multi-state activation
-- ⚡ Dynamic transition generation framework
-- ✅ Complete property-based verification
-
 ## 🌟 Community
 
 MultiState is open-source and welcomes contributions:

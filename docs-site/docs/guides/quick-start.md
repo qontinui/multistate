@@ -181,7 +181,6 @@ if path:
 - Understand the [Formal Model](/docs/theory/formal-model) - Mathematical foundations
 - Read the [Introduction](/docs/introduction) - Core concepts and use cases
 - Try the [Interactive Playground](/playground) - Hands-on experimentation
-- View the [Research Paper](https://link.springer.com/article/10.1007/s10270-025-01319-9) - Academic publication
 
 ## Need Help?
 
