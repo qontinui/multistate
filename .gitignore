@@ -60,8 +60,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Documentation (internal development tracking)
-docs/
+# Documentation (internal development tracking at root only)
+# Use /docs/ to ignore only root-level docs, NOT docs-site/docs/
+/docs/
 
 # Claude development guidelines (local only)
 CLAUDE.md
@@ -109,22 +110,6 @@ logs/
 # Test coverage reports
 coverage.xml
 *.cover
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
 # Temporary markdown files in root (auto-generated summaries)
 STRING_ID_CONVERSION_SUMMARY.md
