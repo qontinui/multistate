@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "multistate"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions"
 authors = ["Joshua Spinak <jspinak@alum.mit.edu>"]
 license = "MIT"
