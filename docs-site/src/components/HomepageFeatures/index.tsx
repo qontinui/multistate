@@ -77,17 +77,6 @@ export default function HomepageFeatures(): ReactNode {
             <Feature key={idx} {...props} />
           ))}
         </div>
-        <div className="row margin-top--lg">
-          <div className="col col--12 text--center">
-            <div className="alert alert--info" role="alert">
-              <strong>Research Paper Available:</strong> Read our academic paper on the
-              theoretical foundations and formal verification of MultiState.{' '}
-              <a href="/papers/multistate-2024.pdf" target="_blank">
-                Download PDF →
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
