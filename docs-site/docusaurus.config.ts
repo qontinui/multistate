@@ -40,17 +40,7 @@ const config: Config = {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl: 'https://github.com/qontinui/multistate/tree/main/docs-site/',
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false, // Disable blog - demo posts removed
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -83,7 +73,6 @@ const config: Config = {
           label: 'Docs',
         },
         {to: '/playground', label: 'Playground', position: 'left'},
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/qontinui/multistate',
           label: 'GitHub',
