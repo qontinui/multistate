@@ -4,8 +4,8 @@
   <ShortName>MultiState</ShortName>
   <Description>Search MultiState</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://jspinak.github.io/multistate/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://jspinak.github.io/multistate/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://jspinak.github.io/multistate/opensearch.xml" />
-  <moz:SearchForm>https://jspinak.github.io/multistate/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://qontinui.github.io/multistate/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://qontinui.github.io/multistate/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://qontinui.github.io/multistate/opensearch.xml" />
+  <moz:SearchForm>https://qontinui.github.io/multistate/</moz:SearchForm>
 </OpenSearchDescription>
