@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
@@ -89,7 +90,7 @@ function KeyFeatures() {
           <div className="col col--4">
             <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
-                src="/img/multi-target-navigation.png"
+                src={useBaseUrl('/img/multi-target-navigation.png')}
                 alt="Multi-Target Navigation"
                 style={{
                   maxWidth: '100px',
@@ -108,7 +109,7 @@ function KeyFeatures() {
           <div className="col col--4">
             <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
-                src="/img/occlusion-reveal.png"
+                src={useBaseUrl('/img/occlusion-reveal.png')}
                 alt="Occlusion & Reveal"
                 style={{
                   maxWidth: '100px',
@@ -127,7 +128,7 @@ function KeyFeatures() {
           <div className="col col--4">
             <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
-                src="/img/safe-execution.png"
+                src={useBaseUrl('/img/safe-execution.png')}
                 alt="Safe Execution"
                 style={{
                   maxWidth: '100px',
