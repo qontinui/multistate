@@ -15,6 +15,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   // Start with simplified sidebars using only existing documents
   docsSidebar: [
+    'intro',
     {
       type: 'category',
       label: 'Integrations',
