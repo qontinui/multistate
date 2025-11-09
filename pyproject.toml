@@ -2,7 +2,7 @@
 name = "multistate"
 version = "0.1.0"
 description = "A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions"
-authors = ["Josip Spiñak <jspinak@example.com>"]
+authors = ["Joshua Spinak <jspinak@alum.mit.edu>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/qontinui/multistate"
