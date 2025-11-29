@@ -5,7 +5,7 @@ all GUI elements, and each state s ∈ S is a subset of E.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 
 @dataclass

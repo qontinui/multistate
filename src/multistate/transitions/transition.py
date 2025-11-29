@@ -20,7 +20,10 @@ from multistate.core.state_group import StateGroup
 
 
 class TransitionPhase(Enum):
-    """Phases of transition execution following φ = ⟨φ_validate, φ_outgoing, φ_activate, φ_incoming, φ_exit⟩."""
+    """Phases of transition execution.
+
+    Follows φ = ⟨φ_validate, φ_outgoing, φ_activate, φ_incoming, φ_exit⟩.
+    """
 
     VALIDATE = "validate"  # φ_validate: Pre-validate all preconditions
     OUTGOING = "outgoing"  # φ_outgoing: Execute outgoing transition action
@@ -185,7 +188,6 @@ class Transition:
         new_active.update(self.get_all_states_to_activate())
 
         # Check all affected groups
-        all_groups = set()
         for state in new_active:
             if state.group:
                 # Need to get the actual group object
@@ -235,10 +237,7 @@ class IncomingTransition:
     """
 
     def __init__(
-        self,
-        state_id: str,
-        action: Callable[[], None],
-        name: Optional[str] = None
+        self, state_id: str, action: Callable[[], None], name: Optional[str] = None
     ):
         """Initialize incoming transition.
 

@@ -59,7 +59,10 @@ class State:
         """String representation for debugging."""
         elem_count = len(self.elements)
         group_str = f", group='{self.group}'" if self.group else ""
-        return f"State(id='{self.id}', name='{self.name}', elements={elem_count}{group_str})"
+        return (
+            f"State(id='{self.id}', name='{self.name}', "
+            f"elements={elem_count}{group_str})"
+        )
 
     def add_element(self, element: Element) -> None:
         """Add an element to this state.

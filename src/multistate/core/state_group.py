@@ -7,7 +7,7 @@ Following the paper's formal model where:
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, Set
 
 from multistate.core.state import State
 

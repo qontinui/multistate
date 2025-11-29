@@ -3,10 +3,11 @@
 Generates ASCII and Graphviz visualizations of pathfinding.
 """
 
-from typing import Set, List, Optional
+from typing import List, Optional, Set
+
 from multistate.core.state import State
-from multistate.transitions.transition import Transition
 from multistate.pathfinding.multi_target import Path
+from multistate.transitions.transition import Transition
 
 
 class PathVisualizer:
@@ -69,7 +70,7 @@ class PathVisualizer:
     def generate_graphviz(
         transitions: List[Transition],
         highlight_path: Optional[Path] = None,
-        target_states: Optional[Set[State]] = None
+        target_states: Optional[Set[State]] = None,
     ) -> str:
         """Generate Graphviz DOT format for visualization.
 
@@ -120,7 +121,9 @@ class PathVisualizer:
         # Draw transitions
         for trans in transitions:
             # For each from state to each activated state
-            from_states = trans.from_states if trans.from_states else [State("*", "Any")]
+            from_states = (
+                trans.from_states if trans.from_states else [State("*", "Any")]
+            )
 
             for from_state in from_states:
                 for to_state in trans.get_all_states_to_activate():
@@ -134,18 +137,20 @@ class PathVisualizer:
                     attributes.append(f'label="{label}"')
 
                     attr_str = f" [{', '.join(attributes)}]"
-                    lines.append(f'  "{from_state.name}" -> "{to_state.name}"{attr_str};')
+                    lines.append(
+                        f'  "{from_state.name}" -> "{to_state.name}"{attr_str};'
+                    )
 
         # Legend
         lines.append("")
         lines.append("  // Legend")
-        lines.append('  subgraph cluster_legend {')
+        lines.append("  subgraph cluster_legend {")
         lines.append('    label="Legend";')
         lines.append('    style="dashed";')
         lines.append('    "Target State" [fillcolor="lightblue", style="filled"];')
         lines.append('    "Path State" [color="red", penwidth="2"];')
         lines.append('    "Blocking State" [shape="box"];')
-        lines.append('  }')
+        lines.append("  }")
 
         lines.append("}")
 
@@ -171,19 +176,28 @@ class PathVisualizer:
             ("Steps", lambda p: len(p.transitions_sequence)),
             ("Total Cost", lambda p: p.total_cost),
             ("States Visited", lambda p: sum(len(s) for s in p.states_sequence)),
-            ("Targets Reached", lambda p: len([s for s in p.targets if any(s in ss for ss in p.states_sequence)])),
+            (
+                "Targets Reached",
+                lambda p: len(
+                    [s for s in p.targets if any(s in ss for ss in p.states_sequence)]
+                ),
+            ),
         ]
 
         for metric_name, metric_func in metrics:
             values = [str(metric_func(p)) if p else "N/A" for p in paths]
-            row = f"| {metric_name:<15} | " + " | ".join(f"{v:^20}" for v in values) + " |"
+            row = (
+                f"| {metric_name:<15} | "
+                + " | ".join(f"{v:^20}" for v in values)
+                + " |"
+            )
             lines.append(row)
 
         lines.append("-" * len(header))
 
         # Show path sequences
         lines.append("\nPath Details:")
-        for i, (path, label) in enumerate(zip(paths, labels)):
+        for path, label in zip(paths, labels):
             if path:
                 lines.append(f"\n{label}:")
                 for j, trans in enumerate(path.transitions_sequence):
@@ -195,8 +209,7 @@ class PathVisualizer:
 
     @staticmethod
     def visualize_search_tree(
-        search_nodes: List,  # List of PathNode objects
-        max_depth: int = 5
+        search_nodes: List, max_depth: int = 5  # List of PathNode objects
     ) -> str:
         """Visualize the search tree exploration."""
         lines = []
@@ -218,7 +231,9 @@ class PathVisualizer:
                 for node in by_depth[depth][:5]:  # Show first 5 at each depth
                     states = ", ".join(s.name for s in node.active_states)
                     targets = ", ".join(s.name for s in node.targets_reached)
-                    lines.append(f"  [{states}] | Reached: {{{targets}}} | Cost: {node.cost}")
+                    lines.append(
+                        f"  [{states}] | Reached: {{{targets}}} | Cost: {node.cost}"
+                    )
 
                 if len(by_depth[depth]) > 5:
                     lines.append(f"  ... and {len(by_depth[depth]) - 5} more")

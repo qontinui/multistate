@@ -7,10 +7,14 @@ With phased execution φ = ⟨φ_outgoing, φ_activate, φ_incoming, φ_exit⟩
 """
 
 from enum import Enum
-from typing import Optional, Set
+from typing import TYPE_CHECKING, Optional, Set
 
 from multistate.core.state import State
 from multistate.transitions.transition import Transition
+
+if TYPE_CHECKING:
+    from multistate.transitions.callbacks import TransitionCallbacks
+    from multistate.transitions.transition import TransitionResult
 
 
 class SuccessPolicy(Enum):
@@ -19,8 +23,6 @@ class SuccessPolicy(Enum):
     STRICT = "strict"  # All incoming must succeed (Brobot-like)
     LENIENT = "lenient"  # Only activation must succeed
     THRESHOLD = "threshold"  # At least k% of incoming must succeed
-
-
 
 
 class TransitionExecutor:
@@ -38,7 +40,7 @@ class TransitionExecutor:
         self,
         success_policy: SuccessPolicy = SuccessPolicy.STRICT,
         success_threshold: float = 0.8,
-        strict_mode: bool = True
+        strict_mode: bool = True,
     ):
         """Initialize the executor.
 
@@ -55,13 +57,14 @@ class TransitionExecutor:
         self,
         transition: Transition,
         active_states: Set[State],
-        callbacks: Optional['TransitionCallbacks'] = None
-    ) -> 'TransitionResult':
+        callbacks: Optional["TransitionCallbacks"] = None,
+    ) -> "TransitionResult":
         """Execute a transition with full phased orchestration.
 
         This implements the complete transition execution following
         the formal model's phased approach:
-        φ = ⟨φ_validate, φ_outgoing, φ_activate, φ_incoming, φ_exit, φ_visibility, φ_cleanup⟩
+        φ = ⟨φ_validate, φ_outgoing, φ_activate, φ_incoming, φ_exit,
+        φ_visibility, φ_cleanup⟩
 
         Args:
             transition: The transition to execute
@@ -72,7 +75,9 @@ class TransitionExecutor:
             TransitionResult with complete phase tracking
         """
         from multistate.transitions.transition import (
-            TransitionResult, PhaseResult, TransitionPhase
+            PhaseResult,
+            TransitionPhase,
+            TransitionResult,
         )
 
         result = TransitionResult(success=False)
@@ -87,27 +92,33 @@ class TransitionExecutor:
             # PHASE 1: VALIDATE
             # Pre-validate all preconditions before any changes
             if not self.can_execute(transition, active_states):
-                result.phase_results.append(PhaseResult(
-                    phase=TransitionPhase.VALIDATE,
-                    success=False,
-                    message="Transition cannot execute from current state"
-                ))
+                result.phase_results.append(
+                    PhaseResult(
+                        phase=TransitionPhase.VALIDATE,
+                        success=False,
+                        message="Transition cannot execute from current state",
+                    )
+                )
                 return result
 
             # Validate group atomicity
             if not transition.validate_groups(active_states):
-                result.phase_results.append(PhaseResult(
-                    phase=TransitionPhase.VALIDATE,
-                    success=False,
-                    message="Group atomicity violation detected"
-                ))
+                result.phase_results.append(
+                    PhaseResult(
+                        phase=TransitionPhase.VALIDATE,
+                        success=False,
+                        message="Group atomicity violation detected",
+                    )
+                )
                 return result
 
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.VALIDATE,
-                success=True,
-                message="All preconditions satisfied"
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.VALIDATE,
+                    success=True,
+                    message="All preconditions satisfied",
+                )
+            )
 
             # PHASE 2: OUTGOING
             # Execute outgoing transition action
@@ -119,26 +130,35 @@ class TransitionExecutor:
                     outgoing_success = transition.action()
                 except Exception as e:
                     outgoing_success = False
-                    result.phase_results.append(PhaseResult(
-                        phase=TransitionPhase.OUTGOING,
-                        success=False,
-                        message=f"Outgoing action failed: {str(e)}"
-                    ))
+                    result.phase_results.append(
+                        PhaseResult(
+                            phase=TransitionPhase.OUTGOING,
+                            success=False,
+                            message=f"Outgoing action failed: {str(e)}",
+                        )
+                    )
 
             if not outgoing_success:
-                if not result.phase_results or result.phase_results[-1].phase != TransitionPhase.OUTGOING:
-                    result.phase_results.append(PhaseResult(
-                        phase=TransitionPhase.OUTGOING,
-                        success=False,
-                        message="Outgoing transition failed"
-                    ))
+                if (
+                    not result.phase_results
+                    or result.phase_results[-1].phase != TransitionPhase.OUTGOING
+                ):
+                    result.phase_results.append(
+                        PhaseResult(
+                            phase=TransitionPhase.OUTGOING,
+                            success=False,
+                            message="Outgoing transition failed",
+                        )
+                    )
                 return result
 
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.OUTGOING,
-                success=True,
-                message="Outgoing transition completed"
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.OUTGOING,
+                    success=True,
+                    message="Outgoing transition completed",
+                )
+            )
 
             # PHASE 3: ACTIVATE
             # Pure memory update - activate ALL target states atomically
@@ -146,12 +166,14 @@ class TransitionExecutor:
             for state in states_to_activate:
                 successfully_activated.add(state)
 
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.ACTIVATE,
-                success=True,
-                message=f"Activated {len(successfully_activated)} states",
-                data={"activated": {s.id for s in successfully_activated}}
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.ACTIVATE,
+                    success=True,
+                    message=f"Activated {len(successfully_activated)} states",
+                    data={"activated": {s.id for s in successfully_activated}},
+                )
+            )
 
             # PHASE 4: INCOMING
             # Execute incoming transitions for ALL activated states
@@ -160,14 +182,16 @@ class TransitionExecutor:
                 incoming_success = True
 
                 if callbacks:
-                    incoming_success = callbacks.execute_incoming(transition.id, state.id)
+                    incoming_success = callbacks.execute_incoming(
+                        transition.id, state.id
+                    )
                 else:
                     # Check for incoming action in transition
                     incoming_action = transition.get_incoming_action_for_state(state)
                     if incoming_action:
                         try:
                             incoming_action()
-                        except Exception as e:
+                        except Exception:
                             incoming_success = False
 
                 incoming_results[state.id] = incoming_success
@@ -176,19 +200,27 @@ class TransitionExecutor:
 
             # Determine if incoming phase succeeded based on policy
             incoming_phase_success = self._evaluate_incoming_success(
-                successfully_activated,
-                failed_incoming
+                successfully_activated, failed_incoming
             )
 
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.INCOMING,
-                success=incoming_phase_success,
-                message=f"{len(successfully_activated) - len(failed_incoming)}/{len(successfully_activated)} incoming transitions succeeded",
-                data={
-                    "successful": {s.id for s in successfully_activated - failed_incoming},
-                    "failed": {s.id for s in failed_incoming}
-                }
-            ))
+            successful_count = len(successfully_activated) - len(failed_incoming)
+            total_count = len(successfully_activated)
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.INCOMING,
+                    success=incoming_phase_success,
+                    message=(
+                        f"{successful_count}/{total_count} "
+                        "incoming transitions succeeded"
+                    ),
+                    data={
+                        "successful": {
+                            s.id for s in successfully_activated - failed_incoming
+                        },
+                        "failed": {s.id for s in failed_incoming},
+                    },
+                )
+            )
 
             if not incoming_phase_success:
                 # Incoming phase failed according to policy
@@ -198,28 +230,34 @@ class TransitionExecutor:
             # PHASE 5: EXIT
             # Pure memory update - deactivate exit states
             # This phase CANNOT fail (it's just memory update)
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.EXIT,
-                success=True,
-                message=f"Deactivated {len(states_to_exit)} states",
-                data={"deactivated": {s.id for s in states_to_exit}}
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.EXIT,
+                    success=True,
+                    message=f"Deactivated {len(states_to_exit)} states",
+                    data={"deactivated": {s.id for s in states_to_exit}},
+                )
+            )
 
             # PHASE 6: VISIBILITY
             # Update visibility of states (if needed)
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.VISIBILITY,
-                success=True,
-                message="Visibility updated"
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.VISIBILITY,
+                    success=True,
+                    message="Visibility updated",
+                )
+            )
 
             # PHASE 7: CLEANUP
             # Clean up resources and finalize
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.CLEANUP,
-                success=True,
-                message="Cleanup completed"
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.CLEANUP,
+                    success=True,
+                    message="Cleanup completed",
+                )
+            )
 
             # Set final result data
             result.success = True
@@ -228,24 +266,24 @@ class TransitionExecutor:
             result.metadata = {
                 "transition_id": transition.id,
                 "incoming_failures": len(failed_incoming),
-                "policy": self.success_policy.value
+                "policy": self.success_policy.value,
             }
 
         except Exception as e:
             # Unexpected error during execution
             result.error = e
-            result.phase_results.append(PhaseResult(
-                phase=TransitionPhase.CLEANUP,
-                success=False,
-                message=f"Unexpected error: {str(e)}"
-            ))
+            result.phase_results.append(
+                PhaseResult(
+                    phase=TransitionPhase.CLEANUP,
+                    success=False,
+                    message=f"Unexpected error: {str(e)}",
+                )
+            )
 
         return result
 
     def _evaluate_incoming_success(
-        self,
-        activated_states: Set[State],
-        failed_states: Set[State]
+        self, activated_states: Set[State], failed_states: Set[State]
     ) -> bool:
         """Evaluate if incoming phase succeeded based on policy.
 
@@ -309,9 +347,7 @@ class TransitionExecutor:
         return True
 
     def get_result_states(
-        self,
-        transition: Transition,
-        current_states: Set[State]
+        self, transition: Transition, current_states: Set[State]
     ) -> Set[State]:
         """Get the resulting active states after executing transition.
 
@@ -331,4 +367,3 @@ class TransitionExecutor:
         new_states.update(transition.get_all_states_to_activate())
 
         return new_states
-
