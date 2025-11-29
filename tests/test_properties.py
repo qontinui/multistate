@@ -5,16 +5,18 @@ These tests use hypothesis to generate random inputs and verify that
 our formal properties always hold. The tests ARE the theorem proofs!
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+import sys
 
-from typing import Set, List, Tuple
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
 import random
+from typing import List
+
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
+from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import Transition
-from multistate.transitions.executor import TransitionExecutor, SuccessPolicy
 
 
 class PropertyTests:
@@ -59,7 +61,7 @@ class PropertyTests:
         each group is either fully active or fully inactive.
         """
         print("\nTheorem 1: Group Atomicity")
-        print("="*50)
+        print("=" * 50)
 
         passed = 0
         failed = 0
@@ -94,14 +96,11 @@ class PropertyTests:
                     id=f"t{i}",
                     name=f"Test {i}",
                     from_states=set(),
-                    activate_groups={group}
+                    activate_groups={group},
                 )
             else:
                 transition = Transition(
-                    id=f"t{i}",
-                    name=f"Test {i}",
-                    from_states=set(),
-                    exit_groups={group}
+                    id=f"t{i}", name=f"Test {i}", from_states=set(), exit_groups={group}
                 )
 
             # Execute transition
@@ -145,7 +144,7 @@ class PropertyTests:
         Every state that gets activated has its incoming transition executed.
         """
         print("\nTheorem 2: Incoming Transition Coverage")
-        print("="*50)
+        print("=" * 50)
 
         passed = 0
         failed = 0
@@ -159,14 +158,17 @@ class PropertyTests:
 
             # Create incoming registry
             incoming_registry = {}
-            for state in states:
-                def make_incoming(s_id):
-                    return lambda: executed_incoming.add(s_id)
 
-                from multistate.transitions.transition import IncomingTransition
+            def make_incoming(s_id, exec_set):
+                def callback():
+                    exec_set.add(s_id)
+                return callback
+
+            from multistate.transitions.transition import IncomingTransition
+
+            for state in states:
                 incoming_registry[state.id] = IncomingTransition(
-                    state.id,
-                    make_incoming(state.id)
+                    state.id, make_incoming(state.id, executed_incoming)
                 )
 
             # Create transition activating random states
@@ -175,7 +177,7 @@ class PropertyTests:
                 id=f"t{i}",
                 name=f"Test {i}",
                 from_states=set(),
-                activate_states=to_activate
+                activate_states=to_activate,
             )
 
             # Execute
@@ -208,7 +210,7 @@ class PropertyTests:
         If a blocking state is active, states it blocks cannot be activated.
         """
         print("\nTheorem 3: Blocking Consistency")
-        print("="*50)
+        print("=" * 50)
 
         passed = 0
         failed = 0
@@ -230,7 +232,7 @@ class PropertyTests:
                 id=f"t{i}",
                 name=f"Test {i}",
                 from_states=set(),
-                activate_states={blocked_state}
+                activate_states={blocked_state},
             )
 
             # Execute
@@ -256,7 +258,7 @@ class PropertyTests:
         If validation and outgoing succeed, activation and exit always succeed.
         """
         print("\nTheorem 4: Activation Infallibility")
-        print("="*50)
+        print("=" * 50)
 
         passed = 0
         failed = 0
@@ -271,7 +273,7 @@ class PropertyTests:
                 id=f"t{i}",
                 name=f"Test {i}",
                 from_states=set(),
-                activate_states=to_activate
+                activate_states=to_activate,
             )
 
             # Execute
@@ -314,7 +316,7 @@ class PropertyTests:
         If transition fails and rolls back, system returns to original state.
         """
         print("\nTheorem 5: Rollback Safety")
-        print("="*50)
+        print("=" * 50)
 
         passed = 0
         failed = 0
@@ -336,7 +338,7 @@ class PropertyTests:
                 id=f"t{i}",
                 name=f"Test {i}",
                 from_states=set(),
-                activate_states={states[0]}  # Will be blocked
+                activate_states={states[0]},  # Will be blocked
             )
 
             # Execute with strict mode (enables rollback)
@@ -345,7 +347,8 @@ class PropertyTests:
 
             if not result.success:
                 # Verify rollback preserved original state
-                # Since we only tried to activate (not exit), original should be unchanged
+                # Since we only tried to activate (not exit),
+                # original should be unchanged
                 passed += 1
             else:
                 # Shouldn't succeed with blocker
@@ -358,9 +361,9 @@ class PropertyTests:
 
     def run_all_theorems(self):
         """Run all theorem proofs."""
-        print("\n" + "#"*60)
+        print("\n" + "#" * 60)
         print("# Property-Based Theorem Proofs")
-        print("#"*60)
+        print("#" * 60)
 
         self.test_group_atomicity_theorem()
         self.test_incoming_coverage_theorem()
@@ -368,9 +371,9 @@ class PropertyTests:
         self.test_activation_infallibility_theorem()
         self.test_rollback_safety_theorem()
 
-        print("\n" + "#"*60)
+        print("\n" + "#" * 60)
         print("# All Theorems Proved!")
-        print("#"*60)
+        print("#" * 60)
         print("\nThese tests demonstrate that our implementation")
         print("correctly satisfies the formal model's theorems.")
 

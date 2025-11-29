@@ -2,17 +2,16 @@
 """Test the transition system implementation."""
 
 import sys
-sys.path.insert(0, 'src')
 
-from multistate.core.element import Element
+sys.path.insert(0, "src")
+
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
+from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import (
     Transition,
-    IncomingTransition,
     TransitionPhase,
 )
-from multistate.transitions.executor import TransitionExecutor, SuccessPolicy
 
 
 def test_basic_transition():
@@ -148,6 +147,7 @@ def test_incoming_transitions():
 
     # Create callbacks object
     from multistate.transitions.callbacks import TransitionCallbacks
+
     callbacks = TransitionCallbacks()
 
     # Register incoming callbacks for each state
@@ -187,12 +187,7 @@ def test_blocking_state():
     # Create states
     main_menu = State("main_menu", "Main Menu")
     toolbar = State("toolbar", "Toolbar")
-    modal = State(
-        "modal",
-        "Modal Dialog",
-        blocking=True,
-        blocks={"toolbar", "sidebar"}
-    )
+    modal = State("modal", "Modal Dialog", blocking=True, blocks={"toolbar", "sidebar"})
 
     # Try to activate toolbar when modal is active
     transition = Transition(
@@ -210,7 +205,9 @@ def test_blocking_state():
 
     assert not result.success
     failed_phase = result.get_failed_phase()
-    assert failed_phase == TransitionPhase.VALIDATE  # Blocking checked in VALIDATE phase
+    assert (
+        failed_phase == TransitionPhase.VALIDATE
+    )  # Blocking checked in VALIDATE phase
     print("   ✓ Blocking state correctly prevented activation")
     return True
 
@@ -243,13 +240,13 @@ def test_phased_execution():
 
     # Verify phase order (matches actual executor implementation)
     expected_phases = [
-        TransitionPhase.VALIDATE,   # Validate first
-        TransitionPhase.OUTGOING,   # Then execute outgoing action
-        TransitionPhase.ACTIVATE,   # Then activate states
-        TransitionPhase.INCOMING,   # Then execute incoming for activated states
-        TransitionPhase.EXIT,       # Then exit states
-        TransitionPhase.VISIBILITY, # Then update visibility
-        TransitionPhase.CLEANUP,    # Finally cleanup
+        TransitionPhase.VALIDATE,  # Validate first
+        TransitionPhase.OUTGOING,  # Then execute outgoing action
+        TransitionPhase.ACTIVATE,  # Then activate states
+        TransitionPhase.INCOMING,  # Then execute incoming for activated states
+        TransitionPhase.EXIT,  # Then exit states
+        TransitionPhase.VISIBILITY,  # Then update visibility
+        TransitionPhase.CLEANUP,  # Finally cleanup
     ]
 
     for i, expected in enumerate(expected_phases):
@@ -309,6 +306,7 @@ def test_success_policies():
 
     # Use TransitionCallbacks (correct API)
     from multistate.transitions.callbacks import TransitionCallbacks
+
     callbacks = TransitionCallbacks()
     callbacks.register_incoming("test", "s1", lambda: None)  # Succeeds
     callbacks.register_incoming("test", "s2", failing_incoming)  # Fails
@@ -339,8 +337,7 @@ def test_success_policies():
     # Test THRESHOLD policy (66% threshold)
     print("   Testing THRESHOLD policy...")
     executor_threshold = TransitionExecutor(
-        success_policy=SuccessPolicy.THRESHOLD,
-        success_threshold=0.66
+        success_policy=SuccessPolicy.THRESHOLD, success_threshold=0.66
     )
     result_threshold = executor_threshold.execute(transition, {login}, callbacks)
     assert result_threshold.success  # 2/3 = 66.7% > 66% threshold

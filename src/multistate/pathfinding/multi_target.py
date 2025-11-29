@@ -10,11 +10,11 @@ Following the formal model:
 The path must visit ALL target states to be valid.
 """
 
+import heapq
+from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
-from collections import deque
-import heapq
+from typing import Dict, List, Optional, Set
 
 from multistate.core.state import State
 from multistate.transitions.transition import Transition
@@ -39,7 +39,7 @@ class PathNode:
     active_states: Set[State]
     targets_reached: Set[State]
     transition_taken: Optional[Transition] = None
-    parent: Optional['PathNode'] = None
+    parent: Optional["PathNode"] = None
     cost: float = 0.0
     depth: int = 0
 
@@ -54,8 +54,10 @@ class PathNode:
         """Nodes are equal if same active states and same targets reached."""
         if not isinstance(other, PathNode):
             return False
-        return (self.active_states == other.active_states and
-                self.targets_reached == other.targets_reached)
+        return (
+            self.active_states == other.active_states
+            and self.targets_reached == other.targets_reached
+        )
 
     def __lt__(self, other) -> bool:
         """For priority queue ordering."""
@@ -84,8 +86,7 @@ class Path:
     def __repr__(self) -> str:
         """String representation."""
         path_str = " -> ".join(
-            f"[{', '.join(s.name for s in states)}]"
-            for states in self.states_sequence
+            f"[{', '.join(s.name for s in states)}]" for states in self.states_sequence
         )
         return f"Path({len(self.transitions_sequence)} steps): {path_str}"
 
@@ -104,7 +105,7 @@ class MultiTargetPathFinder:
     def __init__(
         self,
         transitions: List[Transition],
-        strategy: SearchStrategy = SearchStrategy.BFS
+        strategy: SearchStrategy = SearchStrategy.BFS,
     ):
         """Initialize pathfinder with available transitions.
 
@@ -135,9 +136,7 @@ class MultiTargetPathFinder:
                 self.transitions_from_state["*"].append(transition)
 
     def find_path_to_all(
-        self,
-        current_states: Set[State],
-        target_states: Set[State]
+        self, current_states: Set[State], target_states: Set[State]
     ) -> Optional[Path]:
         """Find shortest path that reaches ALL target states.
 
@@ -158,9 +157,7 @@ class MultiTargetPathFinder:
         # Check if we already have all targets
         if target_states.issubset(current_states):
             return Path(
-                states_sequence=[current_states],
-                targets=target_states,
-                total_cost=0
+                states_sequence=[current_states], targets=target_states, total_cost=0
             )
 
         if self.strategy == SearchStrategy.BFS:
@@ -173,9 +170,7 @@ class MultiTargetPathFinder:
         return None
 
     def _bfs_search(
-        self,
-        current_states: Set[State],
-        target_states: Set[State]
+        self, current_states: Set[State], target_states: Set[State]
     ) -> Optional[Path]:
         """BFS implementation for multi-target pathfinding.
 
@@ -185,8 +180,7 @@ class MultiTargetPathFinder:
         # Initial node
         targets_in_current = target_states.intersection(current_states)
         start_node = PathNode(
-            active_states=current_states,
-            targets_reached=targets_in_current
+            active_states=current_states, targets_reached=targets_in_current
         )
 
         # BFS queue
@@ -203,10 +197,7 @@ class MultiTargetPathFinder:
             # Get available transitions
             for transition in self._get_available_transitions(node.active_states):
                 # Simulate transition execution
-                new_states = self._apply_transition(
-                    node.active_states,
-                    transition
-                )
+                new_states = self._apply_transition(node.active_states, transition)
 
                 # Calculate newly reached targets
                 new_targets_reached = node.targets_reached.union(
@@ -220,7 +211,7 @@ class MultiTargetPathFinder:
                     transition_taken=transition,
                     parent=node,
                     cost=node.cost + transition.path_cost,
-                    depth=node.depth + 1
+                    depth=node.depth + 1,
                 )
 
                 # Only explore if not visited
@@ -232,9 +223,7 @@ class MultiTargetPathFinder:
         return None
 
     def _dijkstra_search(
-        self,
-        current_states: Set[State],
-        target_states: Set[State]
+        self, current_states: Set[State], target_states: Set[State]
     ) -> Optional[Path]:
         """Dijkstra's algorithm for multi-target pathfinding.
 
@@ -243,9 +232,7 @@ class MultiTargetPathFinder:
         # Initial node
         targets_in_current = target_states.intersection(current_states)
         start_node = PathNode(
-            active_states=current_states,
-            targets_reached=targets_in_current,
-            cost=0
+            active_states=current_states, targets_reached=targets_in_current, cost=0
         )
 
         # Priority queue (cost, node)
@@ -267,10 +254,7 @@ class MultiTargetPathFinder:
 
             # Explore transitions
             for transition in self._get_available_transitions(node.active_states):
-                new_states = self._apply_transition(
-                    node.active_states,
-                    transition
-                )
+                new_states = self._apply_transition(node.active_states, transition)
 
                 new_targets_reached = node.targets_reached.union(
                     target_states.intersection(new_states)
@@ -284,7 +268,7 @@ class MultiTargetPathFinder:
                     transition_taken=transition,
                     parent=node,
                     cost=new_cost,
-                    depth=node.depth + 1
+                    depth=node.depth + 1,
                 )
 
                 # Only explore if better cost
@@ -296,9 +280,7 @@ class MultiTargetPathFinder:
         return None
 
     def _astar_search(
-        self,
-        current_states: Set[State],
-        target_states: Set[State]
+        self, current_states: Set[State], target_states: Set[State]
     ) -> Optional[Path]:
         """A* search with heuristic for remaining targets.
 
@@ -308,9 +290,7 @@ class MultiTargetPathFinder:
         # Initial node
         targets_in_current = target_states.intersection(current_states)
         start_node = PathNode(
-            active_states=current_states,
-            targets_reached=targets_in_current,
-            cost=0
+            active_states=current_states, targets_reached=targets_in_current, cost=0
         )
 
         # Priority queue (f_score, node)
@@ -333,10 +313,7 @@ class MultiTargetPathFinder:
 
             # Explore transitions
             for transition in self._get_available_transitions(node.active_states):
-                new_states = self._apply_transition(
-                    node.active_states,
-                    transition
-                )
+                new_states = self._apply_transition(node.active_states, transition)
 
                 new_targets_reached = node.targets_reached.union(
                     target_states.intersection(new_states)
@@ -350,7 +327,7 @@ class MultiTargetPathFinder:
                     transition_taken=transition,
                     parent=node,
                     cost=g_score,
-                    depth=node.depth + 1
+                    depth=node.depth + 1,
                 )
 
                 if new_node not in visited:
@@ -376,10 +353,7 @@ class MultiTargetPathFinder:
         # (assumes minimum cost of 1 per target)
         return len(remaining_targets)
 
-    def _get_available_transitions(
-        self,
-        active_states: Set[State]
-    ) -> List[Transition]:
+    def _get_available_transitions(self, active_states: Set[State]) -> List[Transition]:
         """Get all transitions that can execute from current states."""
         available = []
 
@@ -399,9 +373,7 @@ class MultiTargetPathFinder:
         return available
 
     def _apply_transition(
-        self,
-        current_states: Set[State],
-        transition: Transition
+        self, current_states: Set[State], transition: Transition
     ) -> Set[State]:
         """Simulate applying a transition to get new active states."""
         new_states = current_states.copy()
@@ -414,11 +386,7 @@ class MultiTargetPathFinder:
 
         return new_states
 
-    def _reconstruct_path(
-        self,
-        end_node: PathNode,
-        target_states: Set[State]
-    ) -> Path:
+    def _reconstruct_path(self, end_node: PathNode, target_states: Set[State]) -> Path:
         """Reconstruct path from search tree."""
         path = Path(targets=target_states)
 
@@ -442,20 +410,16 @@ class MultiTargetPathFinder:
 
         return path
 
-    def analyze_complexity(
-        self,
-        num_states: int,
-        num_targets: int
-    ) -> Dict[str, any]:
+    def analyze_complexity(self, num_states: int, num_targets: int) -> Dict[str, any]:
         """Analyze algorithmic complexity for given parameters.
 
         Returns complexity metrics for paper.
         """
         # State space size
-        total_state_configs = 2 ** num_states  # Each state active or not
+        total_state_configs = 2**num_states  # Each state active or not
 
         # Progress tracking adds another dimension
-        target_progress_configs = 2 ** num_targets  # Each target reached or not
+        target_progress_configs = 2**num_targets  # Each target reached or not
 
         # Total search space
         search_space = total_state_configs * target_progress_configs
@@ -465,6 +429,8 @@ class MultiTargetPathFinder:
             "target_progress_configurations": target_progress_configs,
             "total_search_space": search_space,
             "complexity_class": f"O(V * 2^k) where V={num_states}, k={num_targets}",
-            "comparison_to_single": f"Single target: O(V), Multi: O(V * 2^{num_targets})",
-            "exponential_in_targets": True
+            "comparison_to_single": (
+                f"Single target: O(V), Multi: O(V * 2^{num_targets})"
+            ),
+            "exponential_in_targets": True,
         }

@@ -2,7 +2,8 @@
 """Verify that our implementation aligns with the formal model."""
 
 import sys
-sys.path.insert(0, 'src')
+
+sys.path.insert(0, "src")
 
 from multistate.core.element import Element
 from multistate.core.state import State
@@ -90,9 +91,9 @@ def verify_mock_probability():
     print("\n4. Testing mock starting probability...")
 
     # Create states with weights
-    login = State("login", "Login", mock_starting_probability=3.0)
-    dashboard = State("dash", "Dashboard", mock_starting_probability=1.0)
-    settings = State("settings", "Settings", mock_starting_probability=1.0)
+    _ = State("login", "Login", mock_starting_probability=3.0)
+    _ = State("dash", "Dashboard", mock_starting_probability=1.0)
+    _ = State("settings", "Settings", mock_starting_probability=1.0)
 
     # Calculate probabilities
     total = 3.0 + 1.0 + 1.0
@@ -114,10 +115,7 @@ def verify_blocking_states():
     print("\n5. Testing blocking states...")
 
     modal = State(
-        "modal",
-        "Save Dialog",
-        blocking=True,
-        blocks={"toolbar", "sidebar", "content"}
+        "modal", "Save Dialog", blocking=True, blocks={"toolbar", "sidebar", "content"}
     )
 
     assert modal.is_blocking()
@@ -146,9 +144,7 @@ def verify_gui_workspace_scenario():
 
     # Create workspace group
     workspace = StateGroup(
-        "workspace",
-        "IDE Workspace",
-        states={toolbar, sidebar, content, statusbar}
+        "workspace", "IDE Workspace", states={toolbar, sidebar, content, statusbar}
     )
 
     print(f"   ✓ Created workspace with {len(workspace)} components")

@@ -9,21 +9,21 @@ This example shows a realistic GUI application with:
 - Multi-state pathfinding (to be added)
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+import sys
 
-from dataclasses import dataclass
-from typing import Set, Optional
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from typing import Set
+
 from multistate.core.element import Element
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
+from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import (
-    Transition,
     IncomingTransition,
-    TransitionPhase,
+    Transition,
 )
-from multistate.transitions.executor import TransitionExecutor, SuccessPolicy
 
 
 class GUIWorkspaceDemo:
@@ -32,8 +32,7 @@ class GUIWorkspaceDemo:
     def __init__(self):
         """Initialize the GUI workspace demo."""
         self.executor = TransitionExecutor(
-            success_policy=SuccessPolicy.STRICT,
-            strict_mode=True
+            success_policy=SuccessPolicy.STRICT, strict_mode=True
         )
         self.active_states: Set[State] = set()
         self.incoming_registry = {}
@@ -58,10 +57,8 @@ class GUIWorkspaceDemo:
         print("Creating GUI states...")
 
         # Login/Splash states
-        self.splash = State("splash", "Splash Screen",
-                           mock_starting_probability=3.0)
-        self.login = State("login", "Login Screen",
-                          mock_starting_probability=1.0)
+        self.splash = State("splash", "Splash Screen", mock_starting_probability=3.0)
+        self.login = State("login", "Login Screen", mock_starting_probability=1.0)
 
         # Main window
         self.main_window = State("main_window", "Main Window Frame")
@@ -99,21 +96,21 @@ class GUIWorkspaceDemo:
             "save_dialog",
             "Save File Dialog",
             blocking=True,
-            blocks={"toolbar", "sidebar", "editor", "console"}
+            blocks={"toolbar", "sidebar", "editor", "console"},
         )
 
         self.settings_dialog = State(
             "settings_dialog",
             "Settings Dialog",
             blocking=True,
-            blocks={"toolbar", "sidebar", "editor", "console"}
+            blocks={"toolbar", "sidebar", "editor", "console"},
         )
 
         self.error_dialog = State(
             "error_dialog",
             "Error Dialog",
             blocking=True,
-            blocks={"toolbar", "sidebar", "editor", "console", "menu_bar"}
+            blocks={"toolbar", "sidebar", "editor", "console", "menu_bar"},
         )
 
         print(f"  Created {14} states")
@@ -126,15 +123,18 @@ class GUIWorkspaceDemo:
         self.workspace_group = StateGroup(
             "workspace",
             "IDE Workspace",
-            states={self.toolbar, self.sidebar, self.editor,
-                   self.console, self.statusbar}
+            states={
+                self.toolbar,
+                self.sidebar,
+                self.editor,
+                self.console,
+                self.statusbar,
+            },
         )
 
         # Main UI group - includes menu and window
         self.main_ui_group = StateGroup(
-            "main_ui",
-            "Main UI Components",
-            states={self.main_window, self.menu_bar}
+            "main_ui", "Main UI Components", states={self.main_window, self.menu_bar}
         )
 
         print(f"  Workspace group: {len(self.workspace_group)} states")
@@ -151,7 +151,7 @@ class GUIWorkspaceDemo:
             from_states={self.splash},
             activate_states={self.login},
             exit_states={self.splash},
-            action=lambda: self._log_action("Splash screen timeout")
+            action=lambda: self._log_action("Splash screen timeout"),
         )
 
         # Login to main application
@@ -161,7 +161,7 @@ class GUIWorkspaceDemo:
             from_states={self.login},
             activate_groups={self.main_ui_group, self.workspace_group},
             exit_states={self.login},
-            action=lambda: self._log_action("User authenticated")
+            action=lambda: self._log_action("User authenticated"),
         )
 
         # Show save dialog
@@ -170,7 +170,7 @@ class GUIWorkspaceDemo:
             name="Show Save Dialog",
             from_states={self.editor},  # Can only save when editor is active
             activate_states={self.save_dialog},
-            action=lambda: self._log_action("Opening save dialog")
+            action=lambda: self._log_action("Opening save dialog"),
         )
 
         # Close save dialog
@@ -179,7 +179,7 @@ class GUIWorkspaceDemo:
             name="Close Save Dialog",
             from_states={self.save_dialog},
             exit_states={self.save_dialog},
-            action=lambda: self._log_action("Save dialog closed")
+            action=lambda: self._log_action("Save dialog closed"),
         )
 
         # Show settings
@@ -188,7 +188,7 @@ class GUIWorkspaceDemo:
             name="Show Settings",
             from_states={self.menu_bar},
             activate_states={self.settings_dialog},
-            action=lambda: self._log_action("Opening settings")
+            action=lambda: self._log_action("Opening settings"),
         )
 
         # Close settings
@@ -197,7 +197,7 @@ class GUIWorkspaceDemo:
             name="Close Settings",
             from_states={self.settings_dialog},
             exit_states={self.settings_dialog},
-            action=lambda: self._log_action("Settings closed")
+            action=lambda: self._log_action("Settings closed"),
         )
 
         # Error occurred
@@ -206,7 +206,7 @@ class GUIWorkspaceDemo:
             name="Show Error",
             from_states=set(),  # Can happen from any state
             activate_states={self.error_dialog},
-            action=lambda: self._log_action("ERROR OCCURRED!")
+            action=lambda: self._log_action("ERROR OCCURRED!"),
         )
 
         # Logout
@@ -216,7 +216,7 @@ class GUIWorkspaceDemo:
             from_states={self.menu_bar},
             activate_states={self.login},
             exit_groups={self.main_ui_group, self.workspace_group},
-            action=lambda: self._log_action("User logged out")
+            action=lambda: self._log_action("User logged out"),
         )
 
         print("  Created 8 transitions")
@@ -273,20 +273,20 @@ class GUIWorkspaceDemo:
         print(f"{'='*60}")
 
         print(f"Current active states: {self._format_states(self.active_states)}")
-        print(f"States to activate: {self._format_states(transition.get_all_states_to_activate())}")
-        print(f"States to exit: {self._format_states(transition.get_all_states_to_exit())}")
+        to_activate = self._format_states(transition.get_all_states_to_activate())
+        print(f"States to activate: {to_activate}")
+        to_exit = self._format_states(transition.get_all_states_to_exit())
+        print(f"States to exit: {to_exit}")
 
         result = self.executor.execute(
-            transition,
-            self.active_states,
-            self.incoming_registry
+            transition, self.active_states, self.incoming_registry
         )
 
         if result.success:
             # Update our active states based on result
             self.active_states.update(result.activated_states)
             self.active_states.difference_update(result.deactivated_states)
-            print(f"\n✓ Transition successful")
+            print("\n✓ Transition successful")
         else:
             failed_phase = result.get_failed_phase()
             print(f"\n✗ Transition failed at phase: {failed_phase}")
@@ -306,9 +306,9 @@ class GUIWorkspaceDemo:
 
     def verify_group_atomicity(self):
         """Verify that all groups maintain atomicity."""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("Verifying Group Atomicity")
-        print("="*60)
+        print("=" * 60)
 
         groups = [self.workspace_group, self.main_ui_group]
 
@@ -321,14 +321,16 @@ class GUIWorkspaceDemo:
                     print(f"✓ {group.name}: Fully inactive")
             else:
                 active_in_group = [s for s in group.states if s in self.active_states]
-                print(f"✗ {group.name}: ATOMICITY VIOLATED! "
-                      f"{len(active_in_group)}/{len(group)} states active")
+                print(
+                    f"✗ {group.name}: ATOMICITY VIOLATED! "
+                    f"{len(active_in_group)}/{len(group)} states active"
+                )
 
     def demonstrate_blocking(self):
         """Demonstrate blocking state behavior."""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("Demonstrating Blocking States")
-        print("="*60)
+        print("=" * 60)
 
         # Try to show save dialog while editor is active
         if self.execute_transition(self.show_save_dialog):
@@ -342,7 +344,7 @@ class GUIWorkspaceDemo:
                 id="test",
                 name="Try to activate toolbar",
                 from_states=set(),
-                activate_states={self.toolbar}
+                activate_states={self.toolbar},
             )
 
             print("\nAttempting to activate blocked toolbar...")
@@ -354,9 +356,9 @@ class GUIWorkspaceDemo:
 
     def run_demo(self):
         """Run the complete demonstration."""
-        print("\n" + "#"*60)
+        print("\n" + "#" * 60)
         print("# MultiState GUI Workspace Demonstration")
-        print("#"*60)
+        print("#" * 60)
 
         # Start with splash
         self.active_states.add(self.splash)
@@ -388,9 +390,9 @@ class GUIWorkspaceDemo:
 
         # Would need to close error to continue (not implemented)
 
-        print("\n" + "#"*60)
+        print("\n" + "#" * 60)
         print("# Demo Complete")
-        print("#"*60)
+        print("#" * 60)
 
         print(f"\nFinal active states: {self._format_states(self.active_states)}")
         print(f"\nExecution log ({len(self.execution_log)} entries):")

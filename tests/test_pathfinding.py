@@ -2,17 +2,15 @@
 """Test multi-target pathfinding algorithm."""
 
 import sys
-import os
-sys.path.insert(0, 'src')
+
+sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.core.state_group import StateGroup
-from multistate.transitions.transition import Transition
 from multistate.pathfinding.multi_target import (
     MultiTargetPathFinder,
     SearchStrategy,
-    Path
 )
+from multistate.transitions.transition import Transition
 
 
 def create_test_scenario():
@@ -33,7 +31,7 @@ def create_test_scenario():
         from_states={login},
         activate_states={main_menu},
         exit_states={login},
-        path_cost=1
+        path_cost=1,
     )
 
     t2 = Transition(
@@ -42,7 +40,7 @@ def create_test_scenario():
         from_states={main_menu},
         activate_states={toolbar, sidebar, editor},
         exit_states=set(),
-        path_cost=2
+        path_cost=2,
     )
 
     t3 = Transition(
@@ -50,7 +48,7 @@ def create_test_scenario():
         name="Open Console",
         from_states={editor},
         activate_states={console},
-        path_cost=1
+        path_cost=1,
     )
 
     t4 = Transition(
@@ -58,7 +56,7 @@ def create_test_scenario():
         name="Open Settings",
         from_states={main_menu},
         activate_states={settings},
-        path_cost=1
+        path_cost=1,
     )
 
     t5 = Transition(
@@ -67,7 +65,7 @@ def create_test_scenario():
         from_states={login},
         activate_states={editor},
         exit_states={login},
-        path_cost=5  # More expensive direct route
+        path_cost=5,  # More expensive direct route
     )
 
     states = {
@@ -77,7 +75,7 @@ def create_test_scenario():
         "sidebar": sidebar,
         "editor": editor,
         "console": console,
-        "settings": settings
+        "settings": settings,
     }
 
     transitions = [t1, t2, t3, t4, t5]
@@ -87,9 +85,9 @@ def create_test_scenario():
 
 def test_single_target():
     """Test finding path to a single target."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 1: Single Target Pathfinding")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -115,9 +113,9 @@ def test_single_target():
 
 def test_multiple_targets():
     """Test finding path to multiple targets."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 2: Multi-Target Pathfinding")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -155,9 +153,9 @@ def test_multiple_targets():
 
 def test_multi_state_activation():
     """Test that multi-state transitions are properly handled."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 3: Multi-State Activation in Pathfinding")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -182,7 +180,9 @@ def test_multi_state_activation():
         if len(path.states_sequence) >= 3:
             final_states = path.states_sequence[-1]
             activated_count = len(targets.intersection(final_states))
-            print(f"✓ Final state has {activated_count}/3 targets active simultaneously")
+            print(
+                f"✓ Final state has {activated_count}/3 targets active simultaneously"
+            )
     else:
         print("✗ No path found")
 
@@ -191,9 +191,9 @@ def test_multi_state_activation():
 
 def test_dijkstra_vs_bfs():
     """Test that Dijkstra finds lower-cost path than BFS."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 4: Dijkstra vs BFS (Cost Optimization)")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -209,17 +209,19 @@ def test_dijkstra_vs_bfs():
     dijkstra_path = dijkstra_finder.find_path_to_all(current, targets)
 
     if bfs_path:
-        print(f"BFS path: {len(bfs_path.transitions_sequence)} steps, cost={bfs_path.total_cost}")
+        steps = len(bfs_path.transitions_sequence)
+        print(f"BFS path: {steps} steps, cost={bfs_path.total_cost}")
 
     if dijkstra_path:
-        print(f"Dijkstra path: {len(dijkstra_path.transitions_sequence)} steps, cost={dijkstra_path.total_cost}")
+        steps = len(dijkstra_path.transitions_sequence)
+        print(f"Dijkstra path: {steps} steps, cost={dijkstra_path.total_cost}")
 
     # BFS might find: Login -> Main -> Editor (cost=3)
     # Direct path exists: Login -> Editor (cost=5)
     # So BFS chooses fewer steps, Dijkstra chooses lower cost
 
     if bfs_path and dijkstra_path:
-        print(f"✓ Both algorithms found paths")
+        print("✓ Both algorithms found paths")
         return True
 
     return False
@@ -227,9 +229,9 @@ def test_dijkstra_vs_bfs():
 
 def test_impossible_path():
     """Test behavior when no path exists."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 5: Impossible Path")
-    print("="*60)
+    print("=" * 60)
 
     # Create disconnected states
     island1 = State("island1", "Island 1")
@@ -255,9 +257,9 @@ def test_impossible_path():
 
 def test_already_at_targets():
     """Test when current states already include all targets."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Test 6: Already at Targets")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -281,9 +283,9 @@ def test_already_at_targets():
 
 def analyze_complexity():
     """Analyze and display complexity metrics."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Complexity Analysis")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
     finder = MultiTargetPathFinder(transitions, SearchStrategy.BFS)
@@ -291,8 +293,7 @@ def analyze_complexity():
     # Analyze for different target counts
     for num_targets in [1, 2, 3, 4, 5]:
         analysis = finder.analyze_complexity(
-            num_states=7,  # Our test scenario has 7 states
-            num_targets=num_targets
+            num_states=7, num_targets=num_targets  # Our test scenario has 7 states
         )
 
         print(f"\nWith {num_targets} target(s):")
@@ -304,9 +305,9 @@ def analyze_complexity():
 
 def demonstrate_multi_target_advantage():
     """Demonstrate advantage of multi-target over sequential single-target."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Multi-Target vs Sequential Single-Target")
-    print("="*60)
+    print("=" * 60)
 
     states, transitions = create_test_scenario()
 
@@ -342,9 +343,9 @@ def demonstrate_multi_target_advantage():
 
 def main():
     """Run all pathfinding tests."""
-    print("#"*60)
+    print("#" * 60)
     print("# Multi-Target Pathfinding Tests")
-    print("#"*60)
+    print("#" * 60)
 
     tests = [
         test_single_target,
@@ -368,9 +369,9 @@ def main():
     analyze_complexity()
     demonstrate_multi_target_advantage()
 
-    print("\n" + "#"*60)
+    print("\n" + "#" * 60)
     print("# Summary")
-    print("#"*60)
+    print("#" * 60)
 
     passed = sum(1 for _, success in results if success)
     total = len(results)

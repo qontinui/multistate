@@ -4,7 +4,6 @@ These tests verify that our implementation correctly follows the
 mathematical definitions from the Model-based GUI Automation paper.
 """
 
-import pytest
 from typing import Set
 
 from multistate.core.element import Element
@@ -105,7 +104,11 @@ class TestFormalModelAlignment:
         s3 = State("s3", "Settings", mock_starting_probability=1.0)
 
         # Calculate probabilities
-        total_weight = s1.mock_starting_probability + s2.mock_starting_probability + s3.mock_starting_probability
+        total_weight = (
+            s1.mock_starting_probability
+            + s2.mock_starting_probability
+            + s3.mock_starting_probability
+        )
         p1 = s1.mock_starting_probability / total_weight
         p2 = s2.mock_starting_probability / total_weight
         p3 = s3.mock_starting_probability / total_weight
@@ -119,10 +122,12 @@ class TestFormalModelAlignment:
     def test_blocking_states(self):
         """Test: s_b ∈ S_Ξ ⟹ target(t) ∩ B(s_b) = ∅ (blocking)"""
         # Create states
-        modal = State("modal", "Modal Dialog", blocking=True, blocks={"toolbar", "sidebar"})
-        toolbar = State("toolbar", "Toolbar")
-        sidebar = State("sidebar", "Sidebar")
-        footer = State("footer", "Footer")
+        modal = State(
+            "modal", "Modal Dialog", blocking=True, blocks={"toolbar", "sidebar"}
+        )
+        _ = State("toolbar", "Toolbar")
+        _ = State("sidebar", "Sidebar")
+        _ = State("footer", "Footer")
 
         # When modal is active, it blocks certain states
         assert modal.is_blocking()
@@ -171,9 +176,7 @@ class TestPracticalScenarios:
 
         # Group them as workspace
         workspace = StateGroup(
-            "workspace",
-            "Main Workspace",
-            states={toolbar, sidebar, content}
+            "workspace", "Main Workspace", states={toolbar, sidebar, content}
         )
 
         # Verify workspace structure
@@ -202,10 +205,7 @@ class TestPracticalScenarios:
 
         # Create blocking modal
         modal = State(
-            "modal",
-            "Save Dialog",
-            blocking=True,
-            blocks={"toolbar", "content"}
+            "modal", "Save Dialog", blocking=True, blocks={"toolbar", "content"}
         )
 
         # Before modal: normal states active
