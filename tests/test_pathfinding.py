@@ -6,10 +6,7 @@ import sys
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import (
-    MultiTargetPathFinder,
-    SearchStrategy,
-)
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
 from multistate.transitions.transition import Transition
 
 

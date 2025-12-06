@@ -20,10 +20,7 @@ from multistate.core.element import Element
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
-from multistate.transitions.transition import (
-    IncomingTransition,
-    Transition,
-)
+from multistate.transitions.transition import IncomingTransition, Transition
 
 
 class GUIWorkspaceDemo:

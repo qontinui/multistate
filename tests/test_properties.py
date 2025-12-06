@@ -162,6 +162,7 @@ class PropertyTests:
             def make_incoming(s_id, exec_set):
                 def callback():
                     exec_set.add(s_id)
+
                 return callback
 
             from multistate.transitions.transition import IncomingTransition

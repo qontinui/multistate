@@ -81,7 +81,7 @@ def benchmark_scaling():
 
     # Show complexity analysis
     analysis = finder.analyze_complexity(num_states=10, num_targets=4)
-    configs = analysis['total_search_space']
+    configs = analysis["total_search_space"]
     print(f"\nComplexity with 4 targets: {configs:,} configurations")
     print(f"Formula: {analysis['complexity_class']}")
 
@@ -124,7 +124,7 @@ def compare_approaches():
 
     if path:
         print(f"  All targets: cost={path.total_cost:.1f}, time={elapsed:.2f}ms")
-        efficiency = ((total_cost/path.total_cost - 1) * 100)
+        efficiency = (total_cost / path.total_cost - 1) * 100
         print(f"\n  EFFICIENCY GAIN: {efficiency:.0f}% better")
 
 

@@ -197,7 +197,7 @@ class PathVisualizer:
 
         # Show path sequences
         lines.append("\nPath Details:")
-        for path, label in zip(paths, labels):
+        for path, label in zip(paths, labels, strict=False):
             if path:
                 lines.append(f"\n{label}:")
                 for j, trans in enumerate(path.transitions_sequence):
