@@ -8,10 +8,7 @@ sys.path.insert(0, "src")
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
-from multistate.transitions.transition import (
-    Transition,
-    TransitionPhase,
-)
+from multistate.transitions.transition import Transition, TransitionPhase
 
 
 def test_basic_transition():

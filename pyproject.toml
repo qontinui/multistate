@@ -41,6 +41,7 @@ hypothesis = ">=6.0.0"
 black = ">=23.0.0"
 mypy = ">=1.0.0"
 ruff = ">=0.1.0"
+isort = "^7.0.0"
 
 [tool.poetry.group.examples.dependencies]
 jupyter = ">=1.0.0"
