@@ -1,7 +1,7 @@
 """Callback management for transitions."""
 
 from dataclasses import dataclass, field
-from typing import Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 
 
 @dataclass
@@ -82,7 +82,7 @@ class TransitionCallbacks:
         """Get exit callback for state deactivation."""
         return self.exit_callbacks.get((transition_id, state_id))
 
-    def execute_outgoing(self, transition_id: str, **kwargs) -> bool:
+    def execute_outgoing(self, transition_id: str, **kwargs: Any) -> bool:
         """Execute outgoing callback if registered.
 
         Returns:
@@ -96,7 +96,9 @@ class TransitionCallbacks:
                 return False
         return True
 
-    def execute_incoming(self, transition_id: str, state_id: str, **kwargs) -> bool:
+    def execute_incoming(
+        self, transition_id: str, state_id: str, **kwargs: Any
+    ) -> bool:
         """Execute incoming callback if registered.
 
         Returns:
@@ -110,7 +112,7 @@ class TransitionCallbacks:
                 return False
         return True
 
-    def execute_validation(self, transition_id: str, **kwargs) -> bool:
+    def execute_validation(self, transition_id: str, **kwargs: Any) -> bool:
         """Execute validation callback if registered.
 
         Returns:
@@ -124,7 +126,7 @@ class TransitionCallbacks:
                 return False
         return True
 
-    def execute_exit(self, transition_id: str, state_id: str, **kwargs) -> bool:
+    def execute_exit(self, transition_id: str, state_id: str, **kwargs: Any) -> bool:
         """Execute exit callback if registered.
 
         Returns:
@@ -138,7 +140,7 @@ class TransitionCallbacks:
                 return False
         return True
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all callbacks."""
         self.outgoing_callbacks.clear()
         self.incoming_callbacks.clear()
