@@ -126,7 +126,7 @@ class StateManager:
         # Setup logging
         self._setup_logging()
 
-    def _setup_logging(self):
+    def _setup_logging(self) -> None:
         """Configure logging."""
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(getattr(logging, self.config.log_level))
@@ -200,7 +200,7 @@ class StateManager:
             raise InvalidStateError(f"State '{id}' not found")
         return self.states[id]
 
-    def activate_states(self, state_ids: Set[str]):
+    def activate_states(self, state_ids: Set[str]) -> None:
         """Directly activate states (bypassing transitions).
 
         This is like Brobot's state memory population.
@@ -230,7 +230,7 @@ class StateManager:
         self.active_states.update(states)
         self.logger.info(f"Activated states: {state_ids}")
 
-    def deactivate_states(self, state_ids: Set[str]):
+    def deactivate_states(self, state_ids: Set[str]) -> None:
         """Directly deactivate states.
 
         Args:
@@ -399,7 +399,7 @@ class StateManager:
             if self.config.log_transitions:
                 self.logger.warning(
                     f"Transition '{transition_id}' failed at phase: "
-                    f"{failed_phase.value if failed_phase else 'unknown'}"
+                    f"{failed_phase.value if failed_phase is not None else 'unknown'}"
                 )
 
             if self.config.auto_rollback_on_failure:
@@ -408,15 +408,14 @@ class StateManager:
                 self.logger.debug("Rolled back to initial state")
 
         # Log history with additional metadata
+        failed_phase_obj = result.get_failed_phase()
         self.transition_history.append(
             (
                 transition_id,
                 result.success,
                 {
                     "failed_phase": (
-                        result.get_failed_phase().value
-                        if result.get_failed_phase()
-                        else None
+                        failed_phase_obj.value if failed_phase_obj is not None else None
                     ),
                     "activated": len(result.activated_states),
                     "deactivated": len(result.deactivated_states),
@@ -445,7 +444,7 @@ class StateManager:
 
     # ==================== Pathfinding ====================
 
-    def _rebuild_pathfinder(self):
+    def _rebuild_pathfinder(self) -> None:
         """Rebuild pathfinder with current transitions."""
         if self.transitions:
             self.pathfinder = MultiTargetPathFinder(
@@ -567,7 +566,7 @@ class StateManager:
         max_depth = max_depth or self.config.max_path_depth
 
         # Use BFS to explore reachable states
-        reachable = set()
+        reachable: Set[str] = set()
         visited = set()
         queue = [(self.active_states, 0)]
 

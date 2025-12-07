@@ -76,7 +76,7 @@ class HiddenStateManager:
     3. Reveal transitions when covering states close
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the hidden state manager."""
         # Track current occlusions: ω(s1, s2) = 1
         self.occlusions: Set[OcclusionRelation] = set()
@@ -199,9 +199,9 @@ class HiddenStateManager:
         box2_area = (box2["right"] - box2["left"]) * (box2["bottom"] - box2["top"])
 
         if box2_area == 0:
-            return 0
+            return 0.0
 
-        return overlap_area / box2_area
+        return float(overlap_area / box2_area)
 
     def update_occlusions(
         self, active_states: Set[State], spatial_info: Optional[Dict] = None

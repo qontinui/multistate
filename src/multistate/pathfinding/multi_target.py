@@ -14,7 +14,7 @@ import heapq
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 from multistate.core.state import State
 from multistate.transitions.transition import Transition
@@ -50,7 +50,7 @@ class PathNode:
         target_ids = tuple(sorted(s.id for s in self.targets_reached))
         return hash((active_ids, target_ids))
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
         """Nodes are equal if same active states and same targets reached."""
         if not isinstance(other, PathNode):
             return False
@@ -59,8 +59,10 @@ class PathNode:
             and self.targets_reached == other.targets_reached
         )
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: object) -> bool:
         """For priority queue ordering."""
+        if not isinstance(other, PathNode):
+            return NotImplemented
         return self.cost < other.cost
 
 
@@ -120,7 +122,7 @@ class MultiTargetPathFinder:
         self.transitions_from_state: Dict[str, List[Transition]] = {}
         self._build_transition_graph()
 
-    def _build_transition_graph(self):
+    def _build_transition_graph(self) -> None:
         """Build lookup structure for transitions."""
         for transition in self.transitions:
             # Transitions can execute from any of their from_states
@@ -236,9 +238,9 @@ class MultiTargetPathFinder:
         )
 
         # Priority queue (cost, node)
-        heap = [(0, start_node)]
+        heap = [(0.0, start_node)]
         visited = set()
-        best_costs = {start_node: 0}
+        best_costs: Dict[PathNode, float] = {start_node: 0.0}
 
         while heap:
             current_cost, node = heapq.heappop(heap)
@@ -275,7 +277,7 @@ class MultiTargetPathFinder:
                 if new_node not in visited:
                     if new_node not in best_costs or new_cost < best_costs[new_node]:
                         best_costs[new_node] = new_cost
-                        heapq.heappush(heap, (new_cost, new_node))
+                        heapq.heappush(heap, (new_cost, new_node))  # type: ignore[misc,arg-type]
 
         return None
 
@@ -298,7 +300,7 @@ class MultiTargetPathFinder:
         h_score = self._heuristic(start_node, target_states)
         heap = [(h_score, start_node)]
         visited = set()
-        g_scores = {start_node: 0}
+        g_scores: Dict[PathNode, float] = {start_node: 0.0}
 
         while heap:
             _, node = heapq.heappop(heap)
@@ -335,7 +337,7 @@ class MultiTargetPathFinder:
                         g_scores[new_node] = g_score
                         h_score = self._heuristic(new_node, target_states)
                         f_score = g_score + h_score
-                        heapq.heappush(heap, (f_score, new_node))
+                        heapq.heappush(heap, (f_score, new_node))  # type: ignore[misc,arg-type]
 
         return None
 
@@ -392,7 +394,7 @@ class MultiTargetPathFinder:
 
         # Walk backwards from end to start
         nodes = []
-        current = end_node
+        current: Optional[PathNode] = end_node
         while current is not None:
             nodes.append(current)
             current = current.parent
@@ -410,7 +412,7 @@ class MultiTargetPathFinder:
 
         return path
 
-    def analyze_complexity(self, num_states: int, num_targets: int) -> Dict[str, any]:
+    def analyze_complexity(self, num_states: int, num_targets: int) -> Dict[str, Any]:
         """Analyze algorithmic complexity for given parameters.
 
         Returns complexity metrics for paper.

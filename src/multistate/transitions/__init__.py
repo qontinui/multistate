@@ -2,10 +2,10 @@
 
 from multistate.transitions.executor import TransitionExecutor
 from multistate.transitions.transition import (
-    PhaseResult,
-    Transition,
-    TransitionPhase,
-    TransitionResult,
+                                               PhaseResult,
+                                               Transition,
+                                               TransitionPhase,
+                                               TransitionResult,
 )
 
 __all__ = [

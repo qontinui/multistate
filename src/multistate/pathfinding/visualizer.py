@@ -3,7 +3,7 @@
 Generates ASCII and Graphviz visualizations of pathfinding.
 """
 
-from typing import List, Optional, Set
+from typing import Dict, List, Optional, Set
 
 from multistate.core.state import State
 from multistate.pathfinding.multi_target import Path
@@ -217,14 +217,14 @@ class PathVisualizer:
         lines.append("=" * 60)
 
         # Group nodes by depth
-        by_depth = {}
+        by_depth: Dict[int, List] = {}
         for node in search_nodes[:100]:  # Limit to first 100 for readability
             if node.depth not in by_depth:
                 by_depth[node.depth] = []
             by_depth[node.depth].append(node)
 
         # Show each depth level
-        for depth in range(min(max_depth + 1, max(by_depth.keys()) + 1)):
+        for depth in range(min(max_depth + 1, max(by_depth.keys(), default=0) + 1)):
             if depth in by_depth:
                 lines.append(f"\nDepth {depth}: {len(by_depth[depth])} nodes")
 

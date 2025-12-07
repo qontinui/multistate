@@ -7,7 +7,7 @@ Following the paper's formal model where:
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Set
+from typing import Any, Dict, Iterator, Set
 
 from multistate.core.state import State
 
@@ -64,7 +64,7 @@ class StateGroup:
         """Return the number of states in the group."""
         return len(self.states)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[State]:
         """Iterate over states in the group."""
         return iter(self.states)
 
