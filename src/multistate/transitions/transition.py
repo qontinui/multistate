@@ -11,12 +11,16 @@ where:
 - φ: phased execution strategy
 """
 
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from multistate.core.state import State
+
 from multistate.core.state_group import StateGroup
+
+logger = logging.getLogger(__name__)
 
 
 class TransitionPhase(Enum):
@@ -260,5 +264,5 @@ class IncomingTransition:
             self.action()
             return True
         except Exception as e:
-            print(f"Incoming transition {self.name} failed: {e}")
+            logger.error("Incoming transition %s failed: %s", self.name, e)
             return False
