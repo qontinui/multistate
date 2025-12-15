@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Optional dependencies for screenshot support
 try:
-    import cv2
+    import cv2  # type: ignore[import-not-found]
     import numpy as np
 
     HAS_CV2 = True

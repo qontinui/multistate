@@ -40,7 +40,7 @@ class PathAnalyzer:
             return {}
 
         # Build graph
-        G = nx.DiGraph()
+        G: Any = nx.DiGraph()
 
         if hasattr(state_graph, "states"):
             for state_name, state in state_graph.states.items():
