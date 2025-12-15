@@ -1,7 +1,6 @@
 """Test metrics tracking functionality."""
 
 import time
-from datetime import datetime
 
 import pytest
 
@@ -440,9 +439,7 @@ class TestStateManagerIntegration:
 
     def test_transition_success_rates_integration(self) -> None:
         """Test getting transition success rates through StateManager."""
-        config = StateManagerConfig(
-            enable_metrics=True, allow_invalid_transitions=True
-        )
+        config = StateManagerConfig(enable_metrics=True, allow_invalid_transitions=True)
         manager = StateManager(config)
 
         manager.add_state("state1")

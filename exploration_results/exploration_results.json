@@ -1,0 +1,247 @@
+{
+  "metrics": {
+    "total_states": 7,
+    "visited_states": 6,
+    "unvisited_states": [
+      "b2"
+    ],
+    "total_transitions": 6,
+    "executed_transitions": 5,
+    "unexecuted_transitions": [
+      [
+        "b",
+        "b2"
+      ]
+    ],
+    "total_executions": 6,
+    "successful_executions": 6,
+    "failed_executions": 0,
+    "error_executions": 0,
+    "unique_paths": 2,
+    "longest_path_length": 2,
+    "average_path_length": 2.0,
+    "total_execution_time_ms": 600.0,
+    "average_transition_time_ms": 100.0,
+    "calculated_at": "2025-12-15T21:13:53.186889",
+    "state_coverage_percent": 85.71428571428571,
+    "transition_coverage_percent": 83.33333333333334,
+    "success_rate_percent": 100.0
+  },
+  "executions": [
+    {
+      "execution_id": "f49f7a51-e311-4c58-b432-ccec9fb3a916",
+      "from_state": "start",
+      "to_state": "a",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.185888",
+      "duration_ms": 100.0,
+      "attempt_number": 1,
+      "error_message": null,
+      "actual_end_state": "a",
+      "screenshot_path": null,
+      "metadata": {}
+    },
+    {
+      "execution_id": "8b8fd4b5-3033-4c7a-895e-f900b4b52ffa",
+      "from_state": "a",
+      "to_state": "a1",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.185888",
+      "duration_ms": 100.0,
+      "attempt_number": 1,
+      "error_message": null,
+      "actual_end_state": "a1",
+      "screenshot_path": null,
+      "metadata": {}
+    },
+    {
+      "execution_id": "37b33f0f-a788-4358-bafe-ee6e8ebdaa53",
+      "from_state": "start",
+      "to_state": "b",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.185888",
+      "duration_ms": 100.0,
+      "attempt_number": 1,
+      "error_message": null,
+      "actual_end_state": "b",
+      "screenshot_path": null,
+      "metadata": {}
+    },
+    {
+      "execution_id": "bd64a4a1-b908-49c0-90c0-a3fdc4bb0dd0",
+      "from_state": "b",
+      "to_state": "b1",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.186889",
+      "duration_ms": 100.0,
+      "attempt_number": 1,
+      "error_message": null,
+      "actual_end_state": "b1",
+      "screenshot_path": null,
+      "metadata": {}
+    },
+    {
+      "execution_id": "6efaf713-48ec-420b-ba13-85c2efa7c49d",
+      "from_state": "start",
+      "to_state": "a",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.186889",
+      "duration_ms": 100.0,
+      "attempt_number": 2,
+      "error_message": null,
+      "actual_end_state": "a",
+      "screenshot_path": null,
+      "metadata": {}
+    },
+    {
+      "execution_id": "de582aab-9905-441e-9d34-9ac97297978f",
+      "from_state": "a",
+      "to_state": "a2",
+      "status": "success",
+      "timestamp": "2025-12-15T21:13:53.186889",
+      "duration_ms": 100.0,
+      "attempt_number": 1,
+      "error_message": null,
+      "actual_end_state": "a2",
+      "screenshot_path": null,
+      "metadata": {}
+    }
+  ],
+  "statistics": [
+    {
+      "from_state": "start",
+      "to_state": "a",
+      "total_attempts": 2,
+      "successes": 2,
+      "failures": 0,
+      "errors": 0,
+      "min_duration_ms": 100.0,
+      "max_duration_ms": 100.0,
+      "avg_duration_ms": 100.0,
+      "std_dev_duration_ms": 0.0,
+      "first_executed": "2025-12-15T21:13:53.185888",
+      "last_executed": "2025-12-15T21:13:53.186889",
+      "success_rate": 100.0
+    },
+    {
+      "from_state": "a",
+      "to_state": "a1",
+      "total_attempts": 1,
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "min_duration_ms": 100.0,
+      "max_duration_ms": 100.0,
+      "avg_duration_ms": 100.0,
+      "std_dev_duration_ms": 0.0,
+      "first_executed": "2025-12-15T21:13:53.185888",
+      "last_executed": "2025-12-15T21:13:53.185888",
+      "success_rate": 100.0
+    },
+    {
+      "from_state": "start",
+      "to_state": "b",
+      "total_attempts": 1,
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "min_duration_ms": 100.0,
+      "max_duration_ms": 100.0,
+      "avg_duration_ms": 100.0,
+      "std_dev_duration_ms": 0.0,
+      "first_executed": "2025-12-15T21:13:53.185888",
+      "last_executed": "2025-12-15T21:13:53.185888",
+      "success_rate": 100.0
+    },
+    {
+      "from_state": "b",
+      "to_state": "b1",
+      "total_attempts": 1,
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "min_duration_ms": 100.0,
+      "max_duration_ms": 100.0,
+      "avg_duration_ms": 100.0,
+      "std_dev_duration_ms": 0.0,
+      "first_executed": "2025-12-15T21:13:53.186889",
+      "last_executed": "2025-12-15T21:13:53.186889",
+      "success_rate": 100.0
+    },
+    {
+      "from_state": "a",
+      "to_state": "a2",
+      "total_attempts": 1,
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "min_duration_ms": 100.0,
+      "max_duration_ms": 100.0,
+      "avg_duration_ms": 100.0,
+      "std_dev_duration_ms": 0.0,
+      "first_executed": "2025-12-15T21:13:53.186889",
+      "last_executed": "2025-12-15T21:13:53.186889",
+      "success_rate": 100.0
+    }
+  ],
+  "deficiencies": [],
+  "paths": [
+    {
+      "path_id": "ea8bb127-09a7-4ef3-be90-495c63e9a09e",
+      "start_state": "start",
+      "end_state": "a1",
+      "states": [
+        "start",
+        "a",
+        "a1"
+      ],
+      "transitions": [
+        "f49f7a51-e311-4c58-b432-ccec9fb3a916",
+        "8b8fd4b5-3033-4c7a-895e-f900b4b52ffa"
+      ],
+      "start_time": "2025-12-15T21:13:53.185888",
+      "end_time": "2025-12-15T21:13:53.185888",
+      "total_duration_ms": 200.0,
+      "success": true,
+      "metadata": {}
+    },
+    {
+      "path_id": "d994a389-56b2-4e17-ab00-d4578e3af6cd",
+      "start_state": "start",
+      "end_state": "b1",
+      "states": [
+        "start",
+        "b",
+        "b1"
+      ],
+      "transitions": [
+        "37b33f0f-a788-4358-bafe-ee6e8ebdaa53",
+        "bd64a4a1-b908-49c0-90c0-a3fdc4bb0dd0"
+      ],
+      "start_time": "2025-12-15T21:13:53.185888",
+      "end_time": "2025-12-15T21:13:53.186889",
+      "total_duration_ms": 200.0,
+      "success": true,
+      "metadata": {}
+    },
+    {
+      "path_id": "1340c273-c9ea-451d-b50b-a8cb8f551a1c",
+      "start_state": "start",
+      "end_state": "a2",
+      "states": [
+        "start",
+        "a",
+        "a2"
+      ],
+      "transitions": [
+        "6efaf713-48ec-420b-ba13-85c2efa7c49d",
+        "de582aab-9905-441e-9d34-9ac97297978f"
+      ],
+      "start_time": "2025-12-15T21:13:53.186889",
+      "end_time": "2025-12-15T21:13:53.186889",
+      "total_duration_ms": 200.0,
+      "success": true,
+      "metadata": {}
+    }
+  ]
+}

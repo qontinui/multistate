@@ -10,16 +10,23 @@ Following the formal model from the paper:
 """
 
 import logging
+import time
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from multistate.core.element import Element
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
+from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
 from multistate.pathfinding.multi_target import (
     MultiTargetPathFinder,
     Path,
     SearchStrategy,
+)
+from multistate.state_references import (
+    StateHistory,
+    StateReference,
+    StateReferenceResolver,
 )
 from multistate.transitions.callbacks import TransitionCallbacks
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
@@ -56,6 +63,13 @@ class StateManagerConfig:
     # Pathfinding settings
     default_search_strategy: SearchStrategy = SearchStrategy.DIJKSTRA
     max_path_depth: int = 100
+
+    # History settings
+    enable_state_history: bool = False
+    max_history_size: int = 100
+
+    # Metrics settings
+    enable_metrics: bool = False
 
     # Logging
     log_transitions: bool = True
@@ -118,7 +132,19 @@ class StateManager:
         # Callbacks
         self.callbacks = TransitionCallbacks()
 
-        # History
+        # State history tracking
+        self.state_history: Optional[StateHistory] = None
+        self.state_resolver: Optional[StateReferenceResolver] = None
+        if self.config.enable_state_history:
+            self.state_history = StateHistory(max_history=self.config.max_history_size)
+            self.state_resolver = StateReferenceResolver(
+                self.state_history, self._state_lookup
+            )
+
+        # Metrics tracking
+        self.metrics = MetricsManager(enabled=self.config.enable_metrics)
+
+        # Transition history
         self.transition_history: List[Tuple[str, bool, Dict[str, Any]]] = (
             []
         )  # (transition_id, success, metadata)
@@ -130,6 +156,32 @@ class StateManager:
         """Configure logging."""
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(getattr(logging, self.config.log_level))
+
+    def _state_lookup(self, state_id: str) -> Optional[State]:
+        """Lookup function for state resolver.
+
+        Args:
+            state_id: State ID to lookup
+
+        Returns:
+            State object or None if not found
+        """
+        return self.states.get(state_id)
+
+    def _record_state_snapshot(
+        self,
+        transition_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Record current state configuration to history.
+
+        Args:
+            transition_id: Transition that led to this state
+            metadata: Additional context information
+        """
+        if self.state_history:
+            active_ids = {s.id for s in self.active_states}
+            self.state_history.record_snapshot(active_ids, transition_id, metadata)
 
     # ==================== State Management ====================
 
@@ -228,7 +280,17 @@ class StateManager:
                 )
 
         self.active_states.update(states)
+
+        # Record metrics
+        for state_id in state_ids:
+            self.metrics.record_state_activation(state_id)
+
         self.logger.info(f"Activated states: {state_ids}")
+
+        # Record to history
+        self._record_state_snapshot(
+            metadata={"action": "activate", "states": list(state_ids)}
+        )
 
     def deactivate_states(self, state_ids: Set[str]) -> None:
         """Directly deactivate states.
@@ -238,7 +300,17 @@ class StateManager:
         """
         states = {self.get_state(sid) for sid in state_ids}
         self.active_states.difference_update(states)
+
+        # Record metrics
+        for state_id in state_ids:
+            self.metrics.record_state_deactivation(state_id)
+
         self.logger.info(f"Deactivated states: {state_ids}")
+
+        # Record to history
+        self._record_state_snapshot(
+            metadata={"action": "deactivate", "states": list(state_ids)}
+        )
 
     def get_active_states(self) -> Set[str]:
         """Get currently active state IDs."""
@@ -374,16 +446,41 @@ class StateManager:
                     f"Cannot execute '{transition_id}' from current state"
                 )
 
+        # Set expected states before execution
+        if self.state_history:
+            expected_result = self.executor.get_result_states(
+                transition, self.active_states
+            )
+            expected_ids = {s.id for s in expected_result}
+            self.state_history.set_expected_states(expected_ids)
+
         # Execute with callbacks
         initial_states = self.active_states.copy()
 
+        # Track execution time
+        start_time = time.time()
+
         result = self.executor.execute(transition, self.active_states, self.callbacks)
+
+        execution_time = time.time() - start_time
+
+        # Record transition metrics
+        self.metrics.record_transition_execution(
+            transition_id, result.success, execution_time
+        )
 
         # Update active states if successful
         if result.success:
             self.active_states = self.executor.get_result_states(
                 transition, initial_states
             )
+
+            # Record state snapshot
+            self._record_state_snapshot(transition_id=transition_id)
+
+            # Clear expected states
+            if self.state_history:
+                self.state_history.clear_expected_states()
 
             # Log detailed phase information
             if self.config.log_transitions:
@@ -394,6 +491,10 @@ class StateManager:
                         f"{'✓' if phase_result.success else '✗'} {phase_result.message}"
                     )
         else:
+            # Clear expected states on failure
+            if self.state_history:
+                self.state_history.clear_expected_states()
+
             # Log failure information
             failed_phase = result.get_failed_phase()
             if self.config.log_transitions:
@@ -534,6 +635,131 @@ class StateManager:
 
         return self.execute_path(path)
 
+    # ==================== State History & References ====================
+
+    def resolve_state_reference(self, reference: StateReference) -> Set[State]:
+        """Resolve a symbolic state reference to State objects.
+
+        Args:
+            reference: Symbolic reference (CURRENT, PREVIOUS, EXPECTED)
+
+        Returns:
+            Set of State objects matching the reference
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_resolver:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        return self.state_resolver.resolve_reference(reference)
+
+    def get_previous_states(self, offset: int = 1) -> Set[State]:
+        """Get previous states as State objects.
+
+        Args:
+            offset: How many snapshots back (1 = immediately previous)
+
+        Returns:
+            Set of State objects that were previously active
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_resolver:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        return self.state_resolver.get_previous_state_objects(offset)
+
+    def get_current_state_objects(self) -> Set[State]:
+        """Get current states as State objects (via history).
+
+        Returns:
+            Set of currently active State objects
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_resolver:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        return self.state_resolver.get_current_state_objects()
+
+    def get_expected_states(self) -> Set[State]:
+        """Get expected next states as State objects.
+
+        Returns:
+            Set of State objects expected to activate next
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_resolver:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        return self.state_resolver.get_expected_state_objects()
+
+    def get_state_changes(self) -> Tuple[Set[State], Set[State]]:
+        """Get states added/removed since previous snapshot.
+
+        Returns:
+            Tuple of (added_states, removed_states) as State objects
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_history:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+
+        added_ids, removed_ids = self.state_history.get_state_changes()
+
+        added_states = set()
+        for state_id in added_ids:
+            state = self._state_lookup(state_id)
+            if state:
+                added_states.add(state)
+
+        removed_states = set()
+        for state_id in removed_ids:
+            state = self._state_lookup(state_id)
+            if state:
+                removed_states.add(state)
+
+        return added_states, removed_states
+
+    def get_history_length(self) -> int:
+        """Get number of snapshots in history.
+
+        Returns:
+            Count of historical snapshots
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_history:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        return self.state_history.get_history_length()
+
+    def clear_history(self) -> None:
+        """Clear all state history.
+
+        Raises:
+            StateManagerError: If history is not enabled
+        """
+        if not self.state_history:
+            raise StateManagerError(
+                "State history is not enabled. Set enable_state_history=True in config."
+            )
+        self.state_history.clear_history()
+
     # ==================== Analysis ====================
 
     def get_available_transitions(self) -> List[str]:
@@ -659,6 +885,80 @@ class StateManager:
         lines.append(f"  Reachable States: {stats['reachable_states']}")
 
         return "\n".join(lines)
+
+    # ==================== Metrics Methods ====================
+
+    def get_state_metrics(self, state_id: str) -> Optional[StateMetrics]:
+        """Get metrics for a specific state.
+
+        Args:
+            state_id: State to query
+
+        Returns:
+            StateMetrics if available, None otherwise
+        """
+        return self.metrics.get_state_metrics(state_id)
+
+    def get_transition_metrics(self, transition_id: str) -> Optional[TransitionMetrics]:
+        """Get metrics for a specific transition.
+
+        Args:
+            transition_id: Transition to query
+
+        Returns:
+            TransitionMetrics if available, None otherwise
+        """
+        return self.metrics.get_transition_metrics(transition_id)
+
+    def get_most_visited_states(self, limit: int = 10) -> list[tuple[str, int]]:
+        """Get the most frequently visited states.
+
+        Args:
+            limit: Maximum number of states to return
+
+        Returns:
+            List of (state_id, visit_count) tuples, sorted descending
+        """
+        return self.metrics.get_most_visited_states(limit)
+
+    def get_most_executed_transitions(self, limit: int = 10) -> list[tuple[str, int]]:
+        """Get the most frequently executed transitions.
+
+        Args:
+            limit: Maximum number of transitions to return
+
+        Returns:
+            List of (transition_id, execution_count) tuples, sorted descending
+        """
+        return self.metrics.get_most_executed_transitions(limit)
+
+    def get_transition_success_rates(self) -> Dict[str, float]:
+        """Get success rates for all transitions.
+
+        Returns:
+            Dictionary mapping transition IDs to success rates (0.0-1.0)
+        """
+        return self.metrics.get_transition_success_rates()
+
+    def get_metrics_summary(self) -> Dict[str, Any]:
+        """Get summary of all metrics.
+
+        Returns:
+            Dictionary with overview statistics
+        """
+        return self.metrics.get_summary()
+
+    def reset_metrics(self) -> None:
+        """Reset all metrics to initial state."""
+        self.metrics.reset_all()
+
+    def enable_metrics(self) -> None:
+        """Enable metrics tracking."""
+        self.metrics.enable()
+
+    def disable_metrics(self) -> None:
+        """Disable metrics tracking."""
+        self.metrics.disable()
 
     def __repr__(self) -> str:
         """String representation."""

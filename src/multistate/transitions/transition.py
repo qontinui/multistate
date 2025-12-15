@@ -17,8 +17,8 @@ from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from multistate.core.state import State
-
 from multistate.core.state_group import StateGroup
+from multistate.transitions.visibility import StaysVisible
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +93,7 @@ class Transition:
         action: Optional action function A to execute
         incoming_actions: Actions to run for newly activated states
         path_cost: Cost for pathfinding (c_T(t))
+        stays_visible: Controls visibility of source states after transition
         metadata: Additional transition-specific data
     """
 
@@ -106,6 +107,7 @@ class Transition:
     action: Optional[Callable[[], bool]] = None
     incoming_actions: Dict[str, Callable[[], None]] = field(default_factory=dict)
     path_cost: float = 1.0
+    stays_visible: StaysVisible = StaysVisible.NONE
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __hash__(self) -> int:
@@ -227,6 +229,7 @@ class Transition:
             "activate_groups": [g.id for g in self.activate_groups],
             "exit_groups": [g.id for g in self.exit_groups],
             "path_cost": self.path_cost,
+            "stays_visible": self.stays_visible.value,
             "has_action": self.action is not None,
             "incoming_actions": list(self.incoming_actions.keys()),
             "metadata": self.metadata,

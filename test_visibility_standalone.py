@@ -6,12 +6,13 @@ the state_references.py type annotation issue.
 """
 
 import sys
+
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
+from multistate.transitions.executor import TransitionExecutor
 from multistate.transitions.transition import Transition, TransitionPhase
 from multistate.transitions.visibility import StaysVisible
-from multistate.transitions.executor import TransitionExecutor
 
 
 def test_stays_visible_enum():
@@ -36,12 +37,7 @@ def test_transition_default():
     s1 = State("s1", "State 1")
     s2 = State("s2", "State 2")
 
-    t = Transition(
-        id="test",
-        name="Test",
-        from_states={s1},
-        activate_states={s2}
-    )
+    t = Transition(id="test", name="Test", from_states={s1}, activate_states={s2})
 
     assert t.stays_visible == StaysVisible.NONE
     print("   [OK] Default is StaysVisible.NONE")
@@ -61,7 +57,7 @@ def test_transition_with_stays_visible():
         name="Test True",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.TRUE
+        stays_visible=StaysVisible.TRUE,
     )
     assert t_true.stays_visible == StaysVisible.TRUE
 
@@ -71,7 +67,7 @@ def test_transition_with_stays_visible():
         name="Test False",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.FALSE
+        stays_visible=StaysVisible.FALSE,
     )
     assert t_false.stays_visible == StaysVisible.FALSE
 
@@ -91,7 +87,7 @@ def test_to_dict_includes_stays_visible():
         name="Test",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.TRUE
+        stays_visible=StaysVisible.TRUE,
     )
 
     data = t.to_dict()
@@ -114,7 +110,7 @@ def test_executor_visibility_phase_none():
         name="Test",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.NONE
+        stays_visible=StaysVisible.NONE,
     )
 
     executor = TransitionExecutor()
@@ -151,7 +147,7 @@ def test_executor_visibility_phase_true():
         name="Test",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.TRUE
+        stays_visible=StaysVisible.TRUE,
     )
 
     executor = TransitionExecutor()
@@ -188,7 +184,7 @@ def test_executor_visibility_phase_false():
         name="Test",
         from_states={s1},
         activate_states={s2},
-        stays_visible=StaysVisible.FALSE
+        stays_visible=StaysVisible.FALSE,
     )
 
     executor = TransitionExecutor()
@@ -226,7 +222,7 @@ def test_multiple_from_states():
         name="Test",
         from_states={s1, s2},
         activate_states={s3},
-        stays_visible=StaysVisible.TRUE
+        stays_visible=StaysVisible.TRUE,
     )
 
     executor = TransitionExecutor()
@@ -275,6 +271,7 @@ def main():
         except Exception as e:
             print(f"   ✗ Test failed: {e}")
             import traceback
+
             traceback.print_exc()
             results.append((test.__name__, False))
 

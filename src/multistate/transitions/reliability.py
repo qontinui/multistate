@@ -15,7 +15,7 @@ adapted for generic state machine usage (no GUI-specific code).
 
 import logging
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
@@ -175,9 +175,7 @@ class ReliabilityTracker:
             self._stats[transition_id] = TransitionStats(transition_id=transition_id)
         return self._stats[transition_id]
 
-    def record_success(
-        self, transition_id: str, execution_time: float = 0.0
-    ) -> None:
+    def record_success(self, transition_id: str, execution_time: float = 0.0) -> None:
         """Record a successful transition execution.
 
         Args:
@@ -192,9 +190,7 @@ class ReliabilityTracker:
             stats.success_rate * 100,
         )
 
-    def record_failure(
-        self, transition_id: str, execution_time: float = 0.0
-    ) -> None:
+    def record_failure(self, transition_id: str, execution_time: float = 0.0) -> None:
         """Record a failed transition execution.
 
         Args:
@@ -302,9 +298,7 @@ class ReliabilityTracker:
             "overall_success_rate": (
                 total_successes / total_attempts if total_attempts > 0 else 0.0
             ),
-            "transitions": {
-                tid: stats.to_dict() for tid, stats in self._stats.items()
-            },
+            "transitions": {tid: stats.to_dict() for tid, stats in self._stats.items()},
         }
 
     def get_least_reliable(self, limit: int = 5) -> list[TransitionStats]:
@@ -322,9 +316,7 @@ class ReliabilityTracker:
         ]
 
         # Sort by success rate (lowest first)
-        sorted_transitions = sorted(
-            transitions_with_data, key=lambda s: s.success_rate
-        )
+        sorted_transitions = sorted(transitions_with_data, key=lambda s: s.success_rate)
 
         return sorted_transitions[:limit]
 

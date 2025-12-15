@@ -209,7 +209,9 @@ class PathTracker:
             # Determine attempt number
             transition_key = (from_state, to_state)
             if transition_key in self._transition_stats:
-                attempt_number = self._transition_stats[transition_key].total_attempts + 1
+                attempt_number = (
+                    self._transition_stats[transition_key].total_attempts + 1
+                )
             else:
                 attempt_number = 1
 
@@ -223,7 +225,8 @@ class PathTracker:
                 duration_ms=duration_ms,
                 attempt_number=attempt_number,
                 error_message=error_message,
-                actual_end_state=actual_end_state or (to_state if success else from_state),
+                actual_end_state=actual_end_state
+                or (to_state if success else from_state),
                 screenshot_path=screenshot_path,
                 variables_snapshot=variables.copy() if variables else None,
                 metadata=metadata or {},
@@ -307,7 +310,9 @@ class PathTracker:
         Returns:
             List of TransitionStatistics for unstable transitions
         """
-        threshold = min_threshold if min_threshold is not None else self.stability_threshold
+        threshold = (
+            min_threshold if min_threshold is not None else self.stability_threshold
+        )
 
         with self._lock:
             unstable = []
@@ -557,7 +562,10 @@ class PathTracker:
                 priority = 1.0
 
                 # Boost unexplored
-                if prioritize_unexplored and transition_key not in self._executed_transitions:
+                if (
+                    prioritize_unexplored
+                    and transition_key not in self._executed_transitions
+                ):
                     priority *= 2.0
 
                 # Boost if leads to unvisited state
@@ -592,7 +600,9 @@ class PathTracker:
             matching_paths = [
                 p
                 for p in self._paths
-                if p.start_state == start_state and p.end_state == end_state and p.success
+                if p.start_state == start_state
+                and p.end_state == end_state
+                and p.success
             ]
 
             if not matching_paths:
@@ -615,7 +625,9 @@ class PathTracker:
             self._deficiency_callbacks.append(callback)
 
     def on_coverage_milestone(
-        self, callback: Callable[[CoverageMetrics, float], None], milestone_percent: float
+        self,
+        callback: Callable[[CoverageMetrics, float], None],
+        milestone_percent: float,
     ) -> None:
         """Register callback for coverage milestones.
 
@@ -699,7 +711,9 @@ class PathTracker:
 
         # Update average (incremental)
         n = stats.total_attempts
-        stats.avg_duration_ms = (stats.avg_duration_ms * (n - 1) + execution.duration_ms) / n
+        stats.avg_duration_ms = (
+            stats.avg_duration_ms * (n - 1) + execution.duration_ms
+        ) / n
 
         # Update timestamps
         if stats.first_executed is None:
@@ -739,7 +753,9 @@ class PathTracker:
             execution: Execution to analyze
         """
         # Detect execution-level deficiencies
-        deficiency_tuples = self._deficiency_detector.detect_execution_deficiencies(execution)
+        deficiency_tuples = self._deficiency_detector.detect_execution_deficiencies(
+            execution
+        )
 
         for category, severity, title, description in deficiency_tuples:
             self._add_deficiency(
@@ -757,7 +773,9 @@ class PathTracker:
         transition_key = (execution.from_state, execution.to_state)
         if transition_key in self._transition_stats:
             stats = self._transition_stats[transition_key]
-            stat_deficiencies = self._deficiency_detector.detect_transition_deficiencies(stats)
+            stat_deficiencies = (
+                self._deficiency_detector.detect_transition_deficiencies(stats)
+            )
 
             for category, severity, title, description in stat_deficiencies:
                 self._add_deficiency(
@@ -830,12 +848,16 @@ class PathTracker:
             CoverageMetrics instance
         """
         # State coverage
-        total_states = len(self.state_graph.states) if hasattr(self.state_graph, "states") else 0
+        total_states = (
+            len(self.state_graph.states) if hasattr(self.state_graph, "states") else 0
+        )
         visited_states = len(self._visited_states)
         unvisited_states = []
         if hasattr(self.state_graph, "states"):
             unvisited_states = [
-                name for name in self.state_graph.states if name not in self._visited_states
+                name
+                for name in self.state_graph.states
+                if name not in self._visited_states
             ]
 
         # Transition coverage
@@ -855,7 +877,9 @@ class PathTracker:
 
         # Execution metrics
         total_executions = len(self._executions)
-        successful = sum(1 for e in self._executions if e.status == ExecutionStatus.SUCCESS)
+        successful = sum(
+            1 for e in self._executions if e.status == ExecutionStatus.SUCCESS
+        )
         failed = sum(1 for e in self._executions if e.status == ExecutionStatus.FAILURE)
         errors = sum(1 for e in self._executions if e.status == ExecutionStatus.ERROR)
 
@@ -863,7 +887,9 @@ class PathTracker:
         unique_paths = len(self._paths)
         longest_path = max((p.length for p in self._paths), default=0)
         avg_path_length = (
-            sum(p.length for p in self._paths) / len(self._paths) if self._paths else 0.0
+            sum(p.length for p in self._paths) / len(self._paths)
+            if self._paths
+            else 0.0
         )
 
         # Time metrics
@@ -989,7 +1015,14 @@ class PathTracker:
         with open(output_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(
-                ["execution_id", "from_state", "to_state", "status", "duration_ms", "timestamp"]
+                [
+                    "execution_id",
+                    "from_state",
+                    "to_state",
+                    "status",
+                    "duration_ms",
+                    "timestamp",
+                ]
             )
 
             for execution in self._executions:

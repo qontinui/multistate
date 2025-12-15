@@ -2,13 +2,12 @@
 """Test transition reliability tracking."""
 
 import sys
-import time
 
 sys.path.insert(0, "src")
 
 # Import directly to avoid state_references.py type hint issue
 from multistate.core.state import State
-from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
+from multistate.transitions.executor import TransitionExecutor
 from multistate.transitions.reliability import ReliabilityTracker
 from multistate.transitions.transition import Transition
 
@@ -253,8 +252,8 @@ def test_execution_time_tracking():
     tracker.record_success("t1", execution_time=0.3)
 
     stats = tracker.get_stats("t1")
-    assert stats.total_time == 0.6
-    assert stats.average_time == 0.2
+    assert abs(stats.total_time - 0.6) < 0.001  # Floating point tolerance
+    assert abs(stats.average_time - 0.2) < 0.001  # Floating point tolerance
     print(f"   [OK] Average execution time: {stats.average_time:.2f}s")
 
     # Check timestamp tracking

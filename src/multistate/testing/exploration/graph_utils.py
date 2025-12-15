@@ -97,22 +97,16 @@ def analyze_graph_structure(tracker: PathTracker) -> Dict[str, Any]:
     return {
         "num_states": num_states,
         "num_transitions": num_transitions,
-        "avg_out_degree": (
-            sum(out_degrees) / len(out_degrees) if out_degrees else 0
-        ),
+        "avg_out_degree": (sum(out_degrees) / len(out_degrees) if out_degrees else 0),
         "max_out_degree": max(out_degrees) if out_degrees else 0,
         "min_out_degree": min(out_degrees) if out_degrees else 0,
         "graph_density": (
-            num_transitions / (num_states * (num_states - 1))
-            if num_states > 1
-            else 0
+            num_transitions / (num_states * (num_states - 1)) if num_states > 1 else 0
         ),
     }
 
 
-def find_unreachable_states(
-    tracker: PathTracker, start_state: str
-) -> Set[str]:
+def find_unreachable_states(tracker: PathTracker, start_state: str) -> Set[str]:
     """Find states that cannot be reached from the starting state.
 
     Args:

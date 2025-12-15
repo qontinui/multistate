@@ -43,7 +43,9 @@ class FailureAwareExplorer:
         self.skipped_transitions: dict[tuple[str, str], int] = defaultdict(int)
         self.last_retry_time: dict[tuple[str, str], float] = {}
 
-    def should_retry_transition(self, from_state: str, to_state: str, attempt: int) -> bool:
+    def should_retry_transition(
+        self, from_state: str, to_state: str, attempt: int
+    ) -> bool:
         """Determine if a failed transition should be retried.
 
         Args:
@@ -73,7 +75,8 @@ class FailureAwareExplorer:
         # Check max retries
         if attempt > self.max_retries:
             logger.warning(
-                f"Max retries ({self.max_retries}) exceeded for " f"{from_state} -> {to_state}"
+                f"Max retries ({self.max_retries}) exceeded for "
+                f"{from_state} -> {to_state}"
             )
             return False
 
@@ -90,7 +93,9 @@ class FailureAwareExplorer:
 
         return True
 
-    def calculate_backoff_time(self, from_state: str, to_state: str, attempt: int) -> float:
+    def calculate_backoff_time(
+        self, from_state: str, to_state: str, attempt: int
+    ) -> float:
         """Calculate exponential backoff time for retry.
 
         Args:
@@ -111,7 +116,8 @@ class FailureAwareExplorer:
         backoff_ms *= 1 + jitter
 
         logger.debug(
-            f"Backoff for {from_state} -> {to_state} (attempt {attempt}): " f"{backoff_ms:.0f}ms"
+            f"Backoff for {from_state} -> {to_state} (attempt {attempt}): "
+            f"{backoff_ms:.0f}ms"
         )
 
         return backoff_ms
@@ -184,7 +190,8 @@ class FailureAwareExplorer:
             del self.skipped_transitions[transition_key]
             from_state, to_state = transition_key
             logger.info(
-                f"Cooldown expired for {from_state} -> {to_state}, " "transition available again"
+                f"Cooldown expired for {from_state} -> {to_state}, "
+                "transition available again"
             )
 
     def get_failure_statistics(self) -> dict[str, Any]:
@@ -196,9 +203,9 @@ class FailureAwareExplorer:
         total_failed_transitions = len(self.total_failures)
         total_failure_count = sum(self.total_failures.values())
 
-        most_problematic = sorted(self.total_failures.items(), key=lambda x: x[1], reverse=True)[
-            :10
-        ]
+        most_problematic = sorted(
+            self.total_failures.items(), key=lambda x: x[1], reverse=True
+        )[:10]
 
         return {
             "total_failed_transitions": total_failed_transitions,
@@ -209,7 +216,9 @@ class FailureAwareExplorer:
                     "from_state": from_state,
                     "to_state": to_state,
                     "failures": count,
-                    "consecutive": self.consecutive_failures.get((from_state, to_state), 0),
+                    "consecutive": self.consecutive_failures.get(
+                        (from_state, to_state), 0
+                    ),
                 }
                 for (from_state, to_state), count in most_problematic
             ],
@@ -349,7 +358,9 @@ class FailureAwareExplorer:
         # Sort by total failures
         transition_details.sort(
             key=lambda x: (
-                int(x["total_failures"]) if isinstance(x["total_failures"], int | float) else 0
+                int(x["total_failures"])
+                if isinstance(x["total_failures"], int | float)
+                else 0
             ),
             reverse=True,
         )  # type: ignore[arg-type, return-value]

@@ -14,10 +14,13 @@ import heapq
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
 from multistate.core.state import State
 from multistate.transitions.transition import Transition
+
+if TYPE_CHECKING:
+    from multistate.transitions.reliability import ReliabilityTracker
 
 
 class SearchStrategy(Enum):
@@ -108,15 +111,18 @@ class MultiTargetPathFinder:
         self,
         transitions: List[Transition],
         strategy: SearchStrategy = SearchStrategy.BFS,
+        reliability_tracker: Optional["ReliabilityTracker"] = None,
     ):
         """Initialize pathfinder with available transitions.
 
         Args:
             transitions: All transitions in the system
             strategy: Search strategy to use
+            reliability_tracker: Optional tracker for dynamic cost calculation
         """
         self.transitions = transitions
         self.strategy = strategy
+        self.reliability_tracker = reliability_tracker
 
         # Build transition graph for efficient lookup
         self.transitions_from_state: Dict[str, List[Transition]] = {}
@@ -136,6 +142,21 @@ class MultiTargetPathFinder:
                 if "*" not in self.transitions_from_state:
                     self.transitions_from_state["*"] = []
                 self.transitions_from_state["*"].append(transition)
+
+    def _get_transition_cost(self, transition: Transition) -> float:
+        """Get the cost for a transition, optionally using reliability data.
+
+        Args:
+            transition: The transition to get cost for
+
+        Returns:
+            Path cost, adjusted for reliability if tracker is available
+        """
+        if self.reliability_tracker:
+            return self.reliability_tracker.get_dynamic_cost(
+                transition.id, base_cost=transition.path_cost
+            )
+        return transition.path_cost
 
     def find_path_to_all(
         self, current_states: Set[State], target_states: Set[State]
@@ -212,7 +233,7 @@ class MultiTargetPathFinder:
                     targets_reached=new_targets_reached,
                     transition_taken=transition,
                     parent=node,
-                    cost=node.cost + transition.path_cost,
+                    cost=node.cost + self._get_transition_cost(transition),
                     depth=node.depth + 1,
                 )
 
@@ -262,7 +283,7 @@ class MultiTargetPathFinder:
                     target_states.intersection(new_states)
                 )
 
-                new_cost = node.cost + transition.path_cost
+                new_cost = node.cost + self._get_transition_cost(transition)
 
                 new_node = PathNode(
                     active_states=new_states,
@@ -321,7 +342,7 @@ class MultiTargetPathFinder:
                     target_states.intersection(new_states)
                 )
 
-                g_score = node.cost + transition.path_cost
+                g_score = node.cost + self._get_transition_cost(transition)
 
                 new_node = PathNode(
                     active_states=new_states,

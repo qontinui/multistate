@@ -23,6 +23,7 @@ from multistate.testing.exploration.strategies import (
     ExplorationStrategy,
     GreedyCoverageExplorer,
     HybridExplorer,
+    NoveltySeekingExplorer,
     RandomWalkExplorer,
 )
 
@@ -35,6 +36,7 @@ __all__ = [
     "BreadthFirstExplorer",
     "AdaptiveExplorer",
     "HybridExplorer",
+    "NoveltySeekingExplorer",
     "BacktrackingNavigator",
     "PathDiversityEngine",
     "FailureAwareExplorer",

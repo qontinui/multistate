@@ -6,14 +6,17 @@ f_τ_MS: t_MS → (Ξ', r_t)
 With phased execution φ = ⟨φ_outgoing, φ_activate, φ_incoming, φ_exit⟩
 """
 
+import time
 from enum import Enum
 from typing import TYPE_CHECKING, Optional, Set
 
 from multistate.core.state import State
 from multistate.transitions.transition import Transition
+from multistate.transitions.visibility import StaysVisible
 
 if TYPE_CHECKING:
     from multistate.transitions.callbacks import TransitionCallbacks
+    from multistate.transitions.reliability import ReliabilityTracker
     from multistate.transitions.transition import TransitionResult
 
 
@@ -41,6 +44,7 @@ class TransitionExecutor:
         success_policy: SuccessPolicy = SuccessPolicy.STRICT,
         success_threshold: float = 0.8,
         strict_mode: bool = True,
+        reliability_tracker: Optional["ReliabilityTracker"] = None,
     ):
         """Initialize the executor.
 
@@ -48,10 +52,12 @@ class TransitionExecutor:
             success_policy: Policy for determining transition success
             success_threshold: For THRESHOLD policy, % of incoming that must succeed
             strict_mode: If True, enforce strict validation and rollback
+            reliability_tracker: Optional tracker for transition reliability metrics
         """
         self.success_policy = success_policy
         self.success_threshold = success_threshold
         self.strict_mode = strict_mode
+        self.reliability_tracker = reliability_tracker
 
     def execute(
         self,
@@ -88,6 +94,10 @@ class TransitionExecutor:
         successfully_activated = set()
         failed_incoming = set()
 
+        # Track execution time for reliability metrics
+        start_time = time.time() if self.reliability_tracker else None
+        reliability_recorded = False  # Flag to prevent double-recording
+
         try:
             # PHASE 1: VALIDATE
             # Pre-validate all preconditions before any changes
@@ -99,6 +109,12 @@ class TransitionExecutor:
                         message="Transition cannot execute from current state",
                     )
                 )
+                # Track failure before returning
+                if self.reliability_tracker and start_time is not None:
+                    execution_time = time.time() - start_time
+                    self.reliability_tracker.record_failure(
+                        transition.id, execution_time=execution_time
+                    )
                 return result
 
             # Validate group atomicity
@@ -110,6 +126,12 @@ class TransitionExecutor:
                         message="Group atomicity violation detected",
                     )
                 )
+                # Track failure before returning
+                if self.reliability_tracker and start_time is not None:
+                    execution_time = time.time() - start_time
+                    self.reliability_tracker.record_failure(
+                        transition.id, execution_time=execution_time
+                    )
                 return result
 
             result.phase_results.append(
@@ -149,6 +171,12 @@ class TransitionExecutor:
                             success=False,
                             message="Outgoing transition failed",
                         )
+                    )
+                # Track failure before returning
+                if self.reliability_tracker and start_time is not None:
+                    execution_time = time.time() - start_time
+                    self.reliability_tracker.record_failure(
+                        transition.id, execution_time=execution_time
                     )
                 return result
 
@@ -225,6 +253,12 @@ class TransitionExecutor:
             if not incoming_phase_success:
                 # Incoming phase failed according to policy
                 # In strict mode, this means transition fails
+                # Track failure before returning
+                if self.reliability_tracker and start_time is not None:
+                    execution_time = time.time() - start_time
+                    self.reliability_tracker.record_failure(
+                        transition.id, execution_time=execution_time
+                    )
                 return result
 
             # PHASE 5: EXIT
@@ -240,12 +274,16 @@ class TransitionExecutor:
             )
 
             # PHASE 6: VISIBILITY
-            # Update visibility of states (if needed)
+            # Update visibility of states based on stays_visible setting
+            visibility_data = self._update_visibility(
+                transition, active_states, successfully_activated
+            )
             result.phase_results.append(
                 PhaseResult(
                     phase=TransitionPhase.VISIBILITY,
                     success=True,
                     message="Visibility updated",
+                    data=visibility_data,
                 )
             )
 
@@ -269,6 +307,14 @@ class TransitionExecutor:
                 "policy": self.success_policy.value,
             }
 
+            # Track successful execution in reliability tracker
+            if self.reliability_tracker and start_time is not None:
+                execution_time = time.time() - start_time
+                self.reliability_tracker.record_success(
+                    transition.id, execution_time=execution_time
+                )
+                reliability_recorded = True
+
         except Exception as e:
             # Unexpected error during execution
             result.error = e
@@ -278,6 +324,26 @@ class TransitionExecutor:
                     success=False,
                     message=f"Unexpected error: {str(e)}",
                 )
+            )
+
+            # Track failed execution in reliability tracker
+            if self.reliability_tracker and start_time is not None:
+                execution_time = time.time() - start_time
+                self.reliability_tracker.record_failure(
+                    transition.id, execution_time=execution_time
+                )
+                reliability_recorded = True
+
+        # Also track failures from failed phases (not exceptions)
+        if (
+            not result.success
+            and self.reliability_tracker
+            and start_time is not None
+            and not reliability_recorded
+        ):
+            execution_time = time.time() - start_time
+            self.reliability_tracker.record_failure(
+                transition.id, execution_time=execution_time
             )
 
         return result
@@ -367,3 +433,42 @@ class TransitionExecutor:
         new_states.update(transition.get_all_states_to_activate())
 
         return new_states
+
+    def _update_visibility(
+        self,
+        transition: Transition,
+        from_states: Set[State],
+        activated_states: Set[State],
+    ) -> dict:
+        """Update state visibility based on transition's stays_visible setting.
+
+        Args:
+            transition: The transition being executed
+            from_states: States the transition executed from
+            activated_states: States that were activated
+
+        Returns:
+            Dictionary with visibility information for the phase result
+        """
+        states_to_hide = set()
+        states_to_show = set()
+
+        # Determine which states were "source" states (not being exited)
+        states_to_exit = transition.get_all_states_to_exit()
+        source_states = from_states - states_to_exit
+
+        if transition.stays_visible == StaysVisible.TRUE:
+            # Source states should remain visible (explicitly ensure they're shown)
+            states_to_show = {s.id for s in source_states}
+
+        elif transition.stays_visible == StaysVisible.FALSE:
+            # Source states should be hidden
+            states_to_hide = {s.id for s in source_states}
+
+        # NONE means no explicit visibility changes - inherit from container/parent
+
+        return {
+            "stays_visible": transition.stays_visible.value,
+            "states_to_hide": list(states_to_hide),
+            "states_to_show": list(states_to_show),
+        }

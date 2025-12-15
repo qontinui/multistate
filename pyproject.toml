@@ -34,13 +34,23 @@ python = "^3.10"
 typing-extensions = ">=4.0.0"
 dataclasses-json = ">=0.6.0"
 
+# Optional dependencies for testing module
+opencv-python = {version = ">=4.0.0", optional = true}
+numpy = {version = ">=1.20.0", optional = true}
+pyyaml = {version = ">=6.0.0", optional = true}
+
+[tool.poetry.extras]
+testing = ["opencv-python", "numpy"]
+yaml = ["pyyaml"]
+all = ["opencv-python", "numpy", "pyyaml"]
+
 [tool.poetry.group.dev.dependencies]
-pytest = ">=7.0.0"
-pytest-cov = ">=4.0.0"
+pytest = ">=8.0.0"
+pytest-cov = ">=6.0.0"
 hypothesis = ">=6.0.0"
-black = ">=23.0.0"
-mypy = ">=1.0.0"
-ruff = ">=0.1.0"
+black = ">=24.0.0"
+mypy = ">=1.14.0"
+ruff = "^0.14"
 isort = "^7.0.0"
 
 [tool.poetry.group.examples.dependencies]

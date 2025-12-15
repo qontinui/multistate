@@ -241,7 +241,9 @@ class DepthFirstExplorer(ExplorationStrategy):
 
         # Prioritize unexplored transitions
         executed_transitions = self.tracker._executed_transitions
-        unexplored = [(f, t) for f, t in transitions if (f, t) not in executed_transitions]
+        unexplored = [
+            (f, t) for f, t in transitions if (f, t) not in executed_transitions
+        ]
 
         if unexplored:
             _, next_state = unexplored[0]
@@ -319,7 +321,9 @@ class BreadthFirstExplorer(ExplorationStrategy):
         # Get next state from queue
         if self.queue:
             next_state = self.queue.popleft()
-            logger.debug(f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})")
+            logger.debug(
+                f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})"
+            )
             return next_state
 
         logger.debug("BFS queue exhausted")
@@ -391,11 +395,14 @@ class AdaptiveExplorer(ExplorationStrategy):
         else:
             # Exploit: best Q-value
             q_values = [
-                (to_state, self.q_table[(current_state, to_state)]) for _, to_state in transitions
+                (to_state, self.q_table[(current_state, to_state)])
+                for _, to_state in transitions
             ]
             q_values.sort(key=lambda x: x[1], reverse=True)
             next_state, q_val = q_values[0]
-            logger.debug(f"Q-learning exploit: {current_state} -> {next_state} (Q={q_val:.2f})")
+            logger.debug(
+                f"Q-learning exploit: {current_state} -> {next_state} (Q={q_val:.2f})"
+            )
 
         # Store for learning update
         self.last_state = current_state
@@ -439,7 +446,8 @@ class AdaptiveExplorer(ExplorationStrategy):
         next_transitions = self.get_available_transitions(self.last_action)
         if next_transitions:
             max_next_q = max(
-                self.q_table[(self.last_action, to_state)] for _, to_state in next_transitions
+                self.q_table[(self.last_action, to_state)]
+                for _, to_state in next_transitions
             )
         else:
             max_next_q = 0.0
@@ -460,6 +468,73 @@ class AdaptiveExplorer(ExplorationStrategy):
         """Reset learning state (keep Q-table for transfer learning)."""
         self.last_state = None
         self.last_action = None
+
+
+class NoveltySeekingExplorer(ExplorationStrategy):
+    """Novelty-seeking exploration that prioritizes unvisited states.
+
+    This strategy maintains per-path visited tracking to maximize
+    exploration of new states, inspired by best-first search with
+    novelty heuristic. Similar to greedy coverage but tracks local
+    path history to avoid revisiting states within a search branch.
+
+    Useful for discovering new states and transitions quickly.
+    """
+
+    def __init__(self, config: ExplorationConfig, tracker: PathTracker):
+        """Initialize novelty-seeking explorer.
+
+        Args:
+            config: Exploration configuration
+            tracker: PathTracker instance
+        """
+        super().__init__(config, tracker)
+        self.local_visited: set[str] = set()
+        self.exploration_bonus = config.greedy_unexplored_bonus
+
+    def select_next_state(self, current_state: str) -> str | None:
+        """Select next state prioritizing novelty.
+
+        Args:
+            current_state: Current state name
+
+        Returns:
+            Most novel next state, or None if no transitions available
+        """
+        self.local_visited.add(current_state)
+
+        transitions = self.get_available_transitions(current_state)
+
+        if not transitions:
+            return None
+
+        executed_transitions = self.tracker._executed_transitions
+        visited_states = self.tracker._visited_states
+
+        # Sort transitions by novelty (prefer unvisited states)
+        # Tuple sorting: (local_visited, global_visited, transition_executed)
+        sorted_transitions = sorted(
+            transitions,
+            key=lambda t: (
+                t[1] in self.local_visited,  # Local path tracking (best: False)
+                t[1] in visited_states,  # Global visited (better: False)
+                t in executed_transitions,  # Transition executed (ok: False)
+            ),
+        )
+
+        # Select most novel transition
+        _, next_state = sorted_transitions[0]
+
+        logger.debug(
+            f"Novelty: {current_state} -> {next_state} "
+            f"(local_visited: {len(self.local_visited)})"
+        )
+
+        return next_state
+
+    def reset(self) -> None:
+        """Reset local visited tracking."""
+        self.local_visited.clear()
 
 
 class HybridExplorer(ExplorationStrategy):
@@ -497,6 +572,7 @@ class HybridExplorer(ExplorationStrategy):
             "dfs": DepthFirstExplorer(config, tracker),
             "bfs": BreadthFirstExplorer(config, tracker),
             "adaptive": AdaptiveExplorer(config, tracker),
+            "novelty": NoveltySeekingExplorer(config, tracker),
         }
 
         # Set initial strategy
@@ -578,7 +654,9 @@ class HybridExplorer(ExplorationStrategy):
     def _switch_strategy_dynamically(self) -> None:
         """Dynamically switch to a different strategy."""
         # Try strategies in order, skip current one
-        available = [s for s in self.strategies.keys() if s != self.current_strategy_name]
+        available = [
+            s for s in self.strategies.keys() if s != self.current_strategy_name
+        ]
 
         if available:
             new_strategy = available[0]

@@ -10,7 +10,6 @@ from multistate.manager import StateManager, StateManagerConfig
 from multistate.state_references import (
     StateHistory,
     StateReference,
-    StateReferenceResolver,
     StateSnapshot,
 )
 
@@ -239,9 +238,11 @@ def test_manager_with_history():
 
     # Check state changes
     added, removed = manager.get_state_changes()
-    assert added == {"main_menu"}
-    assert removed == {"login"}
-    print(f"State changes: +{added}, -{removed}")
+    assert len(added) == 1
+    assert len(removed) == 1
+    assert list(added)[0].id == "main_menu"
+    assert list(removed)[0].id == "login"
+    print(f"State changes: +{[s.id for s in added]}, -{[s.id for s in removed]}")
 
     # Verify previous states
     previous = manager.get_previous_states()

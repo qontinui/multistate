@@ -1,0 +1,16 @@
+{
+  "summary": {
+    "total_failed_transitions": 0,
+    "total_failure_count": 0,
+    "skipped_transitions": 0,
+    "most_problematic_transitions": []
+  },
+  "transition_details": [],
+  "configuration": {
+    "max_retries": 3,
+    "skip_threshold": 5,
+    "cooldown_iterations": 10,
+    "backoff_base_ms": 1000.0,
+    "backoff_multiplier": 2.0
+  }
+}

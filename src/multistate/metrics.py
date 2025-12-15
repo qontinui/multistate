@@ -284,9 +284,7 @@ class MetricsManager:
         items.sort(key=lambda x: x[1], reverse=True)
         return items[:limit]
 
-    def get_most_executed_transitions(
-        self, limit: int = 10
-    ) -> list[tuple[str, int]]:
+    def get_most_executed_transitions(self, limit: int = 10) -> list[tuple[str, int]]:
         """Get the most frequently executed transitions.
 
         Args:
@@ -295,9 +293,7 @@ class MetricsManager:
         Returns:
             List of (transition_id, execution_count) tuples, sorted descending
         """
-        items = [
-            (tid, m.execution_count) for tid, m in self.transition_metrics.items()
-        ]
+        items = [(tid, m.execution_count) for tid, m in self.transition_metrics.items()]
         items.sort(key=lambda x: x[1], reverse=True)
         return items[:limit]
 

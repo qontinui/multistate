@@ -14,7 +14,11 @@ from multistate.testing.enums import (
     DeficiencySeverity,
     ExecutionStatus,
 )
-from multistate.testing.models import Deficiency, TransitionExecution, TransitionStatistics
+from multistate.testing.models import (
+    Deficiency,
+    TransitionExecution,
+    TransitionStatistics,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +81,9 @@ class DeficiencyDetector:
             if execution.error_message and "timeout" in execution.error_message.lower():
                 category = DeficiencyCategory.TIMEOUT
                 severity = DeficiencySeverity.HIGH
-            elif execution.error_message and "element" in execution.error_message.lower():
+            elif (
+                execution.error_message and "element" in execution.error_message.lower()
+            ):
                 category = DeficiencyCategory.UI_ELEMENT_MISSING
                 severity = DeficiencySeverity.HIGH
 
@@ -145,7 +151,10 @@ class DeficiencyDetector:
                 )
 
         # Check for consistently slow transitions
-        if stats.total_attempts >= 3 and stats.avg_duration_ms > self.performance_threshold_ms:
+        if (
+            stats.total_attempts >= 3
+            and stats.avg_duration_ms > self.performance_threshold_ms
+        ):
             deficiencies.append(
                 (
                     DeficiencyCategory.SLOW_TRANSITION,
@@ -181,7 +190,9 @@ class DeficiencyDetector:
             try:
                 reachable = state_graph.get_reachable_states()
                 all_states = (
-                    set(state_graph.states.keys()) if hasattr(state_graph, "states") else set()
+                    set(state_graph.states.keys())
+                    if hasattr(state_graph, "states")
+                    else set()
                 )
 
                 for state_name in all_states:

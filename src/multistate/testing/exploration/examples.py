@@ -59,7 +59,9 @@ def example_basic_exploration():
     explorer = PathExplorer(config, tracker, initial_state="login")
 
     # Define executor callback (simulates actual transition execution)
-    def execute_transition(from_state: str, to_state: str) -> tuple[bool, float, dict[str, Any]]:
+    def execute_transition(
+        from_state: str, to_state: str
+    ) -> tuple[bool, float, dict[str, Any]]:
         """Simulate transition execution."""
         logger.info(f"Executing: {from_state} -> {to_state}")
 
@@ -89,7 +91,9 @@ def example_basic_exploration():
     print(f"Strategy: {report['summary']['strategy']}")
     print(f"Iterations: {report['summary']['iterations']}")
     print(f"State Coverage: {report['coverage']['state_coverage_percent']:.1f}%")
-    print(f"Transition Coverage: {report['coverage']['transition_coverage_percent']:.1f}%")
+    print(
+        f"Transition Coverage: {report['coverage']['transition_coverage_percent']:.1f}%"
+    )
     print(f"Success Rate: {report['coverage']['success_rate_percent']:.1f}%")
     print(f"Unique Paths: {report['coverage']['unique_paths']}")
     print("=" * 80 + "\n")
@@ -151,7 +155,9 @@ def example_path_exploration():
     # explorer = PathExplorer(config, tracker)
 
     # Define executor
-    def execute_transition(from_state: str, to_state: str) -> tuple[bool, float, dict[str, Any]]:
+    def execute_transition(
+        from_state: str, to_state: str
+    ) -> tuple[bool, float, dict[str, Any]]:
         # Simulate execution
         return True, 150.0, {}
 
@@ -177,7 +183,9 @@ def example_failure_handling():
     # ... rest of setup
 
     # Executor with occasional failures
-    def execute_transition(from_state: str, to_state: str) -> tuple[bool, float, dict[str, Any]]:
+    def execute_transition(
+        from_state: str, to_state: str
+    ) -> tuple[bool, float, dict[str, Any]]:
         # Simulate flaky transition
         if to_state == "error_prone_state":
             success = (hash(str(time.time())) % 10) >= 3  # 70% success
