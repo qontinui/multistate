@@ -136,7 +136,7 @@ class RandomWalkExplorer(ExplorationStrategy):
             # Higher temperature = more uniform
             # Lower temperature = more concentrated
             weights = np.ones(len(transitions))
-            weights = np.exp(weights / self.temperature)
+            weights = np.exp(weights / self.temperature)  # type: ignore[assignment]
             weights /= weights.sum()
 
             idx = np.random.choice(len(transitions), p=weights)

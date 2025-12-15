@@ -16,7 +16,7 @@ adapted for generic state machine usage (no GUI-specific code).
 import logging
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class TransitionStats:
         self.total_time += execution_time
         self.last_failure_time = time.time()
 
-    def to_dict(self) -> Dict[str, any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert stats to dictionary format.
 
         Returns:
@@ -271,7 +271,7 @@ class ReliabilityTracker:
             del self._stats[transition_id]
             logger.info("Reset statistics for transition %s", transition_id)
 
-    def get_summary(self) -> Dict[str, any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Get summary statistics across all transitions.
 
         Returns:

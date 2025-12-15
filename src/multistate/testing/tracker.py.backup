@@ -3,27 +3,36 @@
 This module provides comprehensive tracking of state transitions during
 state machine testing, including coverage metrics, deficiency detection,
 and performance analysis.
-
-This is a refactored version that delegates to specialized modules for
-better maintainability and separation of concerns.
 """
 
+import csv
+import json
 import logging
 import threading
 import uuid
 from collections import defaultdict, deque
 from collections.abc import Callable
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Literal
 
-from multistate.testing.coverage_analyzer import CoverageAnalyzer
+# Optional dependencies for screenshot support
+try:
+    import cv2
+    import numpy as np
+
+    HAS_CV2 = True
+except ImportError:
+    cv2 = None  # type: ignore
+    np = None  # type: ignore
+    HAS_CV2 = False
+
 from multistate.testing.deficiency_detector import DeficiencyDetector
 from multistate.testing.enums import (
     DeficiencyCategory,
     DeficiencySeverity,
     ExecutionStatus,
 )
-from multistate.testing.export_handlers import ExportHandlers
 from multistate.testing.models import (
     CoverageMetrics,
     Deficiency,
@@ -31,8 +40,6 @@ from multistate.testing.models import (
     TransitionExecution,
     TransitionStatistics,
 )
-from multistate.testing.path_analysis import PathAnalyzer
-from multistate.testing.screenshot_manager import ScreenshotManager
 
 logger = logging.getLogger(__name__)
 
@@ -77,22 +84,18 @@ class PathTracker:
             stability_threshold: Success rate threshold for stability (0.95 = 95%)
         """
         self.state_graph = state_graph
+        self.enable_screenshots = enable_screenshots and HAS_CV2
+        self.screenshot_dir = Path(screenshot_dir)
         self.max_history_size = max_history_size
         self.performance_threshold_ms = performance_threshold_ms
         self.stability_threshold = stability_threshold
 
-        # Initialize specialized components
-        self._screenshot_manager = ScreenshotManager(
-            screenshot_dir=screenshot_dir,
-            enabled=enable_screenshots,
-        )
-        self._coverage_analyzer = CoverageAnalyzer()
-        self._export_handlers = ExportHandlers()
-        self._path_analyzer = PathAnalyzer()
-        self._deficiency_detector = DeficiencyDetector(
-            performance_threshold_ms=performance_threshold_ms,
-            stability_threshold=stability_threshold,
-        )
+        # Warn if screenshots requested but cv2 not available
+        if enable_screenshots and not HAS_CV2:
+            logger.warning(
+                "Screenshots requested but opencv-python not available. "
+                "Install with: pip install multistate[testing]"
+            )
 
         # Thread safety
         self._lock = threading.RLock()
@@ -127,6 +130,16 @@ class PathTracker:
         ] = defaultdict(list)
         self._milestone_reached: set[float] = set()
 
+        # Deficiency detector
+        self._deficiency_detector = DeficiencyDetector(
+            performance_threshold_ms=performance_threshold_ms,
+            stability_threshold=stability_threshold,
+        )
+
+        # Create screenshot directory
+        if self.enable_screenshots:
+            self.screenshot_dir.mkdir(parents=True, exist_ok=True)
+
         # Log initialization
         total_states = len(state_graph.states) if hasattr(state_graph, "states") else 0
         total_transitions = 0
@@ -138,10 +151,6 @@ class PathTracker:
         logger.info(
             f"PathTracker initialized: {total_states} states, {total_transitions} transitions"
         )
-
-    # -------------------------------------------------------------------------
-    # Public API - Recording
-    # -------------------------------------------------------------------------
 
     def record_transition(
         self,
@@ -194,10 +203,8 @@ class PathTracker:
 
             # Save screenshot if provided
             screenshot_path = None
-            if screenshot is not None:
-                screenshot_path = self._screenshot_manager.save_screenshot(
-                    execution_id, screenshot
-                )
+            if screenshot is not None and self.enable_screenshots:
+                screenshot_path = self._save_screenshot(execution_id, screenshot)
 
             # Determine attempt number
             transition_key = (from_state, to_state)
@@ -248,45 +255,6 @@ class PathTracker:
 
             return execution
 
-    def start_new_path(self, start_state: str) -> None:
-        """Start tracking a new path.
-
-        Args:
-            start_state: Starting state for the new path
-        """
-        with self._lock:
-            # Finalize current path if exists
-            if self._current_path and not self._current_path.is_complete:
-                self._current_path.end_time = datetime.now()
-                self._paths.append(self._current_path)
-
-            # Create new path
-            self._current_path = PathHistory(
-                path_id=str(uuid.uuid4()),
-                start_state=start_state,
-                end_state=start_state,
-                states=[start_state],
-                transitions=[],
-                start_time=datetime.now(),
-            )
-
-    def end_current_path(self, success: bool = True) -> None:
-        """End the current path tracking.
-
-        Args:
-            success: Whether the path completed successfully
-        """
-        with self._lock:
-            if self._current_path:
-                self._current_path.end_time = datetime.now()
-                self._current_path.success = success
-                self._paths.append(self._current_path)
-                self._current_path = None
-
-    # -------------------------------------------------------------------------
-    # Public API - Retrieval
-    # -------------------------------------------------------------------------
-
     def get_coverage_metrics(self) -> CoverageMetrics:
         """Calculate current coverage metrics.
 
@@ -300,14 +268,8 @@ class PathTracker:
             if not self._cache_dirty and self._metrics_cache:
                 return self._metrics_cache
 
-            # Delegate to coverage analyzer
-            metrics = self._coverage_analyzer.calculate_metrics(
-                state_graph=self.state_graph,
-                visited_states=self._visited_states,
-                executed_transitions=self._executed_transitions,
-                executions=list(self._executions),
-                paths=self._paths,
-            )
+            # Calculate metrics
+            metrics = self._calculate_metrics()
 
             # Cache
             self._metrics_cache = metrics
@@ -322,10 +284,20 @@ class PathTracker:
             List of (from_state, to_state) tuples
         """
         with self._lock:
-            return self._coverage_analyzer.get_unexplored_transitions(
-                state_graph=self.state_graph,
-                executed_transitions=self._executed_transitions,
-            )
+            all_transitions = set()
+
+            # Get all transitions from state graph
+            if hasattr(self.state_graph, "states"):
+                for state in self.state_graph.states.values():
+                    if hasattr(state, "transitions"):
+                        for transition in state.transitions:
+                            from_s = getattr(transition, "from_state", state.name)
+                            to_s = getattr(transition, "to_state", None)
+                            if to_s:
+                                all_transitions.add((from_s, to_s))
+
+            # Return unexplored
+            return list(all_transitions - self._executed_transitions)
 
     def get_unstable_transitions(
         self, min_threshold: float | None = None
@@ -427,61 +399,6 @@ class PathTracker:
 
             return stats
 
-    # -------------------------------------------------------------------------
-    # Public API - Analysis
-    # -------------------------------------------------------------------------
-
-    def analyze_reachability(self) -> dict[str, list[str]]:
-        """Analyze state reachability from initial state.
-
-        Returns:
-            Dictionary mapping state names to list of reachable states
-        """
-        return self._path_analyzer.analyze_reachability(self.state_graph)
-
-    def suggest_next_transitions(
-        self, current_state: str, prioritize_unexplored: bool = True
-    ) -> list[tuple[str, float]]:
-        """Suggest next transitions to maximize coverage.
-
-        Args:
-            current_state: Current state
-            prioritize_unexplored: Prioritize unexplored transitions
-
-        Returns:
-            List of (to_state, priority_score) tuples
-        """
-        with self._lock:
-            return self._path_analyzer.suggest_next_transitions(
-                state_graph=self.state_graph,
-                current_state=current_state,
-                visited_states=self._visited_states,
-                executed_transitions=self._executed_transitions,
-                transition_stats=self._transition_stats,
-                prioritize_unexplored=prioritize_unexplored,
-            )
-
-    def get_critical_path(self, start_state: str, end_state: str) -> PathHistory | None:
-        """Get the critical path between two states.
-
-        Args:
-            start_state: Starting state
-            end_state: Target state
-
-        Returns:
-            PathHistory for critical path, or None if no path found
-        """
-        with self._lock:
-            return self._path_analyzer.get_critical_path(
-                paths=self._paths,
-                start_state=start_state,
-                end_state=end_state,
-            )
-
-    # -------------------------------------------------------------------------
-    # Public API - Export
-    # -------------------------------------------------------------------------
-
     def export_results(
         self,
         output_path: str,
@@ -498,23 +415,18 @@ class PathTracker:
             include_variables: Include variable snapshots
         """
         with self._lock:
-            metrics = self.get_coverage_metrics()
+            if format == "json":
+                self._export_json(output_path, include_screenshots, include_variables)
+            elif format == "html":
+                self._export_html(output_path, include_screenshots, include_variables)
+            elif format == "csv":
+                self._export_csv(output_path)
+            elif format == "markdown":
+                self._export_markdown(output_path)
+            else:
+                raise ValueError(f"Unsupported export format: {format}")
 
-            self._export_handlers.export_results(
-                output_path=output_path,
-                format=format,
-                metrics=metrics,
-                executions=list(self._executions),
-                statistics=list(self._transition_stats.values()),
-                deficiencies=self._deficiencies,
-                paths=self._paths,
-                include_screenshots=include_screenshots,
-                include_variables=include_variables,
-            )
-
-    # -------------------------------------------------------------------------
-    # Public API - Reset
-    # -------------------------------------------------------------------------
+            logger.info(f"Exported results to {output_path} ({format})")
 
     def reset(self) -> None:
         """Reset all tracking data.
@@ -538,8 +450,169 @@ class PathTracker:
 
             logger.info("PathTracker reset")
 
+    def start_new_path(self, start_state: str) -> None:
+        """Start tracking a new path.
+
+        Args:
+            start_state: Starting state for the new path
+        """
+        with self._lock:
+            # Finalize current path if exists
+            if self._current_path and not self._current_path.is_complete:
+                self._current_path.end_time = datetime.now()
+                self._paths.append(self._current_path)
+
+            # Create new path
+            self._current_path = PathHistory(
+                path_id=str(uuid.uuid4()),
+                start_state=start_state,
+                end_state=start_state,
+                states=[start_state],
+                transitions=[],
+                start_time=datetime.now(),
+            )
+
+    def end_current_path(self, success: bool = True) -> None:
+        """End the current path tracking.
+
+        Args:
+            success: Whether the path completed successfully
+        """
+        with self._lock:
+            if self._current_path:
+                self._current_path.end_time = datetime.now()
+                self._current_path.success = success
+                self._paths.append(self._current_path)
+                self._current_path = None
+
     # -------------------------------------------------------------------------
-    # Public API - Callbacks
+    # Analysis Methods
+    # -------------------------------------------------------------------------
+
+    def analyze_reachability(self) -> dict[str, list[str]]:
+        """Analyze state reachability from initial state.
+
+        Returns:
+            Dictionary mapping state names to list of reachable states
+        """
+        try:
+            import networkx as nx
+        except ImportError:
+            logger.warning("networkx not available, skipping reachability analysis")
+            return {}
+
+        with self._lock:
+            # Build graph
+            G = nx.DiGraph()
+
+            if hasattr(self.state_graph, "states"):
+                for state_name, state in self.state_graph.states.items():
+                    G.add_node(state_name)
+                    if hasattr(state, "transitions"):
+                        for transition in state.transitions:
+                            to_s = getattr(transition, "to_state", None)
+                            if to_s:
+                                G.add_edge(state_name, to_s)
+
+            # Calculate reachability from initial state
+            reachability = {}
+            initial = getattr(self.state_graph, "initial_state", None)
+
+            if initial and hasattr(self.state_graph, "states"):
+                for state_name in self.state_graph.states:
+                    if nx.has_path(G, initial, state_name):
+                        reachability[state_name] = [state_name]
+                    else:
+                        reachability[state_name] = []
+
+            return reachability
+
+    def suggest_next_transitions(
+        self, current_state: str, prioritize_unexplored: bool = True
+    ) -> list[tuple[str, float]]:
+        """Suggest next transitions to maximize coverage.
+
+        Args:
+            current_state: Current state
+            prioritize_unexplored: Prioritize unexplored transitions
+
+        Returns:
+            List of (to_state, priority_score) tuples
+        """
+        with self._lock:
+            suggestions = []
+
+            # Get current state transitions
+            if not hasattr(self.state_graph, "states"):
+                return []
+
+            state = self.state_graph.states.get(current_state)
+            if not state or not hasattr(state, "transitions"):
+                return []
+
+            # Score each possible transition
+            for transition in state.transitions:
+                to_state = getattr(transition, "to_state", None)
+                if not to_state:
+                    continue
+
+                transition_key = (current_state, to_state)
+
+                # Base priority
+                priority = 1.0
+
+                # Boost unexplored
+                if (
+                    prioritize_unexplored
+                    and transition_key not in self._executed_transitions
+                ):
+                    priority *= 2.0
+
+                # Boost if leads to unvisited state
+                if to_state not in self._visited_states:
+                    priority *= 1.5
+
+                # Reduce if unstable
+                if transition_key in self._transition_stats:
+                    stats = self._transition_stats[transition_key]
+                    if stats.is_unreliable:
+                        priority *= 0.5
+
+                suggestions.append((to_state, priority))
+
+            # Sort by priority
+            suggestions.sort(key=lambda x: x[1], reverse=True)
+
+            return suggestions
+
+    def get_critical_path(self, start_state: str, end_state: str) -> PathHistory | None:
+        """Get the critical path between two states.
+
+        Args:
+            start_state: Starting state
+            end_state: Target state
+
+        Returns:
+            PathHistory for critical path, or None if no path found
+        """
+        with self._lock:
+            # Find all paths that match
+            matching_paths = [
+                p
+                for p in self._paths
+                if p.start_state == start_state
+                and p.end_state == end_state
+                and p.success
+            ]
+
+            if not matching_paths:
+                return None
+
+            # Return shortest successful path
+            return min(matching_paths, key=lambda p: p.length)
+
+    # -------------------------------------------------------------------------
+    # Callback Methods
     # -------------------------------------------------------------------------
 
     def on_deficiency_detected(self, callback: Callable[[Deficiency], None]) -> None:
@@ -568,6 +641,33 @@ class PathTracker:
     # -------------------------------------------------------------------------
     # Internal Methods
     # -------------------------------------------------------------------------
+
+    def _save_screenshot(self, execution_id: str, screenshot: Any) -> str | None:
+        """Save screenshot to disk.
+
+        Args:
+            execution_id: Execution ID for filename
+            screenshot: Screenshot array
+
+        Returns:
+            Path to saved screenshot, or None if save failed
+        """
+        if not HAS_CV2:
+            logger.warning(
+                "Cannot save screenshot: opencv-python not available. "
+                "Install with: pip install multistate[testing]"
+            )
+            return None
+
+        filename = f"{execution_id}.png"
+        filepath = self.screenshot_dir / filename
+
+        try:
+            cv2.imwrite(str(filepath), screenshot)
+            return str(filepath)
+        except Exception as e:
+            logger.error(f"Failed to save screenshot: {e}")
+            return None
 
     def _update_coverage(self, execution: TransitionExecution) -> None:
         """Update coverage tracking.
@@ -739,21 +839,222 @@ class PathTracker:
                 try:
                     callback(deficiency)
                 except Exception as e:
-                    logger.error(f"Deficiency callback failed: {e}")
+                    logger.error(f"Error in deficiency callback: {e}")
+
+    def _calculate_metrics(self) -> CoverageMetrics:
+        """Calculate coverage metrics.
+
+        Returns:
+            CoverageMetrics instance
+        """
+        # State coverage
+        total_states = (
+            len(self.state_graph.states) if hasattr(self.state_graph, "states") else 0
+        )
+        visited_states = len(self._visited_states)
+        unvisited_states = []
+        if hasattr(self.state_graph, "states"):
+            unvisited_states = [
+                name
+                for name in self.state_graph.states
+                if name not in self._visited_states
+            ]
+
+        # Transition coverage
+        all_transitions = set()
+        if hasattr(self.state_graph, "states"):
+            for state in self.state_graph.states.values():
+                if hasattr(state, "transitions"):
+                    for transition in state.transitions:
+                        from_s = getattr(transition, "from_state", state.name)
+                        to_s = getattr(transition, "to_state", None)
+                        if to_s:
+                            all_transitions.add((from_s, to_s))
+
+        total_transitions = len(all_transitions)
+        executed_transitions = len(self._executed_transitions)
+        unexecuted_transitions = list(all_transitions - self._executed_transitions)
+
+        # Execution metrics
+        total_executions = len(self._executions)
+        successful = sum(
+            1 for e in self._executions if e.status == ExecutionStatus.SUCCESS
+        )
+        failed = sum(1 for e in self._executions if e.status == ExecutionStatus.FAILURE)
+        errors = sum(1 for e in self._executions if e.status == ExecutionStatus.ERROR)
+
+        # Path metrics
+        unique_paths = len(self._paths)
+        longest_path = max((p.length for p in self._paths), default=0)
+        avg_path_length = (
+            sum(p.length for p in self._paths) / len(self._paths)
+            if self._paths
+            else 0.0
+        )
+
+        # Time metrics
+        total_time = sum(e.duration_ms for e in self._executions)
+        avg_time = total_time / total_executions if total_executions > 0 else 0.0
+
+        return CoverageMetrics(
+            total_states=total_states,
+            visited_states=visited_states,
+            unvisited_states=unvisited_states,
+            total_transitions=total_transitions,
+            executed_transitions=executed_transitions,
+            unexecuted_transitions=unexecuted_transitions,
+            total_executions=total_executions,
+            successful_executions=successful,
+            failed_executions=failed,
+            error_executions=errors,
+            unique_paths=unique_paths,
+            longest_path_length=longest_path,
+            average_path_length=avg_path_length,
+            total_execution_time_ms=total_time,
+            average_transition_time_ms=avg_time,
+            calculated_at=datetime.now(),
+        )
 
     def _check_coverage_milestones(self) -> None:
         """Check if coverage milestones have been reached."""
         metrics = self.get_coverage_metrics()
+        coverage = metrics.transition_coverage_percent
 
-        for milestone_percent, callbacks in self._coverage_milestone_callbacks.items():
-            if milestone_percent in self._milestone_reached:
-                continue
-
-            if metrics.state_coverage_percent >= milestone_percent:
-                self._milestone_reached.add(milestone_percent)
+        for milestone, callbacks in self._coverage_milestone_callbacks.items():
+            if coverage >= milestone and milestone not in self._milestone_reached:
+                self._milestone_reached.add(milestone)
 
                 for callback in callbacks:
                     try:
-                        callback(metrics, milestone_percent)
+                        callback(metrics, milestone)
                     except Exception as e:
-                        logger.error(f"Coverage milestone callback failed: {e}")
+                        logger.error(f"Error in coverage milestone callback: {e}")
+
+    def _export_json(
+        self, output_path: str, include_screenshots: bool, include_variables: bool
+    ) -> None:
+        """Export results to JSON."""
+        data = {
+            "metrics": self.get_coverage_metrics().to_dict(),
+            "executions": [e.to_dict() for e in self._executions],
+            "statistics": [s.to_dict() for s in self._transition_stats.values()],
+            "deficiencies": [d.to_dict() for d in self._deficiencies],
+            "paths": [p.to_dict() for p in self._paths],
+        }
+
+        # Remove screenshots/variables if requested
+        execution_list: list[dict] = data["executions"]  # type: ignore[assignment]
+        if not include_screenshots:
+            for execution in execution_list:
+                execution.pop("screenshot_path", None)
+
+        if not include_variables:
+            for execution in execution_list:
+                execution.pop("variables_snapshot", None)
+
+        with open(output_path, "w") as f:
+            json.dump(data, f, indent=2, default=str)
+
+    def _export_html(
+        self, output_path: str, include_screenshots: bool, include_variables: bool
+    ) -> None:
+        """Export results to HTML."""
+        metrics = self.get_coverage_metrics()
+
+        html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <title>PathTracker Report</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 20px; }}
+        h1 {{ color: #333; }}
+        .metric {{ margin: 10px 0; }}
+        .metric-label {{ font-weight: bold; }}
+        .deficiency {{ border: 1px solid #ddd; padding: 10px; margin: 10px 0; }}
+        .critical {{ border-color: #f44336; }}
+        .high {{ border-color: #ff9800; }}
+        .medium {{ border-color: #ffeb3b; }}
+    </style>
+</head>
+<body>
+    <h1>PathTracker Coverage Report</h1>
+
+    <h2>Coverage Metrics</h2>
+    <div class="metric">
+        <span class="metric-label">State Coverage:</span> {metrics.state_coverage_percent:.1f}%
+    </div>
+    <div class="metric">
+        <span class="metric-label">Transition Coverage:</span> {metrics.transition_coverage_percent:.1f}%
+    </div>
+    <div class="metric">
+        <span class="metric-label">Success Rate:</span> {metrics.success_rate_percent:.1f}%
+    </div>
+
+    <h2>Deficiencies ({len(self._deficiencies)})</h2>
+"""
+
+        for deficiency in self._deficiencies:
+            html += f"""
+    <div class="deficiency {deficiency.severity.value}">
+        <h3>[{deficiency.severity.value.upper()}] {deficiency.title}</h3>
+        <p>{deficiency.description}</p>
+        <p><strong>Occurrences:</strong> {deficiency.occurrence_count}</p>
+    </div>
+"""
+
+        html += """
+</body>
+</html>
+"""
+
+        with open(output_path, "w") as f:
+            f.write(html)
+
+    def _export_csv(self, output_path: str) -> None:
+        """Export results to CSV."""
+        with open(output_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                [
+                    "execution_id",
+                    "from_state",
+                    "to_state",
+                    "status",
+                    "duration_ms",
+                    "timestamp",
+                ]
+            )
+
+            for execution in self._executions:
+                writer.writerow(
+                    [
+                        execution.execution_id,
+                        execution.from_state,
+                        execution.to_state,
+                        execution.status.value,
+                        execution.duration_ms,
+                        execution.timestamp.isoformat(),
+                    ]
+                )
+
+    def _export_markdown(self, output_path: str) -> None:
+        """Export results to Markdown."""
+        metrics = self.get_coverage_metrics()
+
+        md = f"""# PathTracker Report
+
+## Coverage Metrics
+
+- **State Coverage**: {metrics.state_coverage_percent:.1f}%
+- **Transition Coverage**: {metrics.transition_coverage_percent:.1f}%
+- **Success Rate**: {metrics.success_rate_percent:.1f}%
+
+## Deficiencies
+
+"""
+        for deficiency in self._deficiencies:
+            md += f"### [{deficiency.severity.value.upper()}] {deficiency.title}\n\n"
+            md += f"{deficiency.description}\n\n"
+
+        with open(output_path, "w") as f:
+            f.write(md)

@@ -6,7 +6,7 @@ including visit counts, success rates, and execution statistics.
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -322,10 +322,10 @@ class MetricsManager:
 
     def reset_all(self) -> None:
         """Reset all metrics to initial state."""
-        for metrics in self.state_metrics.values():
-            metrics.reset()
-        for metrics in self.transition_metrics.values():
-            metrics.reset()
+        for state_metrics in self.state_metrics.values():
+            state_metrics.reset()
+        for transition_metrics in self.transition_metrics.values():
+            transition_metrics.reset()
 
     def reset_state_metrics(self, state_id: str) -> None:
         """Reset metrics for a specific state.
@@ -353,7 +353,7 @@ class MetricsManager:
         """Disable metrics tracking."""
         self.enabled = False
 
-    def get_summary(self) -> Dict[str, any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Get a summary of all metrics.
 
         Returns:

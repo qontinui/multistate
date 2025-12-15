@@ -11,7 +11,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Callable, Deque, Dict, List, Optional, Set
+from typing import Any, Callable, Deque, Dict, List, Optional, Set
 
 from multistate.core.state import State
 
@@ -55,7 +55,7 @@ class StateSnapshot:
     states: Set[str]
     timestamp: datetime = field(default_factory=datetime.now)
     transition_id: Optional[str] = None
-    metadata: Dict[str, any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __repr__(self) -> str:
         """String representation."""
@@ -92,7 +92,7 @@ class StateHistory:
         self,
         active_states: Set[str],
         transition_id: Optional[str] = None,
-        metadata: Optional[Dict[str, any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Record a new state snapshot.
 

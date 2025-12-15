@@ -15,12 +15,12 @@ from multistate.testing.tracker import PathTracker
 logger = logging.getLogger(__name__)
 
 
-def example_basic_exploration():
+def example_basic_exploration() -> None:
     """Example: Basic exploration with default configuration."""
 
     # Assume we have a state graph (mock for example)
     class MockStateGraph:
-        def __init__(self):
+        def __init__(self) -> None:
             self.states = {
                 "login": MockState("login", ["dashboard", "error"]),
                 "dashboard": MockState("dashboard", ["profile", "settings", "logout"]),
@@ -99,7 +99,7 @@ def example_basic_exploration():
     print("=" * 80 + "\n")
 
 
-def example_greedy_strategy():
+def example_greedy_strategy() -> None:
     """Example: Using greedy coverage strategy."""
     # Mock state graph (same as above)
     # ... (omitted for brevity)
@@ -114,7 +114,7 @@ def example_greedy_strategy():
     # ... rest of setup
 
 
-def example_adaptive_strategy():
+def example_adaptive_strategy() -> None:
     """Example: Using Q-learning adaptive strategy."""
     ExplorationConfig(
         strategy="adaptive",
@@ -129,7 +129,7 @@ def example_adaptive_strategy():
     # ... rest of setup
 
 
-def example_custom_configuration():
+def example_custom_configuration() -> None:
     """Example: Using custom YAML configuration."""
     # Save example config to YAML
     config = ExplorationConfig(
@@ -149,7 +149,7 @@ def example_custom_configuration():
     print(f"Max iterations: {loaded_config.max_iterations}")
 
 
-def example_path_exploration():
+def example_path_exploration() -> None:
     """Example: Exploring specific path to target state."""
     # Setup (omitted for brevity)
     # explorer = PathExplorer(config, tracker)
@@ -168,7 +168,7 @@ def example_path_exploration():
     #     print("Successfully reached settings page!")
 
 
-def example_failure_handling():
+def example_failure_handling() -> None:
     """Example: Exploration with failure handling."""
     ExplorationConfig(
         strategy="greedy",
@@ -197,7 +197,7 @@ def example_failure_handling():
     # Explorer will automatically retry failed transitions with backoff
 
 
-def example_coverage_callbacks():
+def example_coverage_callbacks() -> None:
     """Example: Using coverage milestone callbacks."""
     # Setup tracker and explorer
     # tracker = PathTracker(state_graph)
@@ -218,7 +218,7 @@ def example_coverage_callbacks():
     pass
 
 
-def example_exporting_results():
+def example_exporting_results() -> None:
     """Example: Exporting exploration results."""
     ExplorationConfig(
         export_on_completion=True,
@@ -236,7 +236,7 @@ def example_exporting_results():
     # )
 
 
-def example_backtracking():
+def example_backtracking() -> None:
     """Example: Using backtracking to reach unexplored states."""
     ExplorationConfig(
         strategy="greedy",
@@ -249,7 +249,7 @@ def example_backtracking():
     # it will automatically backtrack to states with unexplored transitions
 
 
-def example_diverse_paths():
+def example_diverse_paths() -> None:
     """Example: Generating diverse paths."""
     ExplorationConfig(
         enable_diversity=True,
