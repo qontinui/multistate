@@ -22,18 +22,18 @@
     "average_path_length": 2.0,
     "total_execution_time_ms": 600.0,
     "average_transition_time_ms": 100.0,
-    "calculated_at": "2025-12-15T23:43:35.474437",
+    "calculated_at": "2025-12-15T23:44:46.211875",
     "state_coverage_percent": 85.71428571428571,
     "transition_coverage_percent": 83.33333333333334,
     "success_rate_percent": 100.0
   },
   "executions": [
     {
-      "execution_id": "c3cd56d9-ae17-480f-8ddc-d29ad30fe4fe",
+      "execution_id": "12053cae-9510-41ae-9952-1e757b90a2c4",
       "from_state": "start",
       "to_state": "a",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.473437",
+      "timestamp": "2025-12-15T23:44:46.210874",
       "duration_ms": 100.0,
       "attempt_number": 1,
       "error_message": null,
@@ -42,11 +42,11 @@
       "metadata": {}
     },
     {
-      "execution_id": "665601fa-c86c-40ba-8d50-fa1f67746a5e",
+      "execution_id": "6899652c-9805-4b7b-832e-7838158c624c",
       "from_state": "a",
       "to_state": "a1",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.474437",
+      "timestamp": "2025-12-15T23:44:46.210874",
       "duration_ms": 100.0,
       "attempt_number": 1,
       "error_message": null,
@@ -55,11 +55,11 @@
       "metadata": {}
     },
     {
-      "execution_id": "9fce805d-f3dd-4bd5-a6f0-a21aaa73a4c7",
+      "execution_id": "c69ae947-c7dc-4626-8b48-d15940c9428d",
       "from_state": "start",
       "to_state": "b",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.474437",
+      "timestamp": "2025-12-15T23:44:46.211875",
       "duration_ms": 100.0,
       "attempt_number": 1,
       "error_message": null,
@@ -68,11 +68,11 @@
       "metadata": {}
     },
     {
-      "execution_id": "aff37103-d560-4c1a-b74a-0a10bfbd87af",
+      "execution_id": "1b481c5f-4541-48bc-b135-38b15f9c4d9a",
       "from_state": "b",
       "to_state": "b1",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.474437",
+      "timestamp": "2025-12-15T23:44:46.211875",
       "duration_ms": 100.0,
       "attempt_number": 1,
       "error_message": null,
@@ -81,11 +81,11 @@
       "metadata": {}
     },
     {
-      "execution_id": "dc266c94-d0a3-4e32-b235-844430a3d622",
+      "execution_id": "7aa2a9c4-cd7f-46fd-a567-3e9e7e5ef387",
       "from_state": "start",
       "to_state": "a",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.474437",
+      "timestamp": "2025-12-15T23:44:46.211875",
       "duration_ms": 100.0,
       "attempt_number": 2,
       "error_message": null,
@@ -94,11 +94,11 @@
       "metadata": {}
     },
     {
-      "execution_id": "c44aa0ef-9cc9-4c22-be25-518ef19d64b9",
+      "execution_id": "ebbc22bb-9a52-4906-aa20-6264bcd444a5",
       "from_state": "a",
       "to_state": "a2",
       "status": "success",
-      "timestamp": "2025-12-15T23:43:35.474437",
+      "timestamp": "2025-12-15T23:44:46.211875",
       "duration_ms": 100.0,
       "attempt_number": 1,
       "error_message": null,
@@ -119,8 +119,8 @@
       "max_duration_ms": 100.0,
       "avg_duration_ms": 100.0,
       "std_dev_duration_ms": 0.0,
-      "first_executed": "2025-12-15T23:43:35.473437",
-      "last_executed": "2025-12-15T23:43:35.474437",
+      "first_executed": "2025-12-15T23:44:46.210874",
+      "last_executed": "2025-12-15T23:44:46.211875",
       "success_rate": 100.0
     },
     {
@@ -134,8 +134,8 @@
       "max_duration_ms": 100.0,
       "avg_duration_ms": 100.0,
       "std_dev_duration_ms": 0.0,
-      "first_executed": "2025-12-15T23:43:35.474437",
-      "last_executed": "2025-12-15T23:43:35.474437",
+      "first_executed": "2025-12-15T23:44:46.210874",
+      "last_executed": "2025-12-15T23:44:46.210874",
       "success_rate": 100.0
     },
     {
@@ -149,8 +149,8 @@
       "max_duration_ms": 100.0,
       "avg_duration_ms": 100.0,
       "std_dev_duration_ms": 0.0,
-      "first_executed": "2025-12-15T23:43:35.474437",
-      "last_executed": "2025-12-15T23:43:35.474437",
+      "first_executed": "2025-12-15T23:44:46.211875",
+      "last_executed": "2025-12-15T23:44:46.211875",
       "success_rate": 100.0
     },
     {
@@ -164,8 +164,8 @@
       "max_duration_ms": 100.0,
       "avg_duration_ms": 100.0,
       "std_dev_duration_ms": 0.0,
-      "first_executed": "2025-12-15T23:43:35.474437",
-      "last_executed": "2025-12-15T23:43:35.474437",
+      "first_executed": "2025-12-15T23:44:46.211875",
+      "last_executed": "2025-12-15T23:44:46.211875",
       "success_rate": 100.0
     },
     {
@@ -179,15 +179,15 @@
       "max_duration_ms": 100.0,
       "avg_duration_ms": 100.0,
       "std_dev_duration_ms": 0.0,
-      "first_executed": "2025-12-15T23:43:35.474437",
-      "last_executed": "2025-12-15T23:43:35.474437",
+      "first_executed": "2025-12-15T23:44:46.211875",
+      "last_executed": "2025-12-15T23:44:46.211875",
       "success_rate": 100.0
     }
   ],
   "deficiencies": [],
   "paths": [
     {
-      "path_id": "c2381073-ad9d-4f85-a5c3-e2c184c8636f",
+      "path_id": "dd2b8e19-6e20-4984-8497-0a1369c03db5",
       "start_state": "start",
       "end_state": "a1",
       "states": [
@@ -196,17 +196,17 @@
         "a1"
       ],
       "transitions": [
-        "c3cd56d9-ae17-480f-8ddc-d29ad30fe4fe",
-        "665601fa-c86c-40ba-8d50-fa1f67746a5e"
+        "12053cae-9510-41ae-9952-1e757b90a2c4",
+        "6899652c-9805-4b7b-832e-7838158c624c"
       ],
-      "start_time": "2025-12-15T23:43:35.473437",
-      "end_time": "2025-12-15T23:43:35.474437",
+      "start_time": "2025-12-15T23:44:46.210874",
+      "end_time": "2025-12-15T23:44:46.211875",
       "total_duration_ms": 200.0,
       "success": true,
       "metadata": {}
     },
     {
-      "path_id": "ae459b26-275f-4281-8d7c-5e73dd81c4c7",
+      "path_id": "d6618de1-ea29-402d-9281-85d6e1b1ebad",
       "start_state": "start",
       "end_state": "b1",
       "states": [
@@ -215,17 +215,17 @@
         "b1"
       ],
       "transitions": [
-        "9fce805d-f3dd-4bd5-a6f0-a21aaa73a4c7",
-        "aff37103-d560-4c1a-b74a-0a10bfbd87af"
+        "c69ae947-c7dc-4626-8b48-d15940c9428d",
+        "1b481c5f-4541-48bc-b135-38b15f9c4d9a"
       ],
-      "start_time": "2025-12-15T23:43:35.474437",
-      "end_time": "2025-12-15T23:43:35.474437",
+      "start_time": "2025-12-15T23:44:46.211875",
+      "end_time": "2025-12-15T23:44:46.211875",
       "total_duration_ms": 200.0,
       "success": true,
       "metadata": {}
     },
     {
-      "path_id": "4298d09d-f334-42e2-b11b-c394aad6f649",
+      "path_id": "fbc7cf5d-8b37-4852-a565-d7797d2fe018",
       "start_state": "start",
       "end_state": "a2",
       "states": [
@@ -234,11 +234,11 @@
         "a2"
       ],
       "transitions": [
-        "dc266c94-d0a3-4e32-b235-844430a3d622",
-        "c44aa0ef-9cc9-4c22-be25-518ef19d64b9"
+        "7aa2a9c4-cd7f-46fd-a567-3e9e7e5ef387",
+        "ebbc22bb-9a52-4906-aa20-6264bcd444a5"
       ],
-      "start_time": "2025-12-15T23:43:35.474437",
-      "end_time": "2025-12-15T23:43:35.474437",
+      "start_time": "2025-12-15T23:44:46.211875",
+      "end_time": "2025-12-15T23:44:46.211875",
       "total_duration_ms": 200.0,
       "success": true,
       "metadata": {}

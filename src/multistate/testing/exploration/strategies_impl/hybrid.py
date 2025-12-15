@@ -4,6 +4,8 @@ import logging
 
 from multistate.testing.config import ExplorationConfig
 from multistate.testing.exploration.strategies_impl.adaptive import AdaptiveExplorer
+from multistate.testing.exploration.strategies_impl.bfs import BreadthFirstExplorer
+from multistate.testing.exploration.strategies_impl.novelty import NoveltySeekingExplorer
 from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
 from multistate.testing.exploration.strategies_impl.dfs import DepthFirstExplorer
 from multistate.testing.exploration.strategies_impl.greedy import GreedyCoverageExplorer
