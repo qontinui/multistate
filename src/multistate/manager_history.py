@@ -98,20 +98,6 @@ class StateHistoryManager:
 
         return self.state_resolver.get_previous_state_objects(offset)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def get_current_states(self) -> Set[State]:
         """Get current states from history.
 
@@ -160,13 +146,13 @@ class StateHistoryManager:
                 state = self.state_resolver.state_lookup(state_id)
                 if state is not None:
                     added.add(state)
-            
+
             removed = set()
             for state_id in removed_ids:
                 state = self.state_resolver.state_lookup(state_id)
                 if state is not None:
                     removed.add(state)
-            
+
             return added, removed
 
         return set(), set()

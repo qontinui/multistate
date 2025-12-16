@@ -73,7 +73,9 @@ class StateManagerInfo:
             "total_states": total_states,
             "total_transitions": total_transitions,
             "avg_transitions_per_state": avg_transitions,
-            "max_transitions_from_state": max(transitions_per_state.values(), default=0),
+            "max_transitions_from_state": max(
+                transitions_per_state.values(), default=0
+            ),
             "cyclomatic_complexity": cyclomatic_complexity,
         }
 
@@ -192,9 +194,7 @@ class StateManagerInfo:
         """
         return self.metrics.get_most_visited_states(limit)
 
-    def get_most_executed_transitions(
-        self, limit: int = 10
-    ) -> List[Tuple[str, int]]:
+    def get_most_executed_transitions(self, limit: int = 10) -> List[Tuple[str, int]]:
         """Get most frequently executed transitions.
 
         Args:

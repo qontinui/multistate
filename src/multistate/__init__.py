@@ -46,7 +46,7 @@ except ImportError:
 
 # Transition system (available now)
 try:
-    from multistate.transitions import (
+    from multistate.transitions import (  # noqa: F401
         PhaseResult,
         StaysVisible,
         Transition,
