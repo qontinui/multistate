@@ -18,7 +18,7 @@ interface Transition {
   exit: string[];
 }
 
-export default function Playground(): JSX.Element {
+export default function Playground(): React.JSX.Element {
   const [states, setStates] = useState<State[]>([
     { id: 'main', name: 'Main Window', active: true },
     { id: 'toolbar', name: 'Toolbar', active: false },
