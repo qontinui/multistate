@@ -94,14 +94,15 @@ def main():
     reliable_stats = tracker.get_stats("reliable_transition")
     unreliable_stats = tracker.get_stats("unreliable_transition")
 
-    print(
-        f"   Reliable path: {reliable_stats.success_count}/{reliable_stats.total_attempts} "
-        f"({reliable_stats.success_rate:.1%} success rate)"
-    )
-    print(
-        f"   Unreliable path: {unreliable_stats.success_count}/{unreliable_stats.total_attempts} "
-        f"({unreliable_stats.success_rate:.1%} success rate)"
-    )
+    rel_count = reliable_stats.success_count
+    rel_total = reliable_stats.total_attempts
+    rel_rate = reliable_stats.success_rate
+    print(f"   Reliable path: {rel_count}/{rel_total} ({rel_rate:.1%} success rate)")
+
+    unrel_count = unreliable_stats.success_count
+    unrel_total = unreliable_stats.total_attempts
+    unrel_rate = unreliable_stats.success_rate
+    print(f"   Unreliable path: {unrel_count}/{unrel_total} ({unrel_rate:.1%})")
 
     # Show dynamic costs
     print("\n3. Dynamic Path Costs:")

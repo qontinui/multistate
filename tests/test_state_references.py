@@ -7,11 +7,7 @@ from datetime import datetime
 sys.path.insert(0, "src")
 
 from multistate.manager import StateManager, StateManagerConfig
-from multistate.state_references import (
-    StateHistory,
-    StateReference,
-    StateSnapshot,
-)
+from multistate.state_references import StateHistory, StateReference, StateSnapshot
 
 
 def test_state_snapshot():
@@ -369,13 +365,13 @@ def test_manager_without_history():
     # History operations should raise errors
     try:
         manager.get_previous_states()
-        assert False, "Should have raised error"
+        raise AssertionError("Should have raised error")
     except Exception as e:
         print(f"[PASS] Expected error raised: {type(e).__name__}")
 
     try:
         manager.resolve_state_reference(StateReference.CURRENT)
-        assert False, "Should have raised error"
+        raise AssertionError("Should have raised error")
     except Exception as e:
         print(f"[PASS] Expected error raised: {type(e).__name__}")
 

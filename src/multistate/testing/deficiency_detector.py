@@ -39,7 +39,8 @@ class DeficiencyDetector:
         """Initialize DeficiencyDetector.
 
         Args:
-            performance_threshold_ms: Threshold for slow transition detection (milliseconds)
+            performance_threshold_ms: Threshold for slow transition detection
+                (milliseconds)
             stability_threshold: Success rate threshold for stability (0.95 = 95%)
             min_attempts_for_stability: Minimum attempts before checking stability
         """
@@ -106,7 +107,8 @@ class DeficiencyDetector:
                 (
                     DeficiencyCategory.UNEXPECTED_STATE,
                     DeficiencySeverity.MEDIUM,
-                    f"Unexpected state: {execution.from_state} -> {execution.actual_end_state}",
+                    f"Unexpected state: {execution.from_state} -> "
+                    f"{execution.actual_end_state}",
                     f"Expected to reach {execution.to_state}, "
                     f"but ended in {execution.actual_end_state}",
                 )
@@ -159,7 +161,8 @@ class DeficiencyDetector:
                 (
                     DeficiencyCategory.SLOW_TRANSITION,
                     DeficiencySeverity.MEDIUM,
-                    f"Consistently slow transition: {stats.from_state} -> {stats.to_state}",
+                    f"Consistently slow transition: "
+                    f"{stats.from_state} -> {stats.to_state}",
                     f"Average duration: {stats.avg_duration_ms:.0f}ms "
                     f"(threshold: {self.performance_threshold_ms:.0f}ms)",
                 )
@@ -202,7 +205,8 @@ class DeficiencyDetector:
                                 DeficiencyCategory.UNREACHABLE_STATE,
                                 DeficiencySeverity.HIGH,
                                 f"Unreachable state: {state_name}",
-                                f"State {state_name} cannot be reached from initial state",
+                                f"State {state_name} cannot be reached "
+                                "from initial state",
                                 [state_name],
                             )
                         )

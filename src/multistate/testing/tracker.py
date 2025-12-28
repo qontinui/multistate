@@ -136,7 +136,8 @@ class PathTracker:
                     total_transitions += len(state.transitions)
 
         logger.info(
-            f"PathTracker initialized: {total_states} states, {total_transitions} transitions"
+            f"PathTracker initialized: {total_states} states, "
+            f"{total_transitions} transitions"
         )
 
     # -------------------------------------------------------------------------

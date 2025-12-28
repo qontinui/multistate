@@ -75,7 +75,8 @@ class AdaptiveExplorer(ExplorationStrategy):
             # Explore: random action
             _, next_state = random.choice(transitions)
             logger.debug(
-                f"Q-learning explore: {current_state} -> {next_state} (ε={self.epsilon:.3f})"
+                f"Q-learning explore: {current_state} -> {next_state} "
+                f"(eps={self.epsilon:.3f})"
             )
         else:
             # Exploit: best Q-value

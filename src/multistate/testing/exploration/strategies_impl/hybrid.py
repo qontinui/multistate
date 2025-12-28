@@ -119,7 +119,8 @@ class HybridExplorer(ExplorationStrategy):
             self._switch_strategy(new_strategy_name)
 
             logger.info(
-                f"Phase transition: {self.current_strategy_name} -> {new_strategy_name} "
+                f"Phase transition: {self.current_strategy_name} -> "
+                f"{new_strategy_name} "
                 f"(iteration: {self.iteration})"
             )
 

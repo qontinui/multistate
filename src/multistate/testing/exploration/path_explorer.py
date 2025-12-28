@@ -38,7 +38,7 @@ class PathExplorer:
         >>> config = ExplorationConfig(strategy="hybrid", max_iterations=1000)
         >>> tracker = PathTracker(state_graph=graph)
         >>> explorer = PathExplorer(config, tracker)
-        >>> explorer.explore(initial_state="login", executor_callback=execute_transition)
+        >>> explorer.explore(initial_state="login", executor_callback=exec_fn)
         >>> metrics = tracker.get_coverage_metrics()
         >>> print(f"Coverage: {metrics.transition_coverage_percent:.1f}%")
     """
@@ -119,7 +119,8 @@ class PathExplorer:
         Args:
             executor_callback: Function to execute transitions
                                Args: (from_state, to_state)
-                               Returns: (success: bool, duration_ms: float, metadata: dict)
+                               Returns: (success: bool, duration_ms: float,
+                               metadata: dict)
             initial_state: Override initial state (optional)
 
         Returns:
@@ -419,9 +420,8 @@ class PathExplorer:
             coverage = metrics.transition_coverage_percent / 100.0
 
             if coverage >= self.config.coverage_target:
-                logger.info(
-                    f"Coverage target ({self.config.coverage_target * 100:.1f}%) reached"
-                )
+                target_pct = self.config.coverage_target * 100
+                logger.info(f"Coverage target ({target_pct:.1f}%) reached")
                 return False
 
         return True

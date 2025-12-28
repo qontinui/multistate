@@ -142,7 +142,8 @@ class PathAnalyzer:
             end_state: Target state
 
         Returns:
-            PathHistory for critical path (shortest successful), or None if no path found
+            PathHistory for critical path (shortest successful), or None
+            if no path found
         """
         # Find all paths that match
         matching_paths = [

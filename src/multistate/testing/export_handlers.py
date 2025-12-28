@@ -125,6 +125,9 @@ class ExportHandlers:
         include_screenshots: bool,  # noqa: ARG002 - Reserved for future use
     ) -> None:
         """Export results to HTML."""
+        state_cov = metrics.state_coverage_percent
+        trans_cov = metrics.transition_coverage_percent
+        success_rate = metrics.success_rate_percent
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -145,13 +148,13 @@ class ExportHandlers:
 
     <h2>Coverage Metrics</h2>
     <div class="metric">
-        <span class="metric-label">State Coverage:</span> {metrics.state_coverage_percent:.1f}%
+        <span class="metric-label">State Coverage:</span> {state_cov:.1f}%
     </div>
     <div class="metric">
-        <span class="metric-label">Transition Coverage:</span> {metrics.transition_coverage_percent:.1f}%
+        <span class="metric-label">Transition Coverage:</span> {trans_cov:.1f}%
     </div>
     <div class="metric">
-        <span class="metric-label">Success Rate:</span> {metrics.success_rate_percent:.1f}%
+        <span class="metric-label">Success Rate:</span> {success_rate:.1f}%
     </div>
 
     <h2>Deficiencies ({len(deficiencies)})</h2>

@@ -50,9 +50,9 @@ def main():
     for phase_result in result.phase_results:
         if phase_result.phase.value == "visibility":
             print(f"   Visibility setting: {phase_result.data['stays_visible']}")
-            print(
-                f"   States to show: {[main_menu.id if main_menu.id in phase_result.data['states_to_show'] else None for _ in phase_result.data['states_to_show']]}"
-            )
+            states_to_show = phase_result.data["states_to_show"]
+            show_ids = [main_menu.id if main_menu.id in states_to_show else None]
+            print(f"   States to show: {show_ids}")
 
     # Example 2: Navigation that hides previous state (StaysVisible.FALSE)
     print("\n2. Opening settings - main menu hides")
@@ -74,9 +74,9 @@ def main():
     for phase_result in result.phase_results:
         if phase_result.phase.value == "visibility":
             print(f"   Visibility setting: {phase_result.data['stays_visible']}")
-            print(
-                f"   States to hide: {[main_menu.id if main_menu.id in phase_result.data['states_to_hide'] else None for _ in phase_result.data['states_to_hide']]}"
-            )
+            states_to_hide = phase_result.data["states_to_hide"]
+            hide_ids = [main_menu.id if main_menu.id in states_to_hide else None]
+            print(f"   States to hide: {hide_ids}")
 
     # Example 3: Default behavior (StaysVisible.NONE)
     print("\n3. Default behavior - inherits from container")

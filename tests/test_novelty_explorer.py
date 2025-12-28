@@ -61,7 +61,7 @@ def test_novelty_prioritizes_unvisited():
     visited_order = [current]
 
     # Explore several steps
-    for step in range(5):
+    for _step in range(5):
         next_state = explorer.select_next_state(current)
         if next_state:
             visited_order.append(next_state)
@@ -177,7 +177,7 @@ def test_integration_with_path_explorer():
     graph = create_mock_state_graph()
 
     # PathExplorer expects (config, tracker, initial_state)
-    # But looking at the code, it's actually (config_or_manager, config_or_none, initial)
+    # But looking at the code, it's (config_or_manager, config_or_none, initial)
     # Let's look at PathExplorer signature first
     from multistate.testing.exploration.path_explorer import PathExplorer
 

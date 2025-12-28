@@ -87,7 +87,8 @@ class FailureAwareExplorer:
             self.skipped_transitions[transition_key] = self.cooldown_iterations
             logger.warning(
                 f"Skipping transition {from_state} -> {to_state} after "
-                f"{consecutive} consecutive failures (cooldown: {self.cooldown_iterations})"
+                f"{consecutive} consecutive failures "
+                f"(cooldown: {self.cooldown_iterations})"
             )
             return False
 
