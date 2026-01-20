@@ -10,7 +10,7 @@ from multistate.manager import StateManager, StateManagerConfig
 from multistate.state_references import StateHistory, StateReference, StateSnapshot
 
 
-def test_state_snapshot():
+def test_state_snapshot() -> bool:
     """Test StateSnapshot creation and representation."""
     print("\n" + "=" * 60)
     print("Test 1: StateSnapshot")
@@ -32,7 +32,7 @@ def test_state_snapshot():
     return True
 
 
-def test_state_history_basic():
+def test_state_history_basic() -> bool:
     """Test basic StateHistory operations."""
     print("\n" + "=" * 60)
     print("Test 2: StateHistory Basic Operations")
@@ -70,7 +70,7 @@ def test_state_history_basic():
     return True
 
 
-def test_state_history_expected():
+def test_state_history_expected() -> bool:
     """Test expected states tracking."""
     print("\n" + "=" * 60)
     print("Test 3: Expected States Tracking")
@@ -93,7 +93,7 @@ def test_state_history_expected():
     return True
 
 
-def test_state_history_changes():
+def test_state_history_changes() -> bool:
     """Test state change detection."""
     print("\n" + "=" * 60)
     print("Test 4: State Change Detection")
@@ -119,7 +119,7 @@ def test_state_history_changes():
     return True
 
 
-def test_state_history_max_size():
+def test_state_history_max_size() -> bool:
     """Test history size limit."""
     print("\n" + "=" * 60)
     print("Test 5: History Size Limit")
@@ -149,7 +149,7 @@ def test_state_history_max_size():
     return True
 
 
-def test_reference_resolver():
+def test_reference_resolver() -> bool:
     """Test StateReferenceResolver."""
     print("\n" + "=" * 60)
     print("Test 6: StateReferenceResolver")
@@ -198,7 +198,7 @@ def test_reference_resolver():
     return True
 
 
-def test_manager_with_history():
+def test_manager_with_history() -> bool:
     """Test StateManager with history enabled."""
     print("\n" + "=" * 60)
     print("Test 7: StateManager with History")
@@ -250,7 +250,7 @@ def test_manager_with_history():
     return True
 
 
-def test_expected_states_in_transition():
+def test_expected_states_in_transition() -> bool:
     """Test expected states are set during transitions."""
     print("\n" + "=" * 60)
     print("Test 8: Expected States in Transitions")
@@ -298,7 +298,7 @@ def test_expected_states_in_transition():
     return True
 
 
-def test_history_transitions_to_state():
+def test_history_transitions_to_state() -> bool:
     """Test finding transitions that led to a state."""
     print("\n" + "=" * 60)
     print("Test 9: Transitions to State Tracking")
@@ -343,7 +343,7 @@ def test_history_transitions_to_state():
     return True
 
 
-def test_manager_without_history():
+def test_manager_without_history() -> bool:
     """Test that StateManager works without history enabled."""
     print("\n" + "=" * 60)
     print("Test 10: StateManager without History")
@@ -379,7 +379,7 @@ def test_manager_without_history():
     return True
 
 
-def run_all_tests():
+def run_all_tests() -> bool:
     """Run all tests."""
     tests = [
         test_state_snapshot,

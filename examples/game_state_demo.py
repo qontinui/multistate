@@ -38,13 +38,13 @@ class GameContext:
     """Runtime game context."""
 
     player_level: int = 1
-    discovered_areas: Set[str] = None
-    active_quests: Set[str] = None
-    inventory_items: Set[str] = None
-    buffs: Dict[str, float] = None  # buff -> expiration time
-    cooldowns: Dict[str, float] = None  # ability -> ready time
+    discovered_areas: Set[str] | None = None
+    active_quests: Set[str] | None = None
+    inventory_items: Set[str] | None = None
+    buffs: Dict[str, float] | None = None  # buff -> expiration time
+    cooldowns: Dict[str, float] | None = None  # ability -> ready time
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.discovered_areas is None:
             self.discovered_areas = set()
         if self.active_quests is None:
@@ -60,7 +60,7 @@ class GameContext:
 class RPGGameDemo:
     """Demonstrates MultiState in an RPG game context."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the game state system."""
         config = StateManagerConfig(
             default_search_strategy=SearchStrategy.DIJKSTRA, log_transitions=False
@@ -73,7 +73,7 @@ class RPGGameDemo:
         self._setup_states()
         self._setup_static_transitions()
 
-    def _setup_states(self):
+    def _setup_states(self) -> None:
         """Define all game states."""
         # Main game states
         self.manager.add_state("main_menu", "Main Menu", group="menu_screens")
@@ -111,7 +111,7 @@ class RPGGameDemo:
         self.manager.add_state("buffed", "Buffed Status")
         self.manager.add_state("stealth", "Stealth Mode")
 
-    def _setup_static_transitions(self):
+    def _setup_static_transitions(self) -> None:
         """Define compile-time known transitions."""
         # Menu transitions
         self.manager.add_transition(
@@ -172,8 +172,10 @@ class RPGGameDemo:
                 self.manager.get_state(ui_state), "close"
             )
 
-    def discover_area(self, area: str):
+    def discover_area(self, area: str) -> None:
         """Dynamically discover a new area."""
+        if self.context.discovered_areas is None:
+            self.context.discovered_areas = set()
         if area not in self.context.discovered_areas:
             self.context.discovered_areas.add(area)
 
@@ -198,8 +200,10 @@ class RPGGameDemo:
                 )
                 print(f"💎 Discovered {area}! Accessible after defeating boss.")
 
-    def add_temporal_buff(self, buff_name: str, duration: float):
+    def add_temporal_buff(self, buff_name: str, duration: float) -> None:
         """Add a temporary buff with expiration."""
+        if self.context.buffs is None:
+            self.context.buffs = {}
         expire_time = self.current_time + duration
         self.context.buffs[buff_name] = expire_time
 
@@ -221,13 +225,15 @@ class RPGGameDemo:
         self.hidden_manager.add_dynamic_transition(expire_transition)
         print(f"⚡ Buff '{buff_name}' active for {duration} seconds")
 
-    def set_ability_cooldown(self, ability: str, cooldown: float):
+    def set_ability_cooldown(self, ability: str, cooldown: float) -> None:
         """Set ability on cooldown."""
+        if self.context.cooldowns is None:
+            self.context.cooldowns = {}
         ready_time = self.current_time + cooldown
         self.context.cooldowns[ability] = ready_time
         print(f"⏱️ Ability '{ability}' on cooldown for {cooldown} seconds")
 
-    def demonstrate_fog_of_war(self):
+    def demonstrate_fog_of_war(self) -> None:
         """Demonstrate fog of war occlusion."""
         print("\n" + "=" * 60)
         print("FOG OF WAR DEMONSTRATION")
@@ -264,7 +270,7 @@ class RPGGameDemo:
         )
         print(f"✨ {reveal_trans.name}")
 
-    def demonstrate_multi_target_quest(self):
+    def demonstrate_multi_target_quest(self) -> None:
         """Demonstrate multi-target pathfinding for quest objectives."""
         print("\n" + "=" * 60)
         print("MULTI-TARGET QUEST: Collect the Three Sacred Gems")
@@ -317,7 +323,7 @@ class RPGGameDemo:
             f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units"
         )
 
-    def demonstrate_combat_with_abilities(self):
+    def demonstrate_combat_with_abilities(self) -> None:
         """Demonstrate combat with cooldowns and buffs."""
         print("\n" + "=" * 60)
         print("COMBAT SYSTEM WITH ABILITIES")
@@ -357,15 +363,16 @@ class RPGGameDemo:
 
         # Check expired buffs
         print("\n⏰ Checking buff status...")
-        for buff_name, expire_time in list(self.context.buffs.items()):
-            if self.current_time >= expire_time:
-                print(f"  {buff_name} has expired")
-                del self.context.buffs[buff_name]
-            else:
-                remaining = expire_time - self.current_time
-                print(f"  {buff_name} active for {remaining:.1f}s more")
+        if self.context.buffs is not None:
+            for buff_name, expire_time in list(self.context.buffs.items()):
+                if self.current_time >= expire_time:
+                    print(f"  {buff_name} has expired")
+                    del self.context.buffs[buff_name]
+                else:
+                    remaining = expire_time - self.current_time
+                    print(f"  {buff_name} active for {remaining:.1f}s more")
 
-    def demonstrate_menu_occlusion(self):
+    def demonstrate_menu_occlusion(self) -> None:
         """Demonstrate pause menu occluding game world."""
         print("\n" + "=" * 60)
         print("MENU OCCLUSION DEMONSTRATION")
@@ -401,7 +408,7 @@ class RPGGameDemo:
             )
             print(f"\n📋 Prepared: {reveal.name}")
 
-    def run_full_demo(self):
+    def run_full_demo(self) -> None:
         """Run complete game demo."""
         print("#" * 60)
         print("# RPG GAME STATE MANAGEMENT DEMO")
@@ -431,7 +438,10 @@ class RPGGameDemo:
         print(f"Total transitions: {complexity['num_transitions']}")
         print(f"Dynamic transitions: {len(self.hidden_manager.dynamic_transitions)}")
         print(f"Active states: {complexity['active_states']}")
-        print(f"Discovered areas: {len(self.context.discovered_areas)}")
+        discovered_count = (
+            len(self.context.discovered_areas) if self.context.discovered_areas else 0
+        )
+        print(f"Discovered areas: {discovered_count}")
 
         print("\n" + "#" * 60)
         print("# KEY GAME CONCEPTS DEMONSTRATED")
@@ -449,7 +459,7 @@ class RPGGameDemo:
         )
 
 
-def main():
+def main() -> None:
     """Run the game demo."""
     demo = RPGGameDemo()
     demo.run_full_demo()

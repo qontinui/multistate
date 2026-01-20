@@ -15,7 +15,7 @@ from multistate.pathfinding.multi_target import SearchStrategy
 from multistate.transitions.executor import SuccessPolicy
 
 
-def test_basic_state_management():
+def test_basic_state_management() -> bool:
     """Test basic state operations."""
     print("\n" + "=" * 60)
     print("Test 1: Basic State Management")
@@ -44,7 +44,7 @@ def test_basic_state_management():
     return True
 
 
-def test_transition_execution():
+def test_transition_execution() -> bool:
     """Test transition execution."""
     print("\n" + "=" * 60)
     print("Test 2: Transition Execution")
@@ -100,7 +100,7 @@ def test_transition_execution():
     return True
 
 
-def test_groups():
+def test_groups() -> bool:
     """Test state groups."""
     print("\n" + "=" * 60)
     print("Test 3: State Groups")
@@ -135,7 +135,7 @@ def test_groups():
     return True
 
 
-def test_pathfinding_integration():
+def test_pathfinding_integration() -> bool:
     """Test pathfinding with StateManager."""
     print("\n" + "=" * 60)
     print("Test 4: Pathfinding Integration")
@@ -196,7 +196,7 @@ def test_pathfinding_integration():
     return True
 
 
-def test_blocking_states():
+def test_blocking_states() -> bool:
     """Test blocking state behavior."""
     print("\n" + "=" * 60)
     print("Test 5: Blocking States")
@@ -227,7 +227,7 @@ def test_blocking_states():
     return True
 
 
-def test_callbacks():
+def test_callbacks() -> bool:
     """Test transition callbacks."""
     print("\n" + "=" * 60)
     print("Test 6: Transition Callbacks")
@@ -238,11 +238,11 @@ def test_callbacks():
     # Track callback execution
     callback_log = []
 
-    def on_logout():
+    def on_logout() -> bool:
         callback_log.append("logout_executed")
         return True
 
-    def on_menu_init():
+    def on_menu_init() -> bool:
         callback_log.append("menu_initialized")
         return True
 
@@ -271,7 +271,7 @@ def test_callbacks():
     return True
 
 
-def test_reachability_analysis():
+def test_reachability_analysis() -> bool:
     """Test state reachability analysis."""
     print("\n" + "=" * 60)
     print("Test 7: Reachability Analysis")
@@ -309,7 +309,7 @@ def test_reachability_analysis():
     return True
 
 
-def test_error_handling():
+def test_error_handling() -> bool:
     """Test error handling."""
     print("\n" + "=" * 60)
     print("Test 8: Error Handling")
@@ -353,7 +353,7 @@ def test_error_handling():
     return True
 
 
-def test_history_tracking():
+def test_history_tracking() -> bool:
     """Test transition history."""
     print("\n" + "=" * 60)
     print("Test 9: History Tracking")
@@ -393,7 +393,7 @@ def test_history_tracking():
     return True
 
 
-def test_complex_scenario():
+def test_complex_scenario() -> bool:
     """Test a complex real-world scenario."""
     print("\n" + "=" * 60)
     print("Test 10: Complex IDE Scenario")
@@ -510,7 +510,7 @@ def test_complex_scenario():
     return True
 
 
-def main():
+def main() -> None:
     """Run all StateManager tests."""
     print("#" * 60)
     print("# StateManager API Tests")

@@ -87,7 +87,7 @@ def create_grid_scenario(
     return states, transitions
 
 
-def benchmark_target_scaling(max_targets: int = 8) -> Dict:
+def benchmark_target_scaling(max_targets: int = 8) -> Dict[str, list[float | int]]:
     """Benchmark how performance scales with number of targets.
 
     Args:
@@ -102,7 +102,7 @@ def benchmark_target_scaling(max_targets: int = 8) -> Dict:
     # Start from top-left corner
     start = {states["s_0_0"]}
 
-    results = {
+    results: Dict[str, list[float | int]] = {
         "num_targets": [],
         "bfs_time": [],
         "dijkstra_time": [],
@@ -166,7 +166,7 @@ def benchmark_target_scaling(max_targets: int = 8) -> Dict:
     return results
 
 
-def benchmark_grid_scaling(max_size: int = 10) -> Dict:
+def benchmark_grid_scaling(max_size: int = 10) -> Dict[str, list[float | int]]:
     """Benchmark how performance scales with grid size.
 
     Args:
@@ -175,7 +175,7 @@ def benchmark_grid_scaling(max_size: int = 10) -> Dict:
     Returns:
         Benchmark results
     """
-    results = {
+    results: Dict[str, list[float | int]] = {
         "grid_size": [],
         "num_states": [],
         "num_transitions": [],
@@ -243,8 +243,8 @@ def compare_single_vs_multi() -> None:
 
     # Sequential single-target
     print("\nSequential Single-Target:")
-    total_single_cost = 0
-    total_single_time = 0
+    total_single_cost: float = 0
+    total_single_time: float = 0
     current = start
 
     for i, target in enumerate(targets):
@@ -276,7 +276,7 @@ def compare_single_vs_multi() -> None:
         print(f"  EFFICIENCY: {efficiency:.1f}% better")
 
 
-def plot_complexity_results(results: Dict) -> None:
+def plot_complexity_results(results: Dict[str, list[float | int]]) -> None:
     """Create plots showing complexity scaling.
 
     Args:
@@ -359,7 +359,7 @@ def plot_complexity_results(results: Dict) -> None:
     print("\n✓ Saved complexity plots to pathfinding_complexity.png")
 
 
-def main():
+def main() -> None:
     """Run all benchmarks."""
     print("#" * 60)
     print("# MULTI-TARGET PATHFINDING COMPLEXITY BENCHMARKS")

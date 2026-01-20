@@ -11,7 +11,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 import random
-from typing import List
+from typing import Callable, List
 
 from multistate.core.state import State
 from multistate.core.state_group import StateGroup
@@ -52,7 +52,7 @@ class PropertyTests:
 
         return groups
 
-    def test_group_atomicity_theorem(self, iterations: int = 100):
+    def test_group_atomicity_theorem(self, iterations: int = 100) -> None:
         """Theorem 1: Groups maintain atomicity through all transitions.
 
         ∀g ∈ G, ∀t ∈ T: post(t) ⟹ (g ⊆ S_Ξ ∨ g ∩ S_Ξ = ∅)
@@ -136,7 +136,7 @@ class PropertyTests:
         assert failed == 0, "Group atomicity theorem violated!"
         print("✓ Theorem proved: Groups always maintain atomicity")
 
-    def test_incoming_coverage_theorem(self, iterations: int = 100):
+    def test_incoming_coverage_theorem(self, iterations: int = 100) -> None:
         """Theorem 2: All activated states receive incoming transitions.
 
         ∀s ∈ S_activated: τ_incoming(s) executes
@@ -154,13 +154,13 @@ class PropertyTests:
             states = self.generate_states(random.randint(3, 10))
 
             # Track which incoming executed
-            executed_incoming = set()
+            executed_incoming: set[str] = set()
 
             # Create incoming registry
             incoming_registry = {}
 
-            def make_incoming(s_id, exec_set):
-                def callback():
+            def make_incoming(s_id: str, exec_set: set[str]) -> "Callable[[], None]":
+                def callback() -> None:
                     exec_set.add(s_id)
 
                 return callback
@@ -203,7 +203,7 @@ class PropertyTests:
         assert failed == 0, "Incoming coverage theorem violated!"
         print("✓ Theorem proved: All activated states get incoming transitions")
 
-    def test_blocking_consistency_theorem(self, iterations: int = 100):
+    def test_blocking_consistency_theorem(self, iterations: int = 100) -> None:
         """Theorem 3: Blocking states prevent conflicting activations.
 
         s_b ∈ S_Ξ ∧ s_b.blocking ⟹ ∀s ∈ blocks(s_b): s ∉ S_activated
@@ -251,7 +251,7 @@ class PropertyTests:
         assert failed == 0, "Blocking consistency theorem violated!"
         print("✓ Theorem proved: Blocking states prevent conflicts")
 
-    def test_activation_infallibility_theorem(self, iterations: int = 100):
+    def test_activation_infallibility_theorem(self, iterations: int = 100) -> None:
         """Theorem 4: Activation and exit are infallible operations.
 
         post(φ_validate) ∧ success(φ_outgoing) ⟹ success(φ_activate) ∧ success(φ_exit)
@@ -309,7 +309,7 @@ class PropertyTests:
         assert failed == 0, "Activation infallibility theorem violated!"
         print("✓ Theorem proved: Activation/exit are pure memory ops that cannot fail")
 
-    def test_rollback_safety_theorem(self, iterations: int = 100):
+    def test_rollback_safety_theorem(self, iterations: int = 100) -> None:
         """Theorem 5: Rollback preserves original state on failure.
 
         ¬success(t) ∧ rollback ⟹ S_Ξ' = S_Ξ
@@ -360,7 +360,7 @@ class PropertyTests:
         assert failed == 0, "Rollback safety theorem violated!"
         print("✓ Theorem proved: Rollback preserves original state")
 
-    def run_all_theorems(self):
+    def run_all_theorems(self) -> None:
         """Run all theorem proofs."""
         print("\n" + "#" * 60)
         print("# Property-Based Theorem Proofs")

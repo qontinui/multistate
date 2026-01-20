@@ -16,7 +16,7 @@ from multistate.core.state import State
 from multistate.transitions import StaysVisible, Transition, TransitionExecutor
 
 
-def main():
+def main() -> None:
     """Demonstrate visibility control in state transitions."""
 
     print("=" * 60)

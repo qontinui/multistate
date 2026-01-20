@@ -10,7 +10,7 @@ from multistate.testing.exploration import NoveltySeekingExplorer
 from multistate.testing.tracker import PathTracker
 
 
-def create_mock_state_graph():
+def create_mock_state_graph() -> object:
     """Create a mock state graph for testing.
 
     Structure:
@@ -21,16 +21,16 @@ def create_mock_state_graph():
     """
 
     class MockTransition:
-        def __init__(self, to_state: str):
+        def __init__(self, to_state: str) -> None:
             self.to_state = to_state
 
     class MockState:
-        def __init__(self, name: str, transitions: list[str]):
+        def __init__(self, name: str, transitions: list[str]) -> None:
             self.name = name
             self.transitions = [MockTransition(t) for t in transitions]
 
     class MockStateGraph:
-        def __init__(self):
+        def __init__(self) -> None:
             self.states = {
                 "start": MockState("start", ["a", "b"]),
                 "a": MockState("a", ["a1", "a2"]),
@@ -45,7 +45,7 @@ def create_mock_state_graph():
     return MockStateGraph()
 
 
-def test_novelty_prioritizes_unvisited():
+def test_novelty_prioritizes_unvisited() -> bool:
     """Test that novelty explorer prioritizes unvisited states."""
     print("\n" + "=" * 60)
     print("Test 1: Novelty Explorer Prioritizes Unvisited States")
@@ -84,7 +84,7 @@ def test_novelty_prioritizes_unvisited():
     return True
 
 
-def test_local_visited_tracking():
+def test_local_visited_tracking() -> bool:
     """Test that local visited tracking works correctly."""
     print("\n" + "=" * 60)
     print("Test 2: Local Visited Tracking")
@@ -113,7 +113,7 @@ def test_local_visited_tracking():
     return True
 
 
-def test_novelty_vs_greedy():
+def test_novelty_vs_greedy() -> bool:
     """Compare novelty explorer with greedy coverage explorer."""
     print("\n" + "=" * 60)
     print("Test 3: Novelty vs Greedy Coverage")
@@ -168,7 +168,7 @@ def test_novelty_vs_greedy():
     return True
 
 
-def test_integration_with_path_explorer():
+def test_integration_with_path_explorer() -> bool:
     """Test novelty explorer integrated with PathExplorer."""
     print("\n" + "=" * 60)
     print("Test 4: Integration with PathExplorer")
@@ -189,7 +189,9 @@ def test_integration_with_path_explorer():
     explorer = PathExplorer(config, tracker, initial_state="start")
 
     # Define simple executor
-    def execute_transition(from_state: str, to_state: str):
+    def execute_transition(
+        from_state: str, to_state: str
+    ) -> tuple[bool, float, dict[str, str]]:
         """Simulate transition execution."""
         return True, 100.0, {}
 
@@ -220,7 +222,7 @@ def test_integration_with_path_explorer():
     return True
 
 
-def main():
+def main() -> None:
     """Run all novelty explorer tests."""
     print("#" * 60)
     print("# Novelty-Seeking Explorer Tests")

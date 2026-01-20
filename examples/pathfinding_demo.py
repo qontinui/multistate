@@ -12,7 +12,7 @@ from multistate.pathfinding.visualizer import PathVisualizer
 from multistate.transitions.transition import Transition
 
 
-def create_complex_scenario():
+def create_complex_scenario() -> tuple[dict[str, State], list[Transition]]:
     """Create a more complex scenario to demonstrate pathfinding."""
     states = {}
 
@@ -131,7 +131,7 @@ def create_complex_scenario():
     return states, transitions
 
 
-def demonstrate_single_vs_multi_target():
+def demonstrate_single_vs_multi_target() -> None:
     """Show the difference between single and multi-target pathfinding."""
     print("=" * 80)
     print("DEMONSTRATION: Single vs Multi-Target Pathfinding")
@@ -189,7 +189,7 @@ def demonstrate_single_vs_multi_target():
     print(visualizer.compare_paths(all_paths, all_labels))
 
 
-def demonstrate_search_strategies():
+def demonstrate_search_strategies() -> None:
     """Compare different search strategies."""
     print("\n" + "=" * 80)
     print("DEMONSTRATION: Search Strategy Comparison")
@@ -227,7 +227,7 @@ def demonstrate_search_strategies():
     print(visualizer.compare_paths(paths, labels))
 
 
-def generate_graphviz_output():
+def generate_graphviz_output() -> None:
     """Generate Graphviz visualization."""
     print("\n" + "=" * 80)
     print("GRAPHVIZ OUTPUT (for visualization)")
@@ -252,7 +252,7 @@ def generate_graphviz_output():
     print(dot_output)
 
 
-def analyze_complexity_scaling():
+def analyze_complexity_scaling() -> None:
     """Analyze how complexity scales with targets."""
     print("\n" + "=" * 80)
     print("COMPLEXITY SCALING ANALYSIS")
@@ -280,7 +280,7 @@ def analyze_complexity_scaling():
     print("Each additional target DOUBLES the search space!")
 
 
-def main():
+def main() -> None:
     """Run all demonstrations."""
     print("\n" + "#" * 80)
     print("# MULTI-TARGET PATHFINDING DEMONSTRATION")

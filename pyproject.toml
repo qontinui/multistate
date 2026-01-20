@@ -52,6 +52,8 @@ black = ">=24.0.0"
 mypy = ">=1.14.0"
 ruff = "^0.14"
 isort = "^7.0.0"
+types-PyYAML = ">=6.0.0"
+types-networkx = ">=3.0.0"
 
 [tool.poetry.group.examples.dependencies]
 jupyter = ">=1.0.0"

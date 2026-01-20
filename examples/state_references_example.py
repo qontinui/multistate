@@ -13,7 +13,7 @@ from multistate.manager import StateManager, StateManagerConfig
 from multistate.state_references import StateReference
 
 
-def main():
+def main() -> None:
     """Run the state references example."""
     print("=" * 60)
     print("State References Example")

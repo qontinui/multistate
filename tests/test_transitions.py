@@ -11,7 +11,7 @@ from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import Transition, TransitionPhase
 
 
-def test_basic_transition():
+def test_basic_transition() -> bool:
     """Test a simple transition from one state to another."""
     print("\n1. Testing basic transition...")
 
@@ -41,7 +41,7 @@ def test_basic_transition():
     return True
 
 
-def test_multi_state_activation():
+def test_multi_state_activation() -> bool:
     """Test activating multiple states simultaneously."""
     print("\n2. Testing multi-state activation...")
 
@@ -75,7 +75,7 @@ def test_multi_state_activation():
     return True
 
 
-def test_group_activation():
+def test_group_activation() -> bool:
     """Test atomic group activation."""
     print("\n3. Testing atomic group activation...")
 
@@ -116,7 +116,7 @@ def test_group_activation():
     return True
 
 
-def test_incoming_transitions():
+def test_incoming_transitions() -> bool:
     """Test that incoming transitions execute for ALL activated states."""
     print("\n4. Testing incoming transitions for all activated states...")
 
@@ -130,15 +130,15 @@ def test_incoming_transitions():
     content = State("content", "Content")
 
     # Define incoming actions
-    def init_toolbar():
+    def init_toolbar() -> None:
         executed_incoming.append("toolbar")
         print("     - Initializing toolbar...")
 
-    def init_sidebar():
+    def init_sidebar() -> None:
         executed_incoming.append("sidebar")
         print("     - Initializing sidebar...")
 
-    def init_content():
+    def init_content() -> None:
         executed_incoming.append("content")
         print("     - Initializing content...")
 
@@ -177,7 +177,7 @@ def test_incoming_transitions():
     return True
 
 
-def test_blocking_state():
+def test_blocking_state() -> bool:
     """Test blocking state prevents activation of blocked states."""
     print("\n5. Testing blocking state...")
 
@@ -209,7 +209,7 @@ def test_blocking_state():
     return True
 
 
-def test_phased_execution():
+def test_phased_execution() -> bool:
     """Test that all phases execute in correct order."""
     print("\n6. Testing phased execution order...")
 
@@ -254,7 +254,7 @@ def test_phased_execution():
     return True
 
 
-def test_rollback_on_failure():
+def test_rollback_on_failure() -> bool:
     """Test rollback when transition fails."""
     print("\n7. Testing rollback on failure...")
 
@@ -287,7 +287,7 @@ def test_rollback_on_failure():
     return True
 
 
-def test_success_policies():
+def test_success_policies() -> bool:
     """Test different success policies for incoming transitions."""
     print("\n8. Testing success policies...")
 
@@ -298,7 +298,7 @@ def test_success_policies():
     s3 = State("s3", "State 3")
 
     # Create incoming that will fail for s2
-    def failing_incoming():
+    def failing_incoming() -> None:
         raise Exception("Simulated failure")
 
     # Use TransitionCallbacks (correct API)
@@ -343,7 +343,7 @@ def test_success_policies():
     return True
 
 
-def main():
+def main() -> None:
     """Run all transition tests."""
     print("=" * 60)
     print("MultiState Transition System Tests")

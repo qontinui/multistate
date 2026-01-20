@@ -12,7 +12,7 @@ from multistate.transitions.reliability import ReliabilityTracker
 from multistate.transitions.transition import Transition
 
 
-def test_basic_reliability_tracking():
+def test_basic_reliability_tracking() -> bool:
     """Test basic success/failure tracking."""
     print("\n1. Testing basic reliability tracking...")
 
@@ -44,7 +44,7 @@ def test_basic_reliability_tracking():
     return True
 
 
-def test_dynamic_cost_calculation():
+def test_dynamic_cost_calculation() -> bool:
     """Test dynamic cost calculation based on reliability."""
     print("\n2. Testing dynamic cost calculation...")
 
@@ -83,7 +83,7 @@ def test_dynamic_cost_calculation():
     return True
 
 
-def test_executor_integration():
+def test_executor_integration() -> bool:
     """Test reliability tracking integrated with TransitionExecutor."""
     print("\n3. Testing executor integration...")
 
@@ -119,7 +119,7 @@ def test_executor_integration():
     print("   [OK] Successful transition recorded")
 
     # Create a failing transition
-    def failing_action():
+    def failing_action() -> None:
         raise RuntimeError("Transition failed")
 
     t2 = Transition(
@@ -144,7 +144,7 @@ def test_executor_integration():
     return True
 
 
-def test_summary_statistics():
+def test_summary_statistics() -> bool:
     """Test summary statistics across multiple transitions."""
     print("\n4. Testing summary statistics...")
 
@@ -187,7 +187,7 @@ def test_summary_statistics():
     return True
 
 
-def test_cost_multiplier_bounds():
+def test_cost_multiplier_bounds() -> bool:
     """Test that cost multipliers respect min/max bounds."""
     print("\n5. Testing cost multiplier bounds...")
 
@@ -214,7 +214,7 @@ def test_cost_multiplier_bounds():
     return True
 
 
-def test_reset_functionality():
+def test_reset_functionality() -> bool:
     """Test resetting statistics."""
     print("\n6. Testing reset functionality...")
 
@@ -240,7 +240,7 @@ def test_reset_functionality():
     return True
 
 
-def test_execution_time_tracking():
+def test_execution_time_tracking() -> bool:
     """Test execution time tracking."""
     print("\n7. Testing execution time tracking...")
 
@@ -269,7 +269,7 @@ def test_execution_time_tracking():
     return True
 
 
-def test_stats_to_dict():
+def test_stats_to_dict() -> bool:
     """Test conversion to dictionary format."""
     print("\n8. Testing stats serialization...")
 
@@ -296,7 +296,7 @@ def test_stats_to_dict():
     return True
 
 
-def run_all_tests():
+def run_all_tests() -> bool:
     """Run all reliability tests."""
     tests = [
         test_basic_reliability_tracking,

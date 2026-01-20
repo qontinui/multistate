@@ -26,13 +26,13 @@ from multistate.transitions.transition import IncomingTransition, Transition
 class GUIWorkspaceDemo:
     """Demonstrates a complete GUI workspace with MultiState."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the GUI workspace demo."""
         self.executor = TransitionExecutor(
             success_policy=SuccessPolicy.STRICT, strict_mode=True
         )
         self.active_states: Set[State] = set()
-        self.incoming_registry = {}
+        self.incoming_registry: dict[str, IncomingTransition] = {}
 
         # Create all states
         self._create_states()
@@ -47,9 +47,9 @@ class GUIWorkspaceDemo:
         self._register_incoming_transitions()
 
         # Track execution for demonstration
-        self.execution_log = []
+        self.execution_log: list[str] = []
 
-    def _create_states(self):
+    def _create_states(self) -> None:
         """Create all GUI states."""
         print("Creating GUI states...")
 
@@ -112,7 +112,7 @@ class GUIWorkspaceDemo:
 
         print(f"  Created {14} states")
 
-    def _create_groups(self):
+    def _create_groups(self) -> None:
         """Create state groups for coordinated activation."""
         print("\nCreating state groups...")
 
@@ -137,7 +137,7 @@ class GUIWorkspaceDemo:
         print(f"  Workspace group: {len(self.workspace_group)} states")
         print(f"  Main UI group: {len(self.main_ui_group)} states")
 
-    def _create_transitions(self):
+    def _create_transitions(self) -> None:
         """Create all transitions between states."""
         print("\nCreating transitions...")
 
@@ -218,30 +218,30 @@ class GUIWorkspaceDemo:
 
         print("  Created 8 transitions")
 
-    def _register_incoming_transitions(self):
+    def _register_incoming_transitions(self) -> None:
         """Register incoming transitions for state initialization."""
         print("\nRegistering incoming transitions...")
 
         # Incoming for workspace states
-        def init_toolbar():
+        def init_toolbar() -> None:
             self._log_action("  → Initializing toolbar buttons")
 
-        def init_sidebar():
+        def init_sidebar() -> None:
             self._log_action("  → Loading file tree")
 
-        def init_editor():
+        def init_editor() -> None:
             self._log_action("  → Setting up editor workspace")
 
-        def init_console():
+        def init_console() -> None:
             self._log_action("  → Starting console process")
 
-        def init_statusbar():
+        def init_statusbar() -> None:
             self._log_action("  → Updating status information")
 
-        def init_menu():
+        def init_menu() -> None:
             self._log_action("  → Building menu structure")
 
-        def init_main_window():
+        def init_main_window() -> None:
             self._log_action("  → Creating main window")
 
         # Register incoming transitions
@@ -257,7 +257,7 @@ class GUIWorkspaceDemo:
 
         print(f"  Registered {len(self.incoming_registry)} incoming transitions")
 
-    def _log_action(self, message: str):
+    def _log_action(self, message: str) -> bool:
         """Log an action for demonstration."""
         self.execution_log.append(message)
         print(f"    {message}")
@@ -293,7 +293,7 @@ class GUIWorkspaceDemo:
 
         print(f"New active states: {self._format_states(self.active_states)}")
 
-        return result.success
+        return bool(result.success)
 
     def _format_states(self, states: Set[State]) -> str:
         """Format a set of states for display."""
@@ -301,7 +301,7 @@ class GUIWorkspaceDemo:
             return "[]"
         return f"[{', '.join(s.name for s in states)}]"
 
-    def verify_group_atomicity(self):
+    def verify_group_atomicity(self) -> None:
         """Verify that all groups maintain atomicity."""
         print("\n" + "=" * 60)
         print("Verifying Group Atomicity")
@@ -323,7 +323,7 @@ class GUIWorkspaceDemo:
                     f"{len(active_in_group)}/{len(group)} states active"
                 )
 
-    def demonstrate_blocking(self):
+    def demonstrate_blocking(self) -> None:
         """Demonstrate blocking state behavior."""
         print("\n" + "=" * 60)
         print("Demonstrating Blocking States")
@@ -351,7 +351,7 @@ class GUIWorkspaceDemo:
             # Close the dialog
             self.execute_transition(self.close_save_dialog)
 
-    def run_demo(self):
+    def run_demo(self) -> None:
         """Run the complete demonstration."""
         print("\n" + "#" * 60)
         print("# MultiState GUI Workspace Demonstration")

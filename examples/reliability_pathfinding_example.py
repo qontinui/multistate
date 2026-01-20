@@ -17,7 +17,7 @@ from multistate.transitions.reliability import ReliabilityTracker
 from multistate.transitions.transition import Transition
 
 
-def main():
+def main() -> None:
     """Demonstrate reliability-weighted pathfinding."""
     print("=" * 60)
     print("Reliability-Weighted Pathfinding Example")

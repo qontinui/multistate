@@ -14,7 +14,7 @@ from multistate.core.state_group import StateGroup
 class TestFormalModelAlignment:
     """Verify implementation matches formal mathematical model."""
 
-    def test_state_is_subset_of_elements(self):
+    def test_state_is_subset_of_elements(self) -> None:
         """Test: s ∈ S where s ⊆ E (state is collection of elements)"""
         # Create elements (E)
         e1 = Element("e1", "Button")
@@ -32,7 +32,7 @@ class TestFormalModelAlignment:
         assert not s.has_element(e3)
         assert len(s.elements) == 2
 
-    def test_multiple_active_states(self):
+    def test_multiple_active_states(self) -> None:
         """Test: S_Ξ ⊆ S (multiple states can be active simultaneously)"""
         # Create states (S)
         s1 = State("s1", "Toolbar")
@@ -50,7 +50,7 @@ class TestFormalModelAlignment:
         assert s3 in S_Xi
         assert s4 not in S_Xi  # Not all states must be active
 
-    def test_group_membership_function(self):
+    def test_group_membership_function(self) -> None:
         """Test: γ: G → P(S) (group membership function)"""
         # Create states
         s1 = State("s1", "Toolbar")
@@ -71,7 +71,7 @@ class TestFormalModelAlignment:
         assert s2.group == "g1"
         assert s3.group == "g1"
 
-    def test_group_atomicity_property(self):
+    def test_group_atomicity_property(self) -> None:
         """Test: ∀g ∈ G: g ⊆ S_Ξ ∨ g ∩ S_Ξ = ∅ (atomicity)"""
         # Create states and group
         s1 = State("s1", "Toolbar")
@@ -96,7 +96,7 @@ class TestFormalModelAlignment:
         assert not g.is_fully_inactive(active_states_3)
         assert not g.validate_atomicity(active_states_3)
 
-    def test_mock_starting_probability(self):
+    def test_mock_starting_probability(self) -> None:
         """Test: P_initial(s) = w_s / Σw_s' (initial state selection)"""
         # Create initial states with weights
         s1 = State("s1", "Login", mock_starting_probability=2.0)
@@ -119,7 +119,7 @@ class TestFormalModelAlignment:
         assert p3 == 0.25  # 1.0 / 4.0
         assert p1 + p2 + p3 == 1.0  # Probabilities sum to 1
 
-    def test_blocking_states(self):
+    def test_blocking_states(self) -> None:
         """Test: s_b ∈ S_Ξ ⟹ target(t) ∩ B(s_b) = ∅ (blocking)"""
         # Create states
         modal = State(
@@ -135,7 +135,7 @@ class TestFormalModelAlignment:
         assert "sidebar" in modal.get_blocked_states()
         assert "footer" not in modal.get_blocked_states()
 
-    def test_path_cost_function(self):
+    def test_path_cost_function(self) -> None:
         """Test: c_S: S → ℝ (state cost function)"""
         # Create states with different costs
         s1 = State("s1", "Easy State", path_cost=1.0)
@@ -155,7 +155,7 @@ class TestFormalModelAlignment:
 class TestPracticalScenarios:
     """Test practical use cases that demonstrate the model."""
 
-    def test_gui_workspace_scenario(self):
+    def test_gui_workspace_scenario(self) -> None:
         """Test a typical GUI workspace with multiple components."""
         # Create elements for each component
         toolbar_button = Element("tb_btn", "Toolbar Button")
@@ -196,7 +196,7 @@ class TestPracticalScenarios:
         active_states.update({sidebar, content})
         assert workspace.validate_atomicity(active_states)
 
-    def test_modal_dialog_scenario(self):
+    def test_modal_dialog_scenario(self) -> None:
         """Test blocking modal dialog scenario."""
         # Create main UI states
         main_menu = State("main_menu", "Main Menu")

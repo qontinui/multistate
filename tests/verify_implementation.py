@@ -10,7 +10,7 @@ from multistate.core.state import State
 from multistate.core.state_group import StateGroup
 
 
-def verify_state_as_element_collection():
+def verify_state_as_element_collection() -> bool:
     """Verify: s ∈ S where s ⊆ E"""
     print("\n1. Testing state as collection of elements (s ⊆ E)...")
 
@@ -32,7 +32,7 @@ def verify_state_as_element_collection():
     return True
 
 
-def verify_multiple_active_states():
+def verify_multiple_active_states() -> bool:
     """Verify: S_Ξ ⊆ S (multiple simultaneous active states)"""
     print("\n2. Testing multiple simultaneous active states...")
 
@@ -53,7 +53,7 @@ def verify_multiple_active_states():
     return True
 
 
-def verify_group_atomicity():
+def verify_group_atomicity() -> bool:
     """Verify: ∀g ∈ G: g ⊆ S_Ξ ∨ g ∩ S_Ξ = ∅"""
     print("\n3. Testing group atomicity property...")
 
@@ -86,7 +86,7 @@ def verify_group_atomicity():
     return True
 
 
-def verify_mock_probability():
+def verify_mock_probability() -> bool:
     """Verify: P_initial(s) = w_s / Σw_s'"""
     print("\n4. Testing mock starting probability...")
 
@@ -110,7 +110,7 @@ def verify_mock_probability():
     return True
 
 
-def verify_blocking_states():
+def verify_blocking_states() -> bool:
     """Verify blocking state behavior"""
     print("\n5. Testing blocking states...")
 
@@ -124,7 +124,7 @@ def verify_blocking_states():
     return True
 
 
-def verify_gui_workspace_scenario():
+def verify_gui_workspace_scenario() -> bool:
     """Verify practical GUI workspace scenario"""
     print("\n6. Testing GUI workspace scenario...")
 
@@ -157,7 +157,7 @@ def verify_gui_workspace_scenario():
     return True
 
 
-def main():
+def main() -> None:
     """Run all verification tests."""
     print("=" * 60)
     print("MultiState Implementation Verification")

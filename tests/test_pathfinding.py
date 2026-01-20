@@ -10,7 +10,7 @@ from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStr
 from multistate.transitions.transition import Transition
 
 
-def create_test_scenario():
+def create_test_scenario() -> tuple[dict[str, State], list[Transition]]:
     """Create a test scenario with multiple states and transitions."""
     # Create states
     login = State("login", "Login")
@@ -80,7 +80,7 @@ def create_test_scenario():
     return states, transitions
 
 
-def test_single_target():
+def test_single_target() -> bool:
     """Test finding path to a single target."""
     print("\n" + "=" * 60)
     print("Test 1: Single Target Pathfinding")
@@ -108,7 +108,7 @@ def test_single_target():
     return path is not None
 
 
-def test_multiple_targets():
+def test_multiple_targets() -> bool:
     """Test finding path to multiple targets."""
     print("\n" + "=" * 60)
     print("Test 2: Multi-Target Pathfinding")
@@ -148,7 +148,7 @@ def test_multiple_targets():
     return path is not None
 
 
-def test_multi_state_activation():
+def test_multi_state_activation() -> bool:
     """Test that multi-state transitions are properly handled."""
     print("\n" + "=" * 60)
     print("Test 3: Multi-State Activation in Pathfinding")
@@ -186,7 +186,7 @@ def test_multi_state_activation():
     return path is not None
 
 
-def test_dijkstra_vs_bfs():
+def test_dijkstra_vs_bfs() -> bool:
     """Test that Dijkstra finds lower-cost path than BFS."""
     print("\n" + "=" * 60)
     print("Test 4: Dijkstra vs BFS (Cost Optimization)")
@@ -224,7 +224,7 @@ def test_dijkstra_vs_bfs():
     return False
 
 
-def test_impossible_path():
+def test_impossible_path() -> bool:
     """Test behavior when no path exists."""
     print("\n" + "=" * 60)
     print("Test 5: Impossible Path")
@@ -235,7 +235,7 @@ def test_impossible_path():
     island2 = State("island2", "Island 2")
 
     # No transitions between them
-    transitions = []
+    transitions: list[Transition] = []
 
     finder = MultiTargetPathFinder(transitions, SearchStrategy.BFS)
 
@@ -252,7 +252,7 @@ def test_impossible_path():
         return False
 
 
-def test_already_at_targets():
+def test_already_at_targets() -> bool:
     """Test when current states already include all targets."""
     print("\n" + "=" * 60)
     print("Test 6: Already at Targets")
@@ -278,7 +278,7 @@ def test_already_at_targets():
     return False
 
 
-def analyze_complexity():
+def analyze_complexity() -> None:
     """Analyze and display complexity metrics."""
     print("\n" + "=" * 60)
     print("Complexity Analysis")
@@ -300,7 +300,7 @@ def analyze_complexity():
     print("\nKey insight: Exponential in number of targets!")
 
 
-def demonstrate_multi_target_advantage():
+def demonstrate_multi_target_advantage() -> None:
     """Demonstrate advantage of multi-target over sequential single-target."""
     print("\n" + "=" * 60)
     print("Multi-Target vs Sequential Single-Target")
@@ -338,7 +338,7 @@ def demonstrate_multi_target_advantage():
         print("  ✓ Multi-target finds more efficient path!")
 
 
-def main():
+def main() -> None:
     """Run all pathfinding tests."""
     print("#" * 60)
     print("# Multi-Target Pathfinding Tests")

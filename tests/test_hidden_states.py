@@ -13,7 +13,7 @@ from multistate.dynamics.hidden_states import (
 )
 
 
-def test_modal_occlusion():
+def test_modal_occlusion() -> bool:
     """Test modal dialog occlusion."""
     print("\n" + "=" * 60)
     print("Test 1: Modal Occlusion")
@@ -41,7 +41,7 @@ def test_modal_occlusion():
     return True
 
 
-def test_spatial_occlusion():
+def test_spatial_occlusion() -> bool:
     """Test spatial overlap occlusion."""
     print("\n" + "=" * 60)
     print("Test 2: Spatial Occlusion")
@@ -79,7 +79,7 @@ def test_spatial_occlusion():
     return True
 
 
-def test_reveal_transition():
+def test_reveal_transition() -> bool:
     """Test dynamic reveal transition generation."""
     print("\n" + "=" * 60)
     print("Test 3: Reveal Transition Generation")
@@ -113,7 +113,7 @@ def test_reveal_transition():
     return True
 
 
-def test_self_transition():
+def test_self_transition() -> bool:
     """Test self-transition generation."""
     print("\n" + "=" * 60)
     print("Test 4: Self-Transition")
@@ -139,7 +139,7 @@ def test_self_transition():
     return True
 
 
-def test_occlusion_updates():
+def test_occlusion_updates() -> bool:
     """Test tracking occlusion changes over time."""
     print("\n" + "=" * 60)
     print("Test 5: Occlusion Updates")
@@ -175,7 +175,7 @@ def test_occlusion_updates():
     return True
 
 
-def test_dynamic_transition_expiration():
+def test_dynamic_transition_expiration() -> bool:
     """Test that dynamic transitions can expire."""
     print("\n" + "=" * 60)
     print("Test 6: Dynamic Transition Expiration")
@@ -214,7 +214,7 @@ def test_dynamic_transition_expiration():
     return True
 
 
-def test_complex_gui_scenario():
+def test_complex_gui_scenario() -> bool:
     """Test a complex GUI automation scenario."""
     print("\n" + "=" * 60)
     print("Test 7: Complex GUI Scenario")
@@ -275,7 +275,7 @@ def test_complex_gui_scenario():
     return True
 
 
-def demonstrate_theoretical_extensions():
+def demonstrate_theoretical_extensions() -> None:
     """Demonstrate how this extends the formal model."""
     print("\n" + "=" * 60)
     print("Theoretical Model Extensions")
@@ -314,7 +314,7 @@ These are GENERAL concepts applicable to:
     )
 
 
-def main():
+def main() -> None:
     """Run all hidden state tests."""
     print("#" * 60)
     print("# Hidden States and Dynamic Transitions Tests")

@@ -15,7 +15,7 @@ from multistate.transitions.transition import Transition, TransitionPhase
 from multistate.transitions.visibility import StaysVisible
 
 
-def test_stays_visible_enum():
+def test_stays_visible_enum() -> bool:
     """Test StaysVisible enum values."""
     print("1. Testing StaysVisible enum...")
 
@@ -30,7 +30,7 @@ def test_stays_visible_enum():
     return True
 
 
-def test_transition_default():
+def test_transition_default() -> bool:
     """Test that Transition defaults to StaysVisible.NONE."""
     print("2. Testing Transition default stays_visible...")
 
@@ -44,7 +44,7 @@ def test_transition_default():
     return True
 
 
-def test_transition_with_stays_visible():
+def test_transition_with_stays_visible() -> bool:
     """Test setting stays_visible on Transition."""
     print("3. Testing Transition with stays_visible...")
 
@@ -75,7 +75,7 @@ def test_transition_with_stays_visible():
     return True
 
 
-def test_to_dict_includes_stays_visible():
+def test_to_dict_includes_stays_visible() -> bool:
     """Test that to_dict includes stays_visible."""
     print("4. Testing to_dict serialization...")
 
@@ -98,7 +98,7 @@ def test_to_dict_includes_stays_visible():
     return True
 
 
-def test_executor_visibility_phase_none():
+def test_executor_visibility_phase_none() -> bool:
     """Test executor visibility phase with StaysVisible.NONE."""
     print("5. Testing executor visibility phase (NONE)...")
 
@@ -135,7 +135,7 @@ def test_executor_visibility_phase_none():
     return True
 
 
-def test_executor_visibility_phase_true():
+def test_executor_visibility_phase_true() -> bool:
     """Test executor visibility phase with StaysVisible.TRUE."""
     print("6. Testing executor visibility phase (TRUE)...")
 
@@ -172,7 +172,7 @@ def test_executor_visibility_phase_true():
     return True
 
 
-def test_executor_visibility_phase_false():
+def test_executor_visibility_phase_false() -> bool:
     """Test executor visibility phase with StaysVisible.FALSE."""
     print("7. Testing executor visibility phase (FALSE)...")
 
@@ -209,7 +209,7 @@ def test_executor_visibility_phase_false():
     return True
 
 
-def test_multiple_from_states():
+def test_multiple_from_states() -> bool:
     """Test visibility with multiple from_states."""
     print("8. Testing visibility with multiple from_states...")
 
@@ -245,7 +245,7 @@ def test_multiple_from_states():
     return True
 
 
-def main():
+def main() -> int:
     """Run all visibility tests."""
     print("=" * 60)
     print("Visibility Migration Tests")

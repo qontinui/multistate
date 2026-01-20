@@ -73,7 +73,7 @@ class MicroserviceContext:
 class MicroservicesDemo:
     """Demonstrates MultiState in microservices architecture."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the microservices system."""
         config = StateManagerConfig(
             default_search_strategy=SearchStrategy.DIJKSTRA, log_transitions=False
@@ -85,7 +85,7 @@ class MicroservicesDemo:
         self._setup_core_services()
         self._setup_static_routes()
 
-    def _setup_core_services(self):
+    def _setup_core_services(self) -> None:
         """Define core microservices as states."""
         # API Gateway
         self.manager.add_state("api_gateway", "API Gateway", group="frontend")
@@ -127,7 +127,7 @@ class MicroservicesDemo:
         ]:
             self.context.services[service_id] = ServiceMetrics()
 
-    def _setup_static_routes(self):
+    def _setup_static_routes(self) -> None:
         """Define known service routes."""
         # API Gateway routes
         self.manager.add_transition(
@@ -176,7 +176,7 @@ class MicroservicesDemo:
                 path_cost=1.0,  # Higher cost for replica
             )
 
-    def discover_service(self, service_name: str, endpoints: List[str]):
+    def discover_service(self, service_name: str, endpoints: List[str]) -> None:
         """Dynamically discover a new service."""
         if service_name not in self.context.discovered_services:
             self.context.discovered_services.add(service_name)
@@ -203,7 +203,7 @@ class MicroservicesDemo:
             # Initialize metrics for discovered service
             self.context.services[service_name] = ServiceMetrics()
 
-    def trigger_circuit_breaker(self, service_name: str):
+    def trigger_circuit_breaker(self, service_name: str) -> None:
         """Open circuit breaker for failing service."""
         if service_name in self.context.services:
             metrics = self.context.services[service_name]
@@ -260,7 +260,7 @@ class MicroservicesDemo:
 
         return health
 
-    def demonstrate_service_discovery(self):
+    def demonstrate_service_discovery(self) -> None:
         """Demonstrate dynamic service discovery."""
         print("\n" + "=" * 60)
         print("SERVICE DISCOVERY DEMONSTRATION")
@@ -293,7 +293,7 @@ class MicroservicesDemo:
             if "route_to" in trans_id:
                 print(f"  → {trans_id}")
 
-    def demonstrate_circuit_breaker(self):
+    def demonstrate_circuit_breaker(self) -> None:
         """Demonstrate circuit breaker pattern."""
         print("\n" + "=" * 60)
         print("CIRCUIT BREAKER DEMONSTRATION")
@@ -334,7 +334,7 @@ class MicroservicesDemo:
             if "circuit_recovery" in trans.id:
                 print(f"✅ Recovery transition available: {trans.name}")
 
-    def demonstrate_distributed_transaction(self):
+    def demonstrate_distributed_transaction(self) -> None:
         """Demonstrate distributed transaction coordination."""
         print("\n" + "=" * 60)
         print("DISTRIBUTED TRANSACTION: Complete Order Flow")
@@ -375,7 +375,7 @@ class MicroservicesDemo:
             print(f"  Savings: {sequential_cost - path.total_cost:.1f} units")
             print("  ✅ Coordinated approach is more efficient!")
 
-    def demonstrate_load_balancer_shadows(self):
+    def demonstrate_load_balancer_shadows(self) -> None:
         """Demonstrate load balancer shadow instances."""
         print("\n" + "=" * 60)
         print("LOAD BALANCER SHADOWS (Service Occlusion)")
@@ -421,7 +421,7 @@ class MicroservicesDemo:
         print("  Shadow instances take over traffic")
         print("  Load automatically redistributed")
 
-    def demonstrate_health_checks(self):
+    def demonstrate_health_checks(self) -> None:
         """Demonstrate health check self-transitions."""
         print("\n" + "=" * 60)
         print("HEALTH CHECK MONITORING")
@@ -465,7 +465,7 @@ class MicroservicesDemo:
             if "health_check" in trans_id:
                 print(f"  • {trans_id}")
 
-    def demonstrate_graceful_degradation(self):
+    def demonstrate_graceful_degradation(self) -> None:
         """Demonstrate graceful degradation with group transitions."""
         print("\n" + "=" * 60)
         print("GRACEFUL DEGRADATION")
@@ -504,7 +504,7 @@ class MicroservicesDemo:
         print("  • Maintained auth and user services (critical)")
         print("  • Cache still active (performance)")
 
-    def run_full_demo(self):
+    def run_full_demo(self) -> None:
         """Run complete microservices demo."""
         print("#" * 60)
         print("# MICROSERVICES ORCHESTRATION DEMO")
@@ -535,7 +535,7 @@ class MicroservicesDemo:
         print(f"Dynamic transitions: {len(self.hidden_manager.dynamic_transitions)}")
 
         # Calculate system health
-        total_health = 0
+        total_health: float = 0
         for metrics in self.context.services.values():
             if metrics.request_count > 0:
                 error_rate = metrics.error_count / metrics.request_count
@@ -560,7 +560,7 @@ class MicroservicesDemo:
         )
 
 
-def main():
+def main() -> None:
     """Run the microservices demo."""
     demo = MicroservicesDemo()
     demo.run_full_demo()

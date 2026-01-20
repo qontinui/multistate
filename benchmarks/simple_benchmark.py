@@ -12,7 +12,7 @@ from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStr
 from multistate.transitions.transition import Transition
 
 
-def create_simple_graph():
+def create_simple_graph() -> tuple[dict[str, State], list[Transition]]:
     """Create a simple graph for benchmarking."""
     states = {}
     for i in range(10):
@@ -47,7 +47,7 @@ def create_simple_graph():
     return states, transitions
 
 
-def benchmark_scaling():
+def benchmark_scaling() -> None:
     """Simple benchmark showing exponential scaling."""
     print("\nMulti-Target Pathfinding Complexity Benchmark")
     print("=" * 60)
@@ -86,7 +86,7 @@ def benchmark_scaling():
     print(f"Formula: {analysis['complexity_class']}")
 
 
-def compare_approaches():
+def compare_approaches() -> None:
     """Compare sequential vs multi-target."""
     print("\nSequential vs Multi-Target Comparison")
     print("=" * 60)
@@ -97,8 +97,8 @@ def compare_approaches():
 
     # Sequential approach
     print("\nSequential (one target at a time):")
-    total_cost = 0
-    total_time = 0
+    total_cost: float = 0
+    total_time: float = 0
     current = start
 
     for i, target in enumerate(targets):
@@ -128,7 +128,7 @@ def compare_approaches():
         print(f"\n  EFFICIENCY GAIN: {efficiency:.0f}% better")
 
 
-def main():
+def main() -> None:
     """Run simple benchmarks."""
     print("#" * 60)
     print("# MULTI-TARGET PATHFINDING BENCHMARKS")
