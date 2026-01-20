@@ -275,9 +275,7 @@ class GUIWorkspaceDemo:
         to_exit = self._format_states(transition.get_all_states_to_exit())
         print(f"States to exit: {to_exit}")
 
-        result = self.executor.execute(
-            transition, self.active_states, self.incoming_registry
-        )
+        result = self.executor.execute(transition, self.active_states)
 
         if result.success:
             # Update our active states based on result

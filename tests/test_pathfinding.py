@@ -312,7 +312,7 @@ def demonstrate_multi_target_advantage() -> None:
     targets = [states["toolbar"], states["sidebar"], states["editor"]]
 
     print("Approach 1: Sequential single-target")
-    total_cost_sequential = 0
+    total_cost_sequential: float = 0.0
     current = {states["login"]}
 
     for target in targets:

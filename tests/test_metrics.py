@@ -296,6 +296,8 @@ class TestMetricsManager:
         s_metrics = manager.get_state_metrics("state1")
         t_metrics = manager.get_transition_metrics("trans1")
 
+        assert s_metrics is not None
+        assert t_metrics is not None
         assert s_metrics.visit_count == 0
         assert t_metrics.execution_count == 0
 
@@ -490,6 +492,7 @@ class TestStateManagerIntegration:
         manager.reset_metrics()
 
         metrics = manager.get_state_metrics("state1")
+        assert metrics is not None
         assert metrics.visit_count == 0
 
     def test_enable_disable_metrics_integration(self) -> None:
@@ -516,6 +519,7 @@ class TestStateManagerIntegration:
         manager.deactivate_states({"state1"})
         manager.activate_states({"state1"})
         metrics3 = manager.get_state_metrics("state1")
+        assert metrics3 is not None
         assert metrics3.visit_count == 1  # Unchanged
 
 

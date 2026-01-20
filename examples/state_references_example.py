@@ -22,7 +22,7 @@ def main() -> None:
     # Create manager with history enabled
     config = StateManagerConfig(
         enable_state_history=True,
-        max_history_snapshots=50,
+        max_history_size=50,
         log_transitions=True,
     )
     manager = StateManager(config)
@@ -110,6 +110,7 @@ def main() -> None:
 
     # Check which transitions led to certain states
     print("\n--- Transition Tracking ---")
+    assert manager.state_history is not None
     main_menu_transitions = manager.state_history.get_transitions_to_state("main_menu")
     print(f"Transitions that activated main_menu: {main_menu_transitions}")
 

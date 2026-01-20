@@ -310,7 +310,7 @@ class RPGGameDemo:
 
         # Compare with sequential approach
         print("\nSequential approach comparison:")
-        total_sequential = 0
+        total_sequential: float = 0.0
 
         for target in quest_targets:
             single_path = self.manager.find_path_to([target])
@@ -319,6 +319,7 @@ class RPGGameDemo:
                 total_sequential += single_path.total_cost
 
         print(f"\nSequential total: {total_sequential}")
+        assert path is not None
         print(
             f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units"
         )

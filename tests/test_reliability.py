@@ -119,7 +119,7 @@ def test_executor_integration() -> bool:
     print("   [OK] Successful transition recorded")
 
     # Create a failing transition
-    def failing_action() -> None:
+    def failing_action() -> bool:
         raise RuntimeError("Transition failed")
 
     t2 = Transition(

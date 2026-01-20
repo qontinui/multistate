@@ -183,7 +183,7 @@ class PropertyTests:
 
             # Execute
             executor = TransitionExecutor(success_policy=SuccessPolicy.STRICT)
-            result = executor.execute(transition, set(), incoming_registry)
+            result = executor.execute(transition, set())
 
             if result.success:
                 # Verify ALL activated states had incoming executed
@@ -241,7 +241,8 @@ class PropertyTests:
             result = executor.execute(transition, active_states)
 
             # Should fail at validation
-            if not result.success and result.get_failed_phase().value == "validate":
+            failed_phase = result.get_failed_phase()
+            if not result.success and failed_phase is not None and failed_phase.value == "validate":
                 passed += 1
             else:
                 failed += 1

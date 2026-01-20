@@ -330,6 +330,7 @@ def test_history_transitions_to_state() -> bool:
     manager.execute_transition("open_editor")
 
     # Check transitions that activated main_menu
+    assert manager.state_history is not None
     transitions = manager.state_history.get_transitions_to_state("main_menu")
     assert "login_success" in transitions
     print(f"Transitions to main_menu: {transitions}")

@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path, SearchStrategy
 from multistate.pathfinding.visualizer import PathVisualizer
 from multistate.transitions.transition import Transition
 
@@ -149,10 +149,9 @@ def demonstrate_single_vs_multi_target() -> None:
     print("\n1. SINGLE-TARGET APPROACH (Sequential)")
     print("-" * 40)
 
-    single_paths = []
-    single_labels = []
-    total_single_cost = 0
-
+    single_paths: list[Path] = []
+    single_labels: list[str] = []
+    total_single_cost: float = 0.0
     current_single = current.copy()
     for target in targets:
         finder = MultiTargetPathFinder(transitions, SearchStrategy.DIJKSTRA)
@@ -184,9 +183,10 @@ def demonstrate_single_vs_multi_target() -> None:
     # Compare all paths
     print("\n3. COMPARISON")
     print("-" * 40)
-    all_paths = single_paths + [multi_path]
-    all_labels = single_labels + ["Multi-Target"]
-    print(visualizer.compare_paths(all_paths, all_labels))
+    if multi_path:
+        all_paths = single_paths + [multi_path]
+        all_labels = single_labels + ["Multi-Target"]
+        print(visualizer.compare_paths(all_paths, all_labels))
 
 
 def demonstrate_search_strategies() -> None:
