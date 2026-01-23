@@ -7,7 +7,11 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path, SearchStrategy
+from multistate.pathfinding.multi_target import (
+    MultiTargetPathFinder,
+    Path,
+    SearchStrategy,
+)
 from multistate.pathfinding.visualizer import PathVisualizer
 from multistate.transitions.transition import Transition
 

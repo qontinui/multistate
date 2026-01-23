@@ -242,7 +242,11 @@ class PropertyTests:
 
             # Should fail at validation
             failed_phase = result.get_failed_phase()
-            if not result.success and failed_phase is not None and failed_phase.value == "validate":
+            if (
+                not result.success
+                and failed_phase is not None
+                and failed_phase.value == "validate"
+            ):
                 passed += 1
             else:
                 failed += 1
