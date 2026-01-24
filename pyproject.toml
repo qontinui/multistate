@@ -85,6 +85,14 @@ disable_error_code = ["import-untyped"]
 module = "multistate.testing.screenshot_manager"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "yaml"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "multistate.testing.config"
+disable_error_code = ["import-untyped"]
+
 [tool.black]
 line-length = 88
 target-version = ["py310"]
