@@ -23,16 +23,16 @@ Example:
 from multistate.testing.config import ExplorationConfig
 from multistate.testing.deficiency_detector import DeficiencyDetector
 from multistate.testing.enums import (
-    DeficiencyCategory,
-    DeficiencySeverity,
-    ExecutionStatus,
+                                      DeficiencyCategory,
+                                      DeficiencySeverity,
+                                      ExecutionStatus,
 )
 from multistate.testing.models import (
-    CoverageMetrics,
-    Deficiency,
-    PathHistory,
-    TransitionExecution,
-    TransitionStatistics,
+                                      CoverageMetrics,
+                                      Deficiency,
+                                      PathHistory,
+                                      TransitionExecution,
+                                      TransitionStatistics,
 )
 from multistate.testing.tracker import PathTracker
 

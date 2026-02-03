@@ -46,13 +46,13 @@ except ImportError:
 
 # Transition system (available now)
 try:
-    from multistate.transitions import (  # noqa: F401
-        PhaseResult,
-        StaysVisible,
-        Transition,
-        TransitionExecutor,
-        TransitionPhase,
-        TransitionResult,
+    from multistate.transitions import (
+        PhaseResult,  # noqa: F401
+        StaysVisible,  # noqa: F401
+        Transition,  # noqa: F401
+        TransitionExecutor,  # noqa: F401
+        TransitionPhase,  # noqa: F401
+        TransitionResult,  # noqa: F401
     )
 
     __all__.extend(
