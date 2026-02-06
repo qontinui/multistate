@@ -138,14 +138,14 @@ success = manager.execute_path(path)
 
 ## Why MultiState?
 
-| Feature | MultiState | FSM | Statecharts | Petri Nets |
-|---------|-----------|-----|-------------|------------|
-| Multi-state activation | ✅ | ❌ | Partial | ✅ |
-| Multi-target pathfinding | ✅ | ❌ | ❌ | ❌ |
-| Dynamic transitions | ✅ | ❌ | ❌ | Partial |
-| Occlusion handling | ✅ | ❌ | ❌ | ❌ |
-| Formal verification | ✅ | ✅ | Partial | ✅ |
-| Phased execution | ✅ | ❌ | ❌ | ❌ |
+| Feature                  | MultiState | FSM | Statecharts | Petri Nets |
+| ------------------------ | ---------- | --- | ----------- | ---------- |
+| Multi-state activation   | ✅         | ❌  | Partial     | ✅         |
+| Multi-target pathfinding | ✅         | ❌  | ❌          | ❌         |
+| Dynamic transitions      | ✅         | ❌  | ❌          | Partial    |
+| Occlusion handling       | ✅         | ❌  | ❌          | ❌         |
+| Formal verification      | ✅         | ✅  | Partial     | ✅         |
+| Phased execution         | ✅         | ❌  | ❌          | ❌         |
 
 ## Next Steps
 

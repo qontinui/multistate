@@ -30,6 +30,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
 
 1. **Fork the repository** and create a branch from `main`
 2. **Install development dependencies:**
+
    ```bash
    poetry install --with dev
    ```
@@ -41,6 +42,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
    - Update documentation if needed
 
 4. **Run tests and linting:**
+
    ```bash
    poetry run pytest
    poetry run black .
@@ -116,12 +118,14 @@ multistate/
 ## Areas for Contribution
 
 ### Good First Issues
+
 - Bug fixes
 - Documentation improvements
 - Example projects
 - Test coverage improvements
 
 ### Advanced Contributions
+
 - Performance optimizations
 - New pathfinding algorithms
 - Advanced features (dynamic transitions, occlusion)

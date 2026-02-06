@@ -1,19 +1,19 @@
-import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
-import CodeBlock from '@theme/CodeBlock';
+import type { ReactNode } from "react";
+import clsx from "clsx";
+import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Layout from "@theme/Layout";
+import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import Heading from "@theme/Heading";
+import CodeBlock from "@theme/CodeBlock";
 
-import styles from './index.module.css';
+import styles from "./index.module.css";
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -22,12 +22,14 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/introduction">
+            to="/docs/introduction"
+          >
             Get Started →
           </Link>
           <Link
             className="button button--outline button--secondary button--lg margin-left--md"
-            to="/playground">
+            to="/playground"
+          >
             Try Playground 🎮
           </Link>
         </div>
@@ -44,8 +46,8 @@ function QuickExample() {
           <Heading as="h2">Multi-State Activation</Heading>
           <p>
             Unlike traditional state machines, MultiState allows multiple states
-            to be active simultaneously. Transitions can activate multiple states
-            atomically, perfect for complex GUI applications.
+            to be active simultaneously. Transitions can activate multiple
+            states atomically, perfect for complex GUI applications.
           </p>
           <CodeBlock language="python">{`# Traditional FSM: one state at a time
 fsm.transition_to('panel_open')
@@ -88,13 +90,21 @@ function KeyFeatures() {
         </div>
         <div className="row">
           <div className="col col--4">
-            <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div
+              className="text--center"
+              style={{
+                minHeight: "120px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <img
-                src={useBaseUrl('/img/multi-target-navigation.png')}
+                src={useBaseUrl("/img/multi-target-navigation.png")}
                 alt="Multi-Target Navigation"
                 style={{
-                  maxWidth: '100px',
-                  height: 'auto'
+                  maxWidth: "100px",
+                  height: "auto",
                 }}
               />
             </div>
@@ -107,40 +117,56 @@ function KeyFeatures() {
             </div>
           </div>
           <div className="col col--4">
-            <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div
+              className="text--center"
+              style={{
+                minHeight: "120px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <img
-                src={useBaseUrl('/img/occlusion-reveal.png')}
+                src={useBaseUrl("/img/occlusion-reveal.png")}
                 alt="Occlusion & Reveal"
                 style={{
-                  maxWidth: '100px',
-                  height: 'auto'
+                  maxWidth: "100px",
+                  height: "auto",
                 }}
               />
             </div>
             <div className="text--center padding-horiz--md">
               <Heading as="h3">Occlusion & Reveal</Heading>
               <p>
-                Automatically handle modal dialogs and overlays. Generate
-                reveal transitions when occluding states close.
+                Automatically handle modal dialogs and overlays. Generate reveal
+                transitions when occluding states close.
               </p>
             </div>
           </div>
           <div className="col col--4">
-            <div className="text--center" style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div
+              className="text--center"
+              style={{
+                minHeight: "120px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <img
-                src={useBaseUrl('/img/safe-execution.png')}
+                src={useBaseUrl("/img/safe-execution.png")}
                 alt="Safe Execution"
                 style={{
-                  maxWidth: '100px',
-                  height: 'auto'
+                  maxWidth: "100px",
+                  height: "auto",
                 }}
               />
             </div>
             <div className="text--center padding-horiz--md">
               <Heading as="h3">Safe Execution</Heading>
               <p>
-                Phased execution model with automatic rollback ensures
-                your system never loses state on failure.
+                Phased execution model with automatic rollback ensures your
+                system never loses state on failure.
               </p>
             </div>
           </div>
@@ -156,7 +182,9 @@ function MathematicalFoundation() {
       <div className="row">
         <div className="col col--12">
           <div className="text--center margin-bottom--lg">
-            <Heading as="h2">Built on Rigorous Mathematical Foundations</Heading>
+            <Heading as="h2">
+              Built on Rigorous Mathematical Foundations
+            </Heading>
           </div>
         </div>
       </div>
@@ -164,20 +192,37 @@ function MathematicalFoundation() {
         <div className="col col--8 col--offset-2">
           <div className="card">
             <div className="card__body">
-              <p className="text--center" style={{fontSize: '1.2rem'}}>
-                <strong>Ω = (S, T, G, ω, T<sub>d</sub>)</strong>
+              <p className="text--center" style={{ fontSize: "1.2rem" }}>
+                <strong>
+                  Ω = (S, T, G, ω, T<sub>d</sub>)
+                </strong>
               </p>
               <ul>
-                <li><strong>S</strong> - Set of states with multi-activation</li>
-                <li><strong>T</strong> - Transitions with (from, activate, exit) semantics</li>
-                <li><strong>G</strong> - State groups for atomic operations</li>
-                <li><strong>ω</strong> - Occlusion function for state visibility</li>
-                <li><strong>T<sub>d</sub></strong> - Dynamic transition generator</li>
+                <li>
+                  <strong>S</strong> - Set of states with multi-activation
+                </li>
+                <li>
+                  <strong>T</strong> - Transitions with (from, activate, exit)
+                  semantics
+                </li>
+                <li>
+                  <strong>G</strong> - State groups for atomic operations
+                </li>
+                <li>
+                  <strong>ω</strong> - Occlusion function for state visibility
+                </li>
+                <li>
+                  <strong>
+                    T<sub>d</sub>
+                  </strong>{" "}
+                  - Dynamic transition generator
+                </li>
               </ul>
               <div className="text--center margin-top--md">
                 <Link
                   className="button button--primary"
-                  to="/docs/theory/formal-model">
+                  to="/docs/theory/formal-model"
+                >
                   Explore Formal Model →
                 </Link>
               </div>
@@ -190,11 +235,12 @@ function MathematicalFoundation() {
 }
 
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title="Advanced Multi-State Management Framework"
-      description="MultiState extends traditional state machines with multi-state activation, multi-target pathfinding, and dynamic transitions">
+      description="MultiState extends traditional state machines with multi-state activation, multi-target pathfinding, and dynamic transitions"
+    >
       <HomepageHeader />
       <main>
         <QuickExample />

@@ -15,6 +15,7 @@ $$
 $$
 
 Where:
+
 - **S**: finite set of states
 - **T ⊆ S × P(S) × P(S)**: transition relation
 - **G ⊆ P(S)**: set of state groups
@@ -26,6 +27,7 @@ Where:
 ### Definition & Properties
 
 A state represents a distinguishable system configuration with:
+
 - Unique identity
 - Associated UI elements/components
 - Boolean blocking indicator
@@ -40,6 +42,7 @@ The system maintains active states $S_\Xi(t) \subseteq S$. Unlike traditional FS
 ### Definition
 
 A transition $\tau = (F, A, E)$ consists of:
+
 - **F ⊆ S**: "from" states (preconditions)
 - **A ⊆ S**: states to activate
 - **E ⊆ S**: states to exit
@@ -69,6 +72,7 @@ $$
 ## Occlusion Function
 
 The function $\omega(s_c, s_h, t) = p$ models state visibility, where:
+
 - $s_c$: covering state
 - $s_h$: hidden state
 - $p \in [0,1]$: occlusion probability
@@ -170,17 +174,18 @@ Search space: $O(|V| \cdot 2^{|T|})$, where $|V|$ is state count and $|T|$ is ta
 
 ## Comparison with Existing Models
 
-| Property | MultiState | FSM | Statecharts | Petri Nets |
-|----------|-----------|-----|-------------|-----------|
-| States | P(S) | S | P(S) | Markings |
-| Transitions | (F,A,E) | (s₁,s₂) | Complex | Token flow |
-| Concurrency | Native | None | Orthogonal | Token-based |
-| Hierarchy | Groups | None | Nested | Subnets |
-| Dynamics | T_d function | Static | Static | Static |
+| Property    | MultiState   | FSM     | Statecharts | Petri Nets  |
+| ----------- | ------------ | ------- | ----------- | ----------- |
+| States      | P(S)         | S       | P(S)        | Markings    |
+| Transitions | (F,A,E)      | (s₁,s₂) | Complex     | Token flow  |
+| Concurrency | Native       | None    | Orthogonal  | Token-based |
+| Hierarchy   | Groups       | None    | Nested      | Subnets     |
+| Dynamics    | T_d function | Static  | Static      | Static      |
 
 ## Formal Verification
 
 Verification completed through:
+
 - **Mathematical proofs** for all core properties
 - **Property-based testing** achieving 100% theorem coverage
 - **Bounded model checking** for safety properties

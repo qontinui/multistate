@@ -15,6 +15,7 @@ All 7 states became active in a single atomic operation!
 ### 2. Group Atomicity ✓
 
 Two groups activated atomically:
+
 - **Workspace Group**: 5 states (Toolbar, Sidebar, Editor, Console, Status Bar)
 - **Main UI Group**: 2 states (Main Window, Menu Bar)
 
@@ -23,6 +24,7 @@ Verification confirmed: All states in each group were either fully active or ful
 ### 3. Incoming Transitions for ALL ✓
 
 When the 7 states activated, ALL 7 incoming transitions executed:
+
 ```
 → Setting up editor workspace
 → Updating status information
@@ -38,6 +40,7 @@ This is the critical MultiState feature - EVERY activated state gets initialized
 ### 4. Blocking States ✓
 
 The save dialog successfully blocked toolbar activation:
+
 - Save dialog became active (blocking = true)
 - Attempted to activate toolbar
 - Validation phase correctly rejected it
@@ -46,6 +49,7 @@ The save dialog successfully blocked toolbar activation:
 ### 5. Phase Execution ✓
 
 The phases executed in correct order:
+
 1. **VALIDATE**: Checked preconditions (blocking, atomicity)
 2. **OUTGOING**: Executed transition action
 3. **ACTIVATE**: Pure memory update (always succeeded)
@@ -94,6 +98,7 @@ The phases executed in correct order:
 The example proves the core MultiState concept: **transitions can activate multiple states simultaneously, with ALL states receiving their incoming transitions**.
 
 This is fundamentally different from traditional FSMs where:
+
 - Only one state is active
 - Only one incoming executes
 - Groups don't exist

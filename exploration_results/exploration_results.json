@@ -2,17 +2,10 @@
   "metrics": {
     "total_states": 7,
     "visited_states": 6,
-    "unvisited_states": [
-      "b2"
-    ],
+    "unvisited_states": ["b2"],
     "total_transitions": 6,
     "executed_transitions": 5,
-    "unexecuted_transitions": [
-      [
-        "b",
-        "b2"
-      ]
-    ],
+    "unexecuted_transitions": [["b", "b2"]],
     "total_executions": 6,
     "successful_executions": 6,
     "failed_executions": 0,
@@ -190,11 +183,7 @@
       "path_id": "ad393e44-68a8-4723-b1fe-899d3b310e0a",
       "start_state": "start",
       "end_state": "a1",
-      "states": [
-        "start",
-        "a",
-        "a1"
-      ],
+      "states": ["start", "a", "a1"],
       "transitions": [
         "3c5a905a-c1a9-49c0-8788-a88235c45e4b",
         "2f1b3da6-15eb-4458-ac7c-d16927adf8ee"
@@ -209,11 +198,7 @@
       "path_id": "9605f8df-6fe0-4a6b-ad32-57a5010676be",
       "start_state": "start",
       "end_state": "b1",
-      "states": [
-        "start",
-        "b",
-        "b1"
-      ],
+      "states": ["start", "b", "b1"],
       "transitions": [
         "032ec282-5d4a-4b38-a8ba-22e8927ea6a3",
         "54be6399-15dc-4856-8433-529b08adf6b2"
@@ -228,11 +213,7 @@
       "path_id": "0925b7ce-0edf-4a5d-8a57-7bb9c819d28d",
       "start_state": "start",
       "end_state": "a2",
-      "states": [
-        "start",
-        "a",
-        "a2"
-      ],
+      "states": ["start", "a", "a2"],
       "transitions": [
         "f24039bf-f61e-4cc9-9bcb-5bc1abd5e2aa",
         "f02675ba-519c-4d77-9f60-045e09dad828"

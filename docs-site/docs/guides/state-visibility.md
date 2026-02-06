@@ -97,6 +97,7 @@ During transition execution, the `TransitionExecutor` processes visibility in a 
 7. **CLEANUP** - Finalize and clean up
 
 The visibility phase examines the transition's `stays_visible` setting and determines:
+
 - Which states should remain visible (`states_to_show`)
 - Which states should be hidden (`states_to_hide`)
 

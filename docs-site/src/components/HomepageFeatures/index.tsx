@@ -1,8 +1,8 @@
-import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Heading from '@theme/Heading';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './styles.module.css';
+import type { ReactNode } from "react";
+import clsx from "clsx";
+import Heading from "@theme/Heading";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import styles from "./styles.module.css";
 
 type FeatureItem = {
   title: string;
@@ -12,8 +12,8 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Proven in Production',
-    image: '/img/proven-in-production.png',
+    title: "Proven in Production",
+    image: "/img/proven-in-production.png",
     description: (
       <>
         Born from Brobot's real-world GUI automation needs. Powers Qontinui's
@@ -22,8 +22,8 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: 'Formally Verified',
-    image: '/img/formally-verified.png',
+    title: "Formally Verified",
+    image: "/img/formally-verified.png",
     description: (
       <>
         Mathematical proofs for all core properties. 100% theorem coverage with
@@ -32,8 +32,8 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: 'Easy Integration',
-    image: '/img/easy-integration.png',
+    title: "Easy Integration",
+    image: "/img/easy-integration.png",
     description: (
       <>
         Clean API with adapters for existing systems. Works with any Python 3.8+
@@ -43,16 +43,24 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({title, image, description}: FeatureItem) {
+function Feature({ title, image, description }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center" style={{ minHeight: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className={clsx("col col--4")}>
+      <div
+        className="text--center"
+        style={{
+          minHeight: "140px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <img
           src={useBaseUrl(image)}
           alt={title}
           style={{
-            maxWidth: '120px',
-            height: 'auto'
+            maxWidth: "120px",
+            height: "auto",
           }}
         />
       </div>

@@ -10,6 +10,7 @@ A Python library for managing multiple simultaneous active states with intellige
 ## Overview
 
 Unlike traditional FSM libraries that assume a single active state, MultiState handles:
+
 - Multiple states active simultaneously
 - State groups that activate/deactivate together
 - Pathfinding to multiple target states
@@ -57,6 +58,7 @@ assert manager.get_active_states() == {dashboard, toolbar, sidebar}
 **📚 Full documentation with interactive playground: [qontinui.github.io/multistate](https://qontinui.github.io/multistate/)**
 
 Features:
+
 - Complete API reference
 - Mathematical formulas and proofs
 - Interactive playground to try MultiState in your browser
