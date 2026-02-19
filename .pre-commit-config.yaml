@@ -18,7 +18,7 @@ repos:
     rev: 24.4.2
     hooks:
       - id: black
-        language_version: python3.11
+        language_version: python3.13
         args: ["--line-length=100"]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
@@ -29,8 +29,15 @@ repos:
 
   - repo: local
     hooks:
+      - id: mypy
+        name: Python type check (mypy)
+        entry: bash -c 'poetry run mypy .'
+        language: system
+        pass_filenames: false
+        files: \.py$
+
       - id: block-claude-attribution
         name: Block Claude Attribution
-        entry: ../.pre-commit-hooks/block-claude-attribution.sh
+        entry: .pre-commit-hooks/block-claude-attribution.sh
         language: script
         stages: [commit-msg]
