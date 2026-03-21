@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from multistate.core.element import Element
-from multistate.core.state import State
+from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
 from multistate.pathfinding.multi_target import (
@@ -269,17 +269,17 @@ class StateManager:
         for state in states:
             if state.blocking:
                 # Clear other states except those in same group
-                to_clear = self.active_states.copy()
                 if state.group:
                     group_states = self.groups[state.group].states
-                    to_clear -= group_states
-                self.active_states = (
-                    self.active_states.intersection(group_states)
-                    if state.group
-                    else set()
-                )
+                    self.active_states = self.active_states.intersection(group_states)
+                else:
+                    self.active_states = set()
 
         self.active_states.update(states)
+
+        # Track activation time for timeouts
+        for state in states:
+            state.on_activate()
 
         # Record metrics
         for state_id in state_ids:
@@ -300,6 +300,10 @@ class StateManager:
         """
         states = {self.get_state(sid) for sid in state_ids}
         self.active_states.difference_update(states)
+
+        # Clear timeout tracking
+        for state in states:
+            state.on_deactivate()
 
         # Record metrics
         for state_id in state_ids:
@@ -471,9 +475,13 @@ class StateManager:
 
         # Update active states if successful
         if result.success:
-            self.active_states = self.executor.get_result_states(
-                transition, initial_states
-            )
+            new_states = self.executor.get_result_states(transition, initial_states)
+            # Track deactivation/activation for timeouts
+            for state in initial_states - new_states:
+                state.on_deactivate()
+            for state in new_states - initial_states:
+                state.on_activate()
+            self.active_states = new_states
 
             # Record state snapshot
             self._record_state_snapshot(transition_id=transition_id)
@@ -959,6 +967,120 @@ class StateManager:
     def disable_metrics(self) -> None:
         """Disable metrics tracking."""
         self.metrics.disable()
+
+    # ==================== Timeouts ====================
+
+    def check_timeouts(self) -> list[tuple[State, StateTimeout]]:
+        """Check all active states for timeouts.
+
+        Call this periodically from the automation loop.  For states whose
+        timeout has ``auto_transition=True``, the named transition is
+        executed automatically.
+
+        Returns:
+            List of ``(state, timeout)`` tuples for every timed-out state.
+        """
+        timed_out: list[tuple[State, StateTimeout]] = []
+        for state in list(self.active_states):
+            if state.check_timeout():
+                assert state.timeout is not None
+                timed_out.append((state, state.timeout))
+                if state.timeout.auto_transition:
+                    self._execute_timeout_transition(state)
+        return timed_out
+
+    def _execute_timeout_transition(self, state: State) -> None:
+        """Execute the transition named in *state*'s timeout config."""
+        assert state.timeout is not None
+        transition_name = state.timeout.on_timeout
+        if transition_name in self.transitions:
+            try:
+                self.execute_transition(transition_name)
+            except InvalidTransitionError:
+                self.logger.warning(
+                    "Timeout transition '%s' for state '%s' cannot execute "
+                    "from current configuration",
+                    transition_name,
+                    state.id,
+                )
+
+    # ==================== Serialization ====================
+
+    _SERIALIZATION_VERSION = 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize the full state manager to a dictionary.
+
+        Callbacks and action functions are **not** serialized; they must be
+        re-registered after calling ``from_dict()``.
+
+        Returns:
+            Dictionary suitable for JSON serialization.
+        """
+        return {
+            "version": self._SERIALIZATION_VERSION,
+            "elements": [e.to_dict() for e in self.elements.values()],
+            "states": [s.to_dict() for s in self.states.values()],
+            "groups": [g.to_dict() for g in self.groups.values()],
+            "transitions": [t.to_dict() for t in self.transitions.values()],
+            "active_states": [s.id for s in self.active_states],
+        }
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: Dict[str, Any],
+        config: Optional[StateManagerConfig] = None,
+    ) -> "StateManager":
+        """Reconstruct a StateManager from serialized data.
+
+        Callbacks must be re-registered after deserialization because
+        function references cannot be serialized.
+
+        Args:
+            data: Dictionary produced by ``to_dict()``.
+            config: Optional configuration (defaults are used if omitted).
+
+        Returns:
+            Reconstructed StateManager instance.
+        """
+        manager = cls(config=config)
+
+        # 1. Reconstruct elements
+        element_lookup: Dict[str, Element] = {}
+        for edata in data.get("elements", []):
+            elem = Element.from_dict(edata)
+            element_lookup[elem.id] = elem
+            manager.elements[elem.id] = elem
+
+        # 2. Reconstruct states
+        state_lookup: Dict[str, State] = {}
+        for sdata in data.get("states", []):
+            state = State.from_dict(sdata, element_lookup=element_lookup)
+            state_lookup[state.id] = state
+            manager.states[state.id] = state
+
+        # 3. Reconstruct groups (updates state.group back-references)
+        group_lookup: Dict[str, StateGroup] = {}
+        for gdata in data.get("groups", []):
+            group = StateGroup.from_dict(gdata, state_lookup)
+            group_lookup[group.id] = group
+            manager.groups[group.id] = group
+
+        # 4. Reconstruct transitions
+        for tdata in data.get("transitions", []):
+            transition = Transition.from_dict(tdata, state_lookup, group_lookup)
+            manager.transitions[transition.id] = transition
+
+        # 5. Restore active states
+        for sid in data.get("active_states", []):
+            if sid in state_lookup:
+                manager.active_states.add(state_lookup[sid])
+
+        # 6. Rebuild pathfinder
+        manager._rebuild_pathfinder()
+
+        return manager
 
     def __repr__(self) -> str:
         """String representation."""

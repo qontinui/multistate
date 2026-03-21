@@ -7,7 +7,7 @@ intelligent pathfinding and coordinated transitions.
 __version__ = "0.1.0"
 
 from multistate.core.element import Element
-from multistate.core.state import State
+from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
 from multistate.manager import StateManager, StateManagerConfig
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
@@ -21,6 +21,7 @@ from multistate.state_references import (
 __all__ = [
     "Element",
     "State",
+    "StateTimeout",
     "StateGroup",
     "StateManager",
     "StateManagerConfig",

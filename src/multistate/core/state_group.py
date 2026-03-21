@@ -168,3 +168,29 @@ class StateGroup:
             "states": [s.id for s in self.states],
             "metadata": self.metadata,
         }
+
+    @classmethod
+    def from_dict(
+        cls, data: Dict[str, Any], state_lookup: Dict[str, State]
+    ) -> "StateGroup":
+        """Reconstruct a StateGroup from its serialized representation.
+
+        Args:
+            data: Dictionary produced by ``to_dict()``.
+            state_lookup: Mapping of state ID -> State object so that
+                existing State instances are reused rather than duplicated.
+
+        Returns:
+            Reconstructed StateGroup object.
+        """
+        states: Set[State] = set()
+        for sid in data.get("states", []):
+            if sid in state_lookup:
+                states.add(state_lookup[sid])
+
+        return cls(
+            id=data["id"],
+            name=data.get("name", data["id"]),
+            states=states,
+            metadata=dict(data.get("metadata", {})),
+        )

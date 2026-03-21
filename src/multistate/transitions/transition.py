@@ -193,14 +193,22 @@ class Transition:
         new_active.difference_update(self.get_all_states_to_exit())
         new_active.update(self.get_all_states_to_activate())
 
-        # Check all affected groups
-        for state in new_active:
-            if state.group:
-                # Need to get the actual group object
-                # This is a simplification - in practice we'd look it up
-                pass
+        # Collect all groups referenced by the post-transition active states
+        seen_groups: Dict[str, StateGroup] = {}
+        for group in self.activate_groups | self.exit_groups:
+            seen_groups[group.id] = group
 
-        # For now, return True (actual validation would check each group)
+        # Validate atomicity: each group must be fully active or fully inactive
+        for group in seen_groups.values():
+            if not group.validate_atomicity(new_active):
+                logger.warning(
+                    "Group '%s' would violate atomicity after transition '%s': "
+                    "partially active states detected",
+                    group.name,
+                    self.name,
+                )
+                return False
+
         return True
 
     def get_incoming_action_for_state(self, state: State) -> Optional[Callable]:
@@ -234,6 +242,67 @@ class Transition:
             "incoming_actions": list(self.incoming_actions.keys()),
             "metadata": self.metadata,
         }
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: Dict[str, Any],
+        state_lookup: Dict[str, "State"],
+        group_lookup: Optional[Dict[str, "StateGroup"]] = None,
+    ) -> "Transition":
+        """Reconstruct a Transition from its serialized representation.
+
+        Callbacks (``action``, ``incoming_actions``) cannot be serialized and
+        must be re-registered after deserialization.
+
+        Args:
+            data: Dictionary produced by ``to_dict()``.
+            state_lookup: Mapping of state ID -> State for resolving references.
+            group_lookup: Optional mapping of group ID -> StateGroup.
+
+        Returns:
+            Reconstructed Transition object.
+        """
+        group_lookup = group_lookup or {}
+
+        from_states = {
+            state_lookup[sid]
+            for sid in data.get("from_states", [])
+            if sid in state_lookup
+        }
+        activate_states = {
+            state_lookup[sid]
+            for sid in data.get("activate_states", [])
+            if sid in state_lookup
+        }
+        exit_states = {
+            state_lookup[sid]
+            for sid in data.get("exit_states", [])
+            if sid in state_lookup
+        }
+        activate_groups = {
+            group_lookup[gid]
+            for gid in data.get("activate_groups", [])
+            if gid in group_lookup
+        }
+        exit_groups = {
+            group_lookup[gid]
+            for gid in data.get("exit_groups", [])
+            if gid in group_lookup
+        }
+
+        return cls(
+            id=data["id"],
+            name=data.get("name", data["id"]),
+            from_states=from_states,
+            activate_states=activate_states,
+            exit_states=exit_states,
+            activate_groups=activate_groups,
+            exit_groups=exit_groups,
+            path_cost=data.get("path_cost", 1.0),
+            stays_visible=StaysVisible(data.get("stays_visible", "NONE")),
+            metadata=dict(data.get("metadata", {})),
+        )
 
 
 class IncomingTransition:

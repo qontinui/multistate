@@ -40,3 +40,22 @@ class Element:
     def __repr__(self) -> str:
         """String representation for debugging."""
         return f"Element(id='{self.id}', name='{self.name}', type='{self.type}')"
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert element to dictionary representation."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "type": self.type,
+            "metadata": self.metadata,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "Element":
+        """Reconstruct an Element from its serialized representation."""
+        return cls(
+            id=data["id"],
+            name=data.get("name", data["id"]),
+            type=data.get("type", "generic"),
+            metadata=dict(data.get("metadata", {})),
+        )

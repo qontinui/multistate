@@ -1,11 +1,12 @@
 """Visualization tools for multi-target pathfinding.
 
-Generates ASCII and Graphviz visualizations of pathfinding.
+Generates ASCII, Graphviz, and Mermaid visualizations of pathfinding.
 """
 
 from typing import Dict, List, Optional, Set
 
 from multistate.core.state import State
+from multistate.core.state_group import StateGroup
 from multistate.pathfinding.multi_target import Path
 from multistate.transitions.transition import Transition
 
@@ -207,6 +208,220 @@ class PathVisualizer:
 
         return "\n".join(lines)
 
+    # ==================== Mermaid ====================
+
+    @staticmethod
+    def generate_mermaid(
+        transitions: List[Transition],
+        active_states: Optional[Set[State]] = None,
+        highlight_path: Optional[Path] = None,
+        groups: Optional[List[StateGroup]] = None,
+    ) -> str:
+        """Generate a Mermaid ``stateDiagram-v2`` from transitions.
+
+        Args:
+            transitions: All transitions in the state machine.
+            active_states: Currently active states to highlight.
+            highlight_path: Optional path to highlight with a distinct style.
+            groups: State groups to render as nested state blocks.
+
+        Returns:
+            A Mermaid diagram string.
+        """
+        lines: List[str] = ["stateDiagram-v2"]
+
+        # Collect all states referenced by transitions
+        all_states: Set[State] = set()
+        for trans in transitions:
+            all_states.update(trans.from_states)
+            all_states.update(trans.get_all_states_to_activate())
+            all_states.update(trans.get_all_states_to_exit())
+
+        # Collect states that belong to groups (to avoid listing them at top level)
+        grouped_state_ids: Set[str] = set()
+        if groups:
+            for group in groups:
+                grouped_state_ids.update(s.id for s in group.states)
+
+        # Render groups
+        if groups:
+            for group in groups:
+                lines.append(f"    state {group.name} {{")
+                for state in sorted(group.states, key=lambda s: s.id):
+                    lines.append(f"        {state.name}")
+                lines.append("    }")
+            lines.append("")
+
+        # Transitions
+        highlighted_transitions: Set[Transition] = set()
+        if highlight_path:
+            highlighted_transitions = set(highlight_path.transitions_sequence)
+
+        for trans in transitions:
+            from_states = trans.from_states if trans.from_states else set()
+            to_states = trans.get_all_states_to_activate()
+            label = trans.name or trans.id
+
+            for from_state in sorted(from_states, key=lambda s: s.id):
+                for to_state in sorted(to_states, key=lambda s: s.id):
+                    if trans in highlighted_transitions:
+                        lines.append(
+                            f"    {from_state.name} ==> {to_state.name} : {label}"
+                        )
+                    else:
+                        lines.append(
+                            f"    {from_state.name} --> {to_state.name} : {label}"
+                        )
+
+            # Transitions with no from_states: show as initial transitions
+            if not from_states:
+                for to_state in sorted(to_states, key=lambda s: s.id):
+                    lines.append(f"    [*] --> {to_state.name} : {label}")
+
+        # Highlight active states
+        if active_states:
+            active_in_machine = active_states & all_states
+            if active_in_machine:
+                lines.append("")
+                lines.append("    classDef active fill:#90EE90,stroke:#333")
+                for state in sorted(active_in_machine, key=lambda s: s.id):
+                    lines.append(f"    class {state.name} active")
+
+        # Highlight path states
+        if highlight_path:
+            path_states: Set[State] = set()
+            for state_set in highlight_path.states_sequence:
+                path_states.update(state_set)
+            path_only = path_states - (active_states or set())
+            if path_only:
+                lines.append("")
+                lines.append("    classDef pathHighlight fill:#FFD700,stroke:#333")
+                for state in sorted(path_only, key=lambda s: s.id):
+                    lines.append(f"    class {state.name} pathHighlight")
+
+        return "\n".join(lines)
+
+    @staticmethod
+    def generate_mermaid_path(
+        path: Path,
+        all_transitions: Optional[List[Transition]] = None,
+    ) -> str:
+        """Generate a Mermaid diagram that highlights a specific path.
+
+        Only the transitions along the path are drawn unless
+        *all_transitions* is provided, in which case the full graph is
+        drawn with the path highlighted.
+
+        Args:
+            path: The path to visualise.
+            all_transitions: Optional full transition list for context.
+
+        Returns:
+            A Mermaid diagram string.
+        """
+        lines: List[str] = ["stateDiagram-v2"]
+
+        if all_transitions:
+            # Draw all transitions in grey, then overlay path in colour
+            path_trans_ids = {t.id for t in path.transitions_sequence}
+            for trans in all_transitions:
+                from_states = trans.from_states if trans.from_states else set()
+                to_states = trans.get_all_states_to_activate()
+                label = trans.name or trans.id
+                for fs in sorted(from_states, key=lambda s: s.id):
+                    for ts in sorted(to_states, key=lambda s: s.id):
+                        lines.append(f"    {fs.name} --> {ts.name} : {label}")
+                if not from_states:
+                    for ts in sorted(to_states, key=lambda s: s.id):
+                        lines.append(f"    [*] --> {ts.name} : {label}")
+        else:
+            # Draw only path transitions
+            for trans in path.transitions_sequence:
+                from_states = trans.from_states if trans.from_states else set()
+                to_states = trans.get_all_states_to_activate()
+                label = trans.name or trans.id
+                for fs in sorted(from_states, key=lambda s: s.id):
+                    for ts in sorted(to_states, key=lambda s: s.id):
+                        lines.append(f"    {fs.name} --> {ts.name} : {label}")
+                if not from_states:
+                    for ts in sorted(to_states, key=lambda s: s.id):
+                        lines.append(f"    [*] --> {ts.name} : {label}")
+
+        # Highlight states along the path
+        path_states: Set[State] = set()
+        for state_set in path.states_sequence:
+            path_states.update(state_set)
+
+        if path_states:
+            lines.append("")
+            lines.append("    classDef pathNode fill:#FFD700,stroke:#333")
+            for state in sorted(path_states, key=lambda s: s.id):
+                lines.append(f"    class {state.name} pathNode")
+
+        # Highlight targets
+        if path.targets:
+            lines.append(
+                "    classDef target fill:#90EE90,stroke:#333,stroke-width:2px"
+            )
+            for state in sorted(path.targets, key=lambda s: s.id):
+                lines.append(f"    class {state.name} target")
+
+        return "\n".join(lines)
+
+    @staticmethod
+    def generate_mermaid_diff(
+        transitions: List[Transition],
+        before_states: Set[State],
+        after_states: Set[State],
+    ) -> str:
+        """Generate a Mermaid diagram showing before/after state differences.
+
+        States only active *before* are styled red, states only active
+        *after* are styled green, and states active in both are styled blue.
+
+        Args:
+            transitions: All transitions in the state machine.
+            before_states: Active states before the change.
+            after_states: Active states after the change.
+
+        Returns:
+            A Mermaid diagram string.
+        """
+        lines: List[str] = ["stateDiagram-v2"]
+
+        # Draw all transitions
+        for trans in transitions:
+            from_states = trans.from_states if trans.from_states else set()
+            to_states = trans.get_all_states_to_activate()
+            label = trans.name or trans.id
+            for fs in sorted(from_states, key=lambda s: s.id):
+                for ts in sorted(to_states, key=lambda s: s.id):
+                    lines.append(f"    {fs.name} --> {ts.name} : {label}")
+            if not from_states:
+                for ts in sorted(to_states, key=lambda s: s.id):
+                    lines.append(f"    [*] --> {ts.name} : {label}")
+
+        # Compute diff sets
+        removed = before_states - after_states
+        added = after_states - before_states
+        unchanged = before_states & after_states
+
+        lines.append("")
+        if removed:
+            lines.append("    classDef removed fill:#FF6B6B,stroke:#333")
+            for s in sorted(removed, key=lambda s: s.id):
+                lines.append(f"    class {s.name} removed")
+        if added:
+            lines.append("    classDef added fill:#90EE90,stroke:#333")
+            for s in sorted(added, key=lambda s: s.id):
+                lines.append(f"    class {s.name} added")
+        if unchanged:
+            lines.append("    classDef unchanged fill:#87CEEB,stroke:#333")
+            for s in sorted(unchanged, key=lambda s: s.id):
+                lines.append(f"    class {s.name} unchanged")
+
+        return "\n".join(lines)
+
     @staticmethod
     def visualize_search_tree(
         search_nodes: List, max_depth: int = 5  # List of PathNode objects
@@ -241,6 +456,6 @@ class PathVisualizer:
         # Statistics
         total_nodes = sum(len(nodes) for nodes in by_depth.values())
         lines.append(f"\nTotal nodes explored: {total_nodes}")
-        lines.append(f"Max depth reached: {max(by_depth.keys())}")
+        lines.append(f"Max depth reached: {max(by_depth.keys(), default=0)}")
 
         return "\n".join(lines)
