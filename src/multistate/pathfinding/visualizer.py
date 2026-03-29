@@ -323,7 +323,6 @@ class PathVisualizer:
 
         if all_transitions:
             # Draw all transitions in grey, then overlay path in colour
-            path_trans_ids = {t.id for t in path.transitions_sequence}
             for trans in all_transitions:
                 from_states = trans.from_states if trans.from_states else set()
                 to_states = trans.get_all_states_to_activate()
