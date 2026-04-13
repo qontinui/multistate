@@ -82,6 +82,13 @@ class State:
     blocks: Set[str] = field(default_factory=set)
     metadata: Dict[str, Any] = field(default_factory=dict)
     timeout: Optional[StateTimeout] = None
+    htn_config: Optional[Any] = field(default=None, repr=False)
+    """Optional :class:`~multistate.planning.htn_state.HTNStateConfig`.
+
+    Typed as ``Any`` to avoid a circular import from the planning sub-package
+    back into core.  At runtime the value should be an ``HTNStateConfig``
+    instance (or ``None``).
+    """
     _activated_at: Optional[float] = field(default=None, repr=False)
 
     def __hash__(self) -> int:

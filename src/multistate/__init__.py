@@ -69,6 +69,14 @@ try:
 except ImportError:
     pass  # Transition module may have missing dependencies
 
+# Planning module (HTN planning layer)
+try:
+    from multistate import planning  # noqa: F401
+
+    __all__.append("planning")
+except ImportError:
+    pass  # Planning module not available
+
 # These will be imported when implemented
 # from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path
 # from multistate.api.state_manager import StateManager

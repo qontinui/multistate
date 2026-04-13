@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Callable
 
 from multistate.planning.planner import WorldState
+
+logger = logging.getLogger(__name__)
 
 
 class MethodLoader:
@@ -30,12 +33,25 @@ class MethodLoader:
         }
         """
         path = Path(path)
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError) as exc:
+            logger.warning("Failed to load method file %s: %s", path, exc)
+            return {}
+
+        if not isinstance(data, dict) or "methods" not in data:
+            logger.warning("Invalid method file %s: missing 'methods' key", path)
+            return {}
 
         result: dict[str, list[Callable[..., Any]]] = {}
-        for method_config in data.get("methods", []):
-            task_name = method_config["task_name"]
+        for method_config in data["methods"]:
+            task_name = method_config.get("task_name")
+            if not task_name:
+                logger.warning(
+                    "Skipping method in %s: missing 'task_name'", path,
+                )
+                continue
             method_fn = MethodLoader._build_method_from_config(method_config)
             if task_name not in result:
                 result[task_name] = []
@@ -50,7 +66,11 @@ class MethodLoader:
         dir_path = Path(dir_path)
         merged: dict[str, list[Callable[..., Any]]] = {}
         for json_file in sorted(dir_path.glob("*.json")):
-            file_methods = MethodLoader.load_from_file(json_file)
+            try:
+                file_methods = MethodLoader.load_from_file(json_file)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Failed to load %s: %s", json_file, exc)
+                continue
             for task_name, methods in file_methods.items():
                 if task_name not in merged:
                     merged[task_name] = []
