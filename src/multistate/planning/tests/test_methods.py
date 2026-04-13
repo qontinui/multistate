@@ -32,7 +32,7 @@ class TestNavigateTo:
     def test_navigate_to_pathfinding(self) -> None:
         state = FakeWorldState(active_states={"home"})
         result = navigate_to_via_pathfinding(state, "settings")  # type: ignore[arg-type]
-        assert result == [("navigate_transition", "_pathfind_to_settings")]
+        assert result == [("navigate_path", "settings")]
 
     def test_navigate_to_via_menu(self) -> None:
         state = FakeWorldState(active_states={"main_menu", "home"})
@@ -91,6 +91,6 @@ class TestLogin:
         assert result is not None
         # Should NOT include navigate_to
         assert ("navigate_to", "login_screen") not in result
-        # Should have fill form actions + submit + wait
-        assert ("click_element", "submit_button") in result
+        # Should have fill_form subtask + click btn_login + wait
+        assert ("click_element", "btn_login") in result
         assert ("wait_for_state", "dashboard") in result

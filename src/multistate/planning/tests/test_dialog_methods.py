@@ -12,15 +12,15 @@ from multistate.planning.planner import WorldState
 
 
 def test_dismiss_via_escape() -> None:
-    """Escape dismissal produces type-escape + wait when dialog present."""
+    """Escape dismissal produces type-escape + dismiss_dialog when dialog present."""
     state = WorldState(active_states={"dialog_confirm", "main_page"})
     result = dismiss_via_escape(state)
     assert result is not None
     assert result[0] == ("type_text", "_keyboard", "\x1b")
-    # Should have wait_for_state for the dialog
-    wait_actions = [a for a in result if a[0] == "wait_for_state"]
-    assert len(wait_actions) == 1
-    assert wait_actions[0] == ("wait_for_state", "confirm")
+    # Should have dismiss_dialog for the dialog
+    dismiss_actions = [a for a in result if a[0] == "dismiss_dialog"]
+    assert len(dismiss_actions) == 1
+    assert dismiss_actions[0] == ("dismiss_dialog", "dialog_confirm")
 
 
 def test_dismiss_via_escape_modal() -> None:
@@ -28,7 +28,7 @@ def test_dismiss_via_escape_modal() -> None:
     state = WorldState(active_states={"modal_settings"})
     result = dismiss_via_escape(state)
     assert result is not None
-    assert ("wait_for_state", "settings") in result
+    assert ("dismiss_dialog", "modal_settings") in result
 
 
 def test_dismiss_via_close_button() -> None:

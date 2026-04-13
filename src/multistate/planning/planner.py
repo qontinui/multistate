@@ -6,6 +6,7 @@ primitive operators, producing executable plans over a WorldState.
 
 from __future__ import annotations
 
+import copy
 import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional
@@ -36,7 +37,7 @@ class WorldState:
             available_transitions=set(self.available_transitions),
             element_visible=dict(self.element_visible),
             element_values=dict(self.element_values),
-            blackboard=dict(self.blackboard),
+            blackboard=copy.deepcopy(self.blackboard),
         )
 
 

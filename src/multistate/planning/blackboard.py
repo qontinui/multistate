@@ -6,7 +6,15 @@ from typing import Any
 
 
 class Blackboard:
-    """Scoped variable storage with parent chain lookup and thread safety."""
+    """Scoped variable storage with parent chain lookup and thread safety.
+
+    Thread safety: Each scope's local data is protected by its own lock.
+    Parent chain lookups are non-atomic -- a concurrent ``set()`` on a child
+    scope between the child's local miss and the parent lookup can cause
+    the caller to receive the parent's value instead of the freshly-set
+    local value.  This is acceptable for the HTN use case where planning
+    is single-threaded and only execution uses concurrent blackboards.
+    """
 
     MAX_DEPTH: int = 16
 

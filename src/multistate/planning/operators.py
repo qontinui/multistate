@@ -77,8 +77,21 @@ def dismiss_dialog(state: WorldState, dialog_state: str) -> WorldState | None:
     return new
 
 
+def navigate_path(state: WorldState, target_state: str) -> WorldState | None:
+    """Navigate to target via multistate pathfinding (optimistic during planning).
+
+    At execution time the handler uses StateManager.navigate_to(). During
+    planning this operator optimistically assumes the target will be reached.
+    """
+    new = state.copy()
+    new.active_states.add(target_state)
+    new.blackboard["_last_navigation_target"] = target_state
+    return new
+
+
 STANDARD_OPERATORS: dict[str, Operator] = {
     "navigate_transition": navigate_transition,
+    "navigate_path": navigate_path,
     "click_element": click_element,
     "type_text": type_text,
     "wait_for_state": wait_for_state,

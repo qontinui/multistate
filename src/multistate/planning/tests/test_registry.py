@@ -14,7 +14,7 @@ def test_create_default_registry() -> None:
     """Default registry includes standard operators and methods from all packs."""
     registry = create_default_registry()
     # 6 standard operators
-    assert registry.operator_count == 6
+    assert registry.operator_count == 7
     # Methods from generic (7), navigation (4), forms (4), dialogs (4) = 19
     assert registry.method_count >= 19
     # Task names should include keys from all packs
@@ -36,7 +36,7 @@ def test_build_planner() -> None:
     registry = create_default_registry()
     planner = registry.build_planner()
     assert isinstance(planner, HTNPlanner)
-    assert len(planner.operators) == 6
+    assert len(planner.operators) == 7
     assert "navigate_to" in planner.methods
     assert "fill_form" in planner.methods
 

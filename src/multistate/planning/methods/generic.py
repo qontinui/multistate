@@ -11,10 +11,14 @@ Method = Callable[..., list[tuple[str, ...]] | None]
 def navigate_to_via_pathfinding(
     state: WorldState, target_state: str
 ) -> list[tuple[str, ...]] | None:
-    """Navigate using pathfinding. If target already active, return []."""
+    """Navigate to target using multistate pathfinding.
+
+    During planning this is optimistic (assumes success). The actual
+    pathfinding is performed by the executor's action handler at runtime.
+    """
     if target_state in state.active_states:
         return []
-    return [("navigate_transition", f"_pathfind_to_{target_state}")]
+    return [("navigate_path", target_state)]
 
 
 def navigate_to_via_menu(
@@ -57,19 +61,16 @@ def handle_unexpected_dialog(
 def login_generic(
     state: WorldState, username: str, password: str
 ) -> list[tuple[str, ...]] | None:
-    """Generic login: navigate to login_screen, fill credentials, submit."""
-    actions: list[tuple[str, ...]] = []
+    """Generic login: navigate to login screen, fill credentials, submit."""
+    tasks: list[tuple[str, ...]] = []
     if "login_screen" not in state.active_states:
-        actions.append(("navigate_to", "login_screen"))
-    actions.extend(
-        fill_form_sequential(
-            state, {"username_field": username, "password_field": password}
-        )
-        or []
-    )
-    actions.append(("click_element", "submit_button"))
-    actions.append(("wait_for_state", "dashboard"))
-    return actions
+        tasks.append(("navigate_to", "login_screen"))
+    tasks.extend([
+        ("fill_form", {"username_field": username, "password_field": password}),
+        ("click_element", "btn_login"),
+        ("wait_for_state", "dashboard"),
+    ])
+    return tasks
 
 
 def scroll_to_element(

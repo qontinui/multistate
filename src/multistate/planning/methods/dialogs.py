@@ -25,9 +25,7 @@ def dismiss_via_escape(state: WorldState) -> list[tuple[str, ...]] | None:
         return None
     actions: list[tuple[str, ...]] = [("type_text", "_keyboard", "\x1b")]  # Escape key
     for ds in dialog_states:
-        actions.append(
-            ("wait_for_state", ds.replace("dialog_", "").replace("modal_", ""))
-        )
+        actions.append(("dismiss_dialog", ds))
     return actions
 
 

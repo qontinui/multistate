@@ -104,10 +104,13 @@ class MethodLoader:
             # Interpolate actions
             result: list[tuple[str, ...]] = []
             for action_parts in actions_template:
-                interpolated = tuple(
-                    part.format(**subs) if "{" in part else part
-                    for part in action_parts
-                )
+                try:
+                    interpolated = tuple(
+                        part.format(**subs) if "{" in part else part
+                        for part in action_parts
+                    )
+                except KeyError:
+                    return None  # precondition not met (missing template variable)
                 result.append(interpolated)
             return result
 

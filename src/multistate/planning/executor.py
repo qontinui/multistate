@@ -54,7 +54,7 @@ class PlanExecutor:
         max_replans: Maximum number of replan attempts before giving up.
     """
 
-    _NOT_INTERRUPTABLE: set[str] = {"type_text"}
+    _NOT_INTERRUPTABLE: frozenset[str] = frozenset({"type_text"})
 
     def __init__(
         self,

@@ -10,7 +10,7 @@ import logging
 from pathlib import Path
 from typing import Callable
 
-from multistate.planning.planner import HTNPlanner, WorldState  # noqa: F401
+from multistate.planning.planner import HTNPlanner
 
 logger = logging.getLogger(__name__)
 
