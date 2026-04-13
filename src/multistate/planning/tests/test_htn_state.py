@@ -39,7 +39,7 @@ class TestHTNState:
             blackboard_plan=BlackboardPlan({"counter": int}),
         )
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         htn.on_activate(parent_blackboard=parent_bb)
 
@@ -54,7 +54,7 @@ class TestHTNState:
         """on_activate without blackboard_plan creates a plain Blackboard."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         htn.on_activate()
 
@@ -65,7 +65,7 @@ class TestHTNState:
         """on_deactivate clears plan and blackboard."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         htn.on_activate()
         htn._current_plan = [("action_a",), ("action_b",)]
@@ -89,15 +89,13 @@ class TestHTNState:
             nodes_explored=5,
         )
 
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
         ws = WorldState(active_states={"login_screen"})
 
         result = htn.plan(ws)
 
         assert result.success is True
-        planner.find_plan.assert_called_once_with(
-            ws, [("navigate_to", "dashboard")]
-        )
+        planner.find_plan.assert_called_once_with(ws, [("navigate_to", "dashboard")])
         assert htn.current_plan == [("click_element", "btn")]
         assert htn._plan_index == 0
 
@@ -112,7 +110,7 @@ class TestHTNState:
             nodes_explored=1,
         )
 
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
         htn.plan(WorldState())
 
         planner.find_plan.assert_called_once_with(WorldState(), [])
@@ -121,7 +119,7 @@ class TestHTNState:
         """Set current_plan, advance() returns each action sequentially."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         htn.current_plan = [
             ("action_a",),
@@ -137,7 +135,7 @@ class TestHTNState:
         """advance past end -> None."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         htn.current_plan = [("action_a",)]
         assert htn.advance() == ("action_a",)
@@ -148,7 +146,7 @@ class TestHTNState:
         """advance with no plan -> None."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         assert htn.advance() is None
 
@@ -156,7 +154,7 @@ class TestHTNState:
         """True when no plan or index past end."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         # No plan -> complete
         assert htn.is_plan_complete is True
@@ -174,7 +172,7 @@ class TestHTNState:
         """has_plan reflects whether a plan has been set."""
         config = HTNStateConfig()
         planner = MagicMock(spec=HTNPlanner)
-        htn = HTNState(state=_FakeState(), config=config, planner=planner)
+        htn = HTNState(state=_FakeState(), config=config, planner=planner)  # type: ignore[arg-type]
 
         assert htn.has_plan is False
         htn.current_plan = [("action_a",)]

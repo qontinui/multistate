@@ -33,9 +33,7 @@ def click_element(state: WorldState, element_id: str) -> WorldState | None:
     return new
 
 
-def type_text(
-    state: WorldState, element_id: str, text: str
-) -> WorldState | None:
+def type_text(state: WorldState, element_id: str, text: str) -> WorldState | None:
     """Type *text* into *element_id* if visible.
 
     Updates ``element_values[element_id]`` to *text*.

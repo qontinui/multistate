@@ -57,9 +57,9 @@ class TestFormMethods:
         # Each field should produce click + type pair
         assert len(result) == 4
         assert result[0] == ("click_element", "email_input")
-        assert result[1] == ("type_text", "test@example.com")
+        assert result[1] == ("type_text", "email_input", "test@example.com")
         assert result[2] == ("click_element", "name_input")
-        assert result[3] == ("type_text", "John")
+        assert result[3] == ("type_text", "name_input", "John")
 
 
 class TestDialogHandling:

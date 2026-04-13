@@ -12,6 +12,7 @@ from multistate.planning.planner import HTNPlanner, WorldState
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _op_step_a(state: WorldState) -> WorldState | None:
     new = state.copy()
     new.blackboard["a_done"] = True

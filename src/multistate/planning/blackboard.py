@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import builtins
 import threading
 from typing import Any
 
@@ -55,12 +56,12 @@ class Blackboard:
         with self._lock:
             self._data.pop(name, None)
 
-    def local_keys(self) -> set[str]:
+    def local_keys(self) -> "builtins.set[str]":
         """Return keys in this scope only."""
         with self._lock:
-            return set(self._data.keys())
+            return builtins.set(self._data.keys())
 
-    def all_keys(self) -> set[str]:
+    def all_keys(self) -> "builtins.set[str]":
         """Return keys from this scope + all parents (no duplicates)."""
         keys = self.local_keys()
         if self._parent is not None:

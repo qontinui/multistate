@@ -61,9 +61,7 @@ def confirm_dialog(
     ]
 
 
-def cancel_dialog(
-    state: WorldState, dialog_state: str
-) -> list[tuple[str, ...]] | None:
+def cancel_dialog(state: WorldState, dialog_state: str) -> list[tuple[str, ...]] | None:
     """Cancel a dialog."""
     if dialog_state not in state.active_states:
         return None

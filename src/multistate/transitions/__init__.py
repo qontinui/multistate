@@ -3,10 +3,10 @@
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.reliability import ReliabilityTracker, TransitionStats
 from multistate.transitions.transition import (
-    PhaseResult,
-    Transition,
-    TransitionPhase,
-    TransitionResult,
+                                                PhaseResult,
+                                                Transition,
+                                                TransitionPhase,
+                                                TransitionResult,
 )
 from multistate.transitions.visibility import StaysVisible
 

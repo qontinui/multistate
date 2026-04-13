@@ -5,10 +5,7 @@ from __future__ import annotations
 from unittest.mock import MagicMock
 
 from multistate.planning.blackboard import Blackboard
-from multistate.planning.executor import (
-    PlanExecutor,
-    StepStatus,
-)
+from multistate.planning.executor import PlanExecutor, StepStatus
 from multistate.planning.planner import HTNPlanner, PlanResult, WorldState
 from multistate.planning.world_adapter import WorldStateAdapter
 
@@ -230,9 +227,7 @@ class TestPlanExecutor:
         )
 
         plan = [("action_a",), ("action_b",)]
-        result = executor.execute(
-            plan, initial_state, original_tasks=[("task",)]
-        )
+        result = executor.execute(plan, initial_state, original_tasks=[("task",)])
 
         assert result.success is True
         assert result.replans == 1
@@ -260,9 +255,7 @@ class TestPlanExecutor:
 
         # type_text followed by another action
         plan = [("type_text", "field1", "hello"), ("action_b",)]
-        result = executor.execute(
-            plan, initial_state, original_tasks=[("task",)]
-        )
+        result = executor.execute(plan, initial_state, original_tasks=[("task",)])
 
         assert result.success is True
         # No replanning should have occurred for type_text

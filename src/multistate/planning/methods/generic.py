@@ -36,7 +36,7 @@ def fill_form_sequential(
     actions: list[tuple[str, ...]] = []
     for element_id, value in fields.items():
         actions.append(("click_element", element_id))
-        actions.append(("type_text", value))
+        actions.append(("type_text", element_id, value))
     return actions
 
 

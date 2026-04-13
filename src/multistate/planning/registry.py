@@ -46,9 +46,7 @@ class PlannerRegistry:
             count += len(methods)
         return count
 
-    def build_planner(
-        self, max_depth: int = 16, max_nodes: int = 10_000
-    ) -> HTNPlanner:
+    def build_planner(self, max_depth: int = 16, max_nodes: int = 10_000) -> HTNPlanner:
         """Create a fully-configured HTNPlanner with all registered content."""
         planner = HTNPlanner(max_depth=max_depth, max_nodes=max_nodes)
         for name, fn in self._operators.items():
