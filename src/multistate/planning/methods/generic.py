@@ -65,11 +65,13 @@ def login_generic(
     tasks: list[tuple[str, ...]] = []
     if "login_screen" not in state.active_states:
         tasks.append(("navigate_to", "login_screen"))
-    tasks.extend([
-        ("fill_form", {"username_field": username, "password_field": password}),
-        ("click_element", "btn_login"),
-        ("wait_for_state", "dashboard"),
-    ])
+    tasks.extend(
+        [
+            ("fill_form", {"username_field": username, "password_field": password}),
+            ("click_element", "btn_login"),
+            ("wait_for_state", "dashboard"),
+        ]
+    )
     return tasks
 
 

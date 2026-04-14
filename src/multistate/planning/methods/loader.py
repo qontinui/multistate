@@ -49,7 +49,8 @@ class MethodLoader:
             task_name = method_config.get("task_name")
             if not task_name:
                 logger.warning(
-                    "Skipping method in %s: missing 'task_name'", path,
+                    "Skipping method in %s: missing 'task_name'",
+                    path,
                 )
                 continue
             method_fn = MethodLoader._build_method_from_config(method_config)
