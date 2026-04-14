@@ -18,19 +18,12 @@ from typing import Any, Literal
 
 from multistate.testing.coverage_analyzer import CoverageAnalyzer
 from multistate.testing.deficiency_detector import DeficiencyDetector
-from multistate.testing.enums import (
-    DeficiencyCategory,
-    DeficiencySeverity,
-    ExecutionStatus,
-)
+from multistate.testing.enums import (DeficiencyCategory, DeficiencySeverity,
+                                      ExecutionStatus)
 from multistate.testing.export_handlers import ExportHandlers
-from multistate.testing.models import (
-    CoverageMetrics,
-    Deficiency,
-    PathHistory,
-    TransitionExecution,
-    TransitionStatistics,
-)
+from multistate.testing.models import (CoverageMetrics, Deficiency,
+                                       PathHistory, TransitionExecution,
+                                       TransitionStatistics)
 from multistate.testing.path_analysis import PathAnalyzer
 from multistate.testing.screenshot_manager import ScreenshotManager
 

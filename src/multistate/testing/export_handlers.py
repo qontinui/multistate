@@ -10,13 +10,9 @@ import logging
 from collections.abc import Sequence
 from typing import Literal
 
-from multistate.testing.models import (
-    CoverageMetrics,
-    Deficiency,
-    PathHistory,
-    TransitionExecution,
-    TransitionStatistics,
-)
+from multistate.testing.models import (CoverageMetrics, Deficiency,
+                                       PathHistory, TransitionExecution,
+                                       TransitionStatistics)
 
 logger = logging.getLogger(__name__)
 

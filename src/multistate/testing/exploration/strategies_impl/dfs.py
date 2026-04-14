@@ -4,7 +4,8 @@ import logging
 from collections import deque
 
 from multistate.testing.config import ExplorationConfig
-from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
+from multistate.testing.exploration.strategies_impl.base import \
+    ExplorationStrategy
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)

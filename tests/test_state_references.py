@@ -7,7 +7,8 @@ from datetime import datetime
 sys.path.insert(0, "src")
 
 from multistate.manager import StateManager, StateManagerConfig
-from multistate.state_references import StateHistory, StateReference, StateSnapshot
+from multistate.state_references import (StateHistory, StateReference,
+                                         StateSnapshot)
 
 
 def test_state_snapshot() -> bool:

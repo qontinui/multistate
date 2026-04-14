@@ -5,12 +5,8 @@ import sys
 
 sys.path.insert(0, "src")
 
-from multistate.manager import (
-    InvalidStateError,
-    InvalidTransitionError,
-    StateManager,
-    StateManagerConfig,
-)
+from multistate.manager import (InvalidStateError, InvalidTransitionError,
+                                StateManager, StateManagerConfig)
 from multistate.pathfinding.multi_target import SearchStrategy
 from multistate.transitions.executor import SuccessPolicy
 

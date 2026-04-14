@@ -8,14 +8,14 @@ import os
 import random
 import sys
 import time
-
 # import matplotlib.pyplot as plt  # Optional for plotting
 from typing import Dict, List, Tuple
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
+from multistate.pathfinding.multi_target import (MultiTargetPathFinder,
+                                                 SearchStrategy)
 from multistate.transitions.transition import Transition
 
 

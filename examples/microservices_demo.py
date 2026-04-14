@@ -20,11 +20,9 @@ from typing import Dict, List, Set
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from multistate.dynamics.hidden_states import (
-    DynamicTransition,
-    HiddenStateManager,
-    OcclusionType,
-)
+from multistate.dynamics.hidden_states import (DynamicTransition,
+                                               HiddenStateManager,
+                                               OcclusionType)
 from multistate.manager import StateManager, StateManagerConfig
 from multistate.pathfinding.multi_target import SearchStrategy
 

@@ -10,7 +10,8 @@ from datetime import datetime
 from typing import Any
 
 from multistate.testing.enums import ExecutionStatus
-from multistate.testing.models import CoverageMetrics, PathHistory, TransitionExecution
+from multistate.testing.models import (CoverageMetrics, PathHistory,
+                                       TransitionExecution)
 
 logger = logging.getLogger(__name__)
 

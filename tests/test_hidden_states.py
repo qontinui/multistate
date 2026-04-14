@@ -6,11 +6,9 @@ import sys
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.dynamics.hidden_states import (
-    DynamicTransition,
-    HiddenStateManager,
-    OcclusionType,
-)
+from multistate.dynamics.hidden_states import (DynamicTransition,
+                                               HiddenStateManager,
+                                               OcclusionType)
 
 
 def test_modal_occlusion() -> bool:

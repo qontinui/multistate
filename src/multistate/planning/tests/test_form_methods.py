@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from multistate.planning.methods.forms import (
-    clear_and_fill_field,
-    fill_form_tab_order,
-    fill_form_with_validation,
-    select_dropdown,
-)
+from multistate.planning.methods.forms import (clear_and_fill_field,
+                                               fill_form_tab_order,
+                                               fill_form_with_validation,
+                                               select_dropdown)
 from multistate.planning.planner import WorldState
 
 

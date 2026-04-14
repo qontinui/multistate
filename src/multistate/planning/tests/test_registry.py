@@ -7,7 +7,8 @@ import tempfile
 from pathlib import Path
 
 from multistate.planning.planner import HTNPlanner, WorldState
-from multistate.planning.registry import PlannerRegistry, create_default_registry
+from multistate.planning.registry import (PlannerRegistry,
+                                          create_default_registry)
 
 
 def test_create_default_registry() -> None:

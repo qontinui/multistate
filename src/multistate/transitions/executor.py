@@ -80,11 +80,9 @@ class TransitionExecutor:
         Returns:
             TransitionResult with complete phase tracking
         """
-        from multistate.transitions.transition import (
-            PhaseResult,
-            TransitionPhase,
-            TransitionResult,
-        )
+        from multistate.transitions.transition import (PhaseResult,
+                                                       TransitionPhase,
+                                                       TransitionResult)
 
         result = TransitionResult(success=False)
         states_to_activate = transition.get_all_states_to_activate()

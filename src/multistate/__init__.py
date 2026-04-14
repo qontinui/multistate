@@ -11,12 +11,8 @@ from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
 from multistate.manager import StateManager, StateManagerConfig
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
-from multistate.state_references import (
-    StateHistory,
-    StateReference,
-    StateReferenceResolver,
-    StateSnapshot,
-)
+from multistate.state_references import (StateHistory, StateReference,
+                                         StateReferenceResolver, StateSnapshot)
 
 __all__ = [
     "Element",
@@ -47,14 +43,12 @@ except ImportError:
 
 # Transition system (available now)
 try:
-    from multistate.transitions import (
-        PhaseResult,  # noqa: F401
-        StaysVisible,  # noqa: F401
-        Transition,  # noqa: F401
-        TransitionExecutor,  # noqa: F401
-        TransitionPhase,  # noqa: F401
-        TransitionResult,  # noqa: F401
-    )
+    from multistate.transitions import PhaseResult  # noqa: F401
+    from multistate.transitions import StaysVisible  # noqa: F401
+    from multistate.transitions import Transition  # noqa: F401
+    from multistate.transitions import TransitionExecutor  # noqa: F401
+    from multistate.transitions import TransitionPhase  # noqa: F401
+    from multistate.transitions import TransitionResult  # noqa: F401
 
     __all__.extend(
         [

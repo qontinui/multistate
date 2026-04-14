@@ -9,11 +9,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from multistate.testing.enums import (
-    DeficiencyCategory,
-    DeficiencySeverity,
-    ExecutionStatus,
-)
+from multistate.testing.enums import (DeficiencyCategory, DeficiencySeverity,
+                                      ExecutionStatus)
 
 
 @dataclass

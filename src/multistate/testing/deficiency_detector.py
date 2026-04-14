@@ -9,16 +9,10 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from multistate.testing.enums import (
-    DeficiencyCategory,
-    DeficiencySeverity,
-    ExecutionStatus,
-)
-from multistate.testing.models import (
-    Deficiency,
-    TransitionExecution,
-    TransitionStatistics,
-)
+from multistate.testing.enums import (DeficiencyCategory, DeficiencySeverity,
+                                      ExecutionStatus)
+from multistate.testing.models import (Deficiency, TransitionExecution,
+                                       TransitionStatistics)
 
 logger = logging.getLogger(__name__)
 

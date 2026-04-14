@@ -12,16 +12,14 @@ from multistate.testing.config import ExplorationConfig
 from multistate.testing.exploration.backtracking import BacktrackingNavigator
 from multistate.testing.exploration.diversity import PathDiversityEngine
 from multistate.testing.exploration.failure_handler import FailureAwareExplorer
-from multistate.testing.exploration.strategies import (
-    AdaptiveExplorer,
-    BreadthFirstExplorer,
-    DepthFirstExplorer,
-    ExplorationStrategy,
-    GreedyCoverageExplorer,
-    HybridExplorer,
-    NoveltySeekingExplorer,
-    RandomWalkExplorer,
-)
+from multistate.testing.exploration.strategies import (AdaptiveExplorer,
+                                                       BreadthFirstExplorer,
+                                                       DepthFirstExplorer,
+                                                       ExplorationStrategy,
+                                                       GreedyCoverageExplorer,
+                                                       HybridExplorer,
+                                                       NoveltySeekingExplorer,
+                                                       RandomWalkExplorer)
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)

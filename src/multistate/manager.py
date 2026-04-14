@@ -18,16 +18,10 @@ from multistate.core.element import Element
 from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
-from multistate.pathfinding.multi_target import (
-    MultiTargetPathFinder,
-    Path,
-    SearchStrategy,
-)
-from multistate.state_references import (
-    StateHistory,
-    StateReference,
-    StateReferenceResolver,
-)
+from multistate.pathfinding.multi_target import (MultiTargetPathFinder, Path,
+                                                 SearchStrategy)
+from multistate.state_references import (StateHistory, StateReference,
+                                         StateReferenceResolver)
 from multistate.transitions.callbacks import TransitionCallbacks
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import Transition
