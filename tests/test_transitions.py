@@ -38,7 +38,7 @@ def test_basic_transition() -> bool:
     assert dashboard in result.activated_states
     assert login in result.deactivated_states
     print("   ✓ Basic transition successful")
-    return True
+
 
 
 def test_multi_state_activation() -> bool:
@@ -72,7 +72,7 @@ def test_multi_state_activation() -> bool:
     assert sidebar in result.activated_states
     assert content in result.activated_states
     print("   ✓ Multiple states activated simultaneously")
-    return True
+
 
 
 def test_group_activation() -> bool:
@@ -113,7 +113,7 @@ def test_group_activation() -> bool:
     # Verify group atomicity
     assert workspace.validate_atomicity(activated)
     print("   ✓ Group activated atomically")
-    return True
+
 
 
 def test_incoming_transitions() -> bool:
@@ -174,7 +174,7 @@ def test_incoming_transitions() -> bool:
     assert "content" in executed_incoming
     assert len(executed_incoming) == 3
     print("   ✓ All incoming transitions executed")
-    return True
+
 
 
 def test_blocking_state() -> bool:
@@ -206,7 +206,7 @@ def test_blocking_state() -> bool:
         failed_phase == TransitionPhase.VALIDATE
     )  # Blocking checked in VALIDATE phase
     print("   ✓ Blocking state correctly prevented activation")
-    return True
+
 
 
 def test_phased_execution() -> bool:
@@ -251,10 +251,10 @@ def test_phased_execution() -> bool:
         assert result.phase_results[i].success
 
     print("   ✓ All phases executed in correct order")
-    return True
 
 
-def test_rollback_on_failure() -> bool:
+
+def test_rollback_on_failure() -> None:
     """Test rollback when transition fails."""
     print("\n7. Testing rollback on failure...")
 
@@ -284,10 +284,10 @@ def test_rollback_on_failure() -> bool:
     assert result.get_failed_phase() == TransitionPhase.VALIDATE
     # No explicit rollback needed - validation prevents any state changes
     print("   ✓ Validation prevented invalid transition (implicit rollback)")
-    return True
 
 
-def test_success_policies() -> bool:
+
+def test_success_policies() -> None:
     """Test different success policies for incoming transitions."""
     print("\n8. Testing success policies...")
 
@@ -340,7 +340,7 @@ def test_success_policies() -> bool:
     assert result_threshold.success  # 2/3 = 66.7% > 66% threshold
     print("     ✓ THRESHOLD: Succeeded with 66.7% success rate")
 
-    return True
+
 
 
 def main() -> None:

@@ -456,11 +456,11 @@ class StateManager:
         initial_states = self.active_states.copy()
 
         # Track execution time
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         result = self.executor.execute(transition, self.active_states, self.callbacks)
 
-        execution_time = time.time() - start_time
+        execution_time = time.perf_counter() - start_time
 
         # Record transition metrics
         self.metrics.record_transition_execution(

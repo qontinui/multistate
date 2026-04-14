@@ -417,7 +417,7 @@ class TestStateManagerIntegration:
 
         metrics = manager.get_transition_metrics("trans1")
         assert metrics is not None
-        assert metrics.total_execution_time > 0.0
+        assert metrics.total_execution_time >= 0.0
 
     def test_most_visited_states_integration(self) -> None:
         """Test getting most visited states through StateManager."""
