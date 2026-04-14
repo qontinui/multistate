@@ -40,7 +40,6 @@ def test_basic_transition() -> bool:
     print("   ✓ Basic transition successful")
 
 
-
 def test_multi_state_activation() -> bool:
     """Test activating multiple states simultaneously."""
     print("\n2. Testing multi-state activation...")
@@ -72,7 +71,6 @@ def test_multi_state_activation() -> bool:
     assert sidebar in result.activated_states
     assert content in result.activated_states
     print("   ✓ Multiple states activated simultaneously")
-
 
 
 def test_group_activation() -> bool:
@@ -113,7 +111,6 @@ def test_group_activation() -> bool:
     # Verify group atomicity
     assert workspace.validate_atomicity(activated)
     print("   ✓ Group activated atomically")
-
 
 
 def test_incoming_transitions() -> bool:
@@ -176,7 +173,6 @@ def test_incoming_transitions() -> bool:
     print("   ✓ All incoming transitions executed")
 
 
-
 def test_blocking_state() -> bool:
     """Test blocking state prevents activation of blocked states."""
     print("\n5. Testing blocking state...")
@@ -206,7 +202,6 @@ def test_blocking_state() -> bool:
         failed_phase == TransitionPhase.VALIDATE
     )  # Blocking checked in VALIDATE phase
     print("   ✓ Blocking state correctly prevented activation")
-
 
 
 def test_phased_execution() -> bool:
@@ -253,7 +248,6 @@ def test_phased_execution() -> bool:
     print("   ✓ All phases executed in correct order")
 
 
-
 def test_rollback_on_failure() -> None:
     """Test rollback when transition fails."""
     print("\n7. Testing rollback on failure...")
@@ -284,7 +278,6 @@ def test_rollback_on_failure() -> None:
     assert result.get_failed_phase() == TransitionPhase.VALIDATE
     # No explicit rollback needed - validation prevents any state changes
     print("   ✓ Validation prevented invalid transition (implicit rollback)")
-
 
 
 def test_success_policies() -> None:
@@ -339,8 +332,6 @@ def test_success_policies() -> None:
     result_threshold = executor_threshold.execute(transition, {login}, callbacks)
     assert result_threshold.success  # 2/3 = 66.7% > 66% threshold
     print("     ✓ THRESHOLD: Succeeded with 66.7% success rate")
-
-
 
 
 def main() -> None:
