@@ -67,7 +67,7 @@ def login_generic(
         tasks.append(("navigate_to", "login_screen"))
     tasks.extend(
         [
-            ("fill_form", {"username_field": username, "password_field": password}),
+            ("fill_form", {"username_field": username, "password_field": password}),  # type: ignore[list-item]
             ("click_element", "btn_login"),
             ("wait_for_state", "dashboard"),
         ]
