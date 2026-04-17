@@ -153,7 +153,10 @@ class HTNPlanner:
         # 1. Try as primitive operator
         if task_name in self.operators:
             operator = self.operators[task_name]
-            new_state = operator(state, *task_args)
+            try:
+                new_state = operator(state, *task_args)
+            except TypeError:
+                new_state = None  # Argument mismatch → treat as not applicable
             if new_state is not None:
                 rest = self._seek_plan(new_state, remaining, depth + 1, nodes)
                 if rest is not None:
@@ -162,7 +165,10 @@ class HTNPlanner:
         # 2. Try as compound task via methods
         if task_name in self.methods:
             for method in self.methods[task_name]:
-                subtasks = method(state, *task_args)
+                try:
+                    subtasks = method(state, *task_args)
+                except TypeError:
+                    subtasks = None  # Argument mismatch → method not applicable
                 if subtasks is not None:
                     merged = subtasks + remaining
                     result = self._seek_plan(state, merged, depth + 1, nodes)

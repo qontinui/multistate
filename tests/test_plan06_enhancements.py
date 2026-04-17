@@ -17,7 +17,7 @@ from multistate.transitions.visibility import StaysVisible
 # ==================== Mermaid Tests ====================
 
 
-def test_mermaid_basic_diagram():
+def test_mermaid_basic_diagram() -> None:
     """Generate Mermaid from a simple 3-state machine, verify valid syntax."""
     s1 = State(id="idle", name="Idle")
     s2 = State(id="loading", name="Loading")
@@ -44,10 +44,9 @@ def test_mermaid_basic_diagram():
     assert "Idle --> Loading : click_start" in mermaid
     assert "Loading --> Ready : load_complete" in mermaid
     print("OK: Basic Mermaid diagram generation works")
-    return True
 
 
-def test_mermaid_active_state_highlighting():
+def test_mermaid_active_state_highlighting() -> None:
     """Generate with active state highlighting."""
     s1 = State(id="idle", name="Idle")
     s2 = State(id="loading", name="Loading")
@@ -75,10 +74,9 @@ def test_mermaid_active_state_highlighting():
     # Inactive states should NOT have the active class
     assert "class Idle active" not in mermaid
     print("OK: Mermaid active state highlighting works")
-    return True
 
 
-def test_mermaid_with_groups():
+def test_mermaid_with_groups() -> None:
     """Generate with groups rendered as nested states."""
     s1 = State(id="idle", name="Idle")
     s2 = State(id="toolbar", name="Toolbar")
@@ -104,10 +102,9 @@ def test_mermaid_with_groups():
     assert "Sidebar" in mermaid
     assert "Editor" in mermaid
     print("OK: Mermaid group rendering works")
-    return True
 
 
-def test_mermaid_no_from_states():
+def test_mermaid_no_from_states() -> None:
     """Transitions with no from_states render as initial transitions."""
     s1 = State(id="idle", name="Idle")
     t1 = Transition(
@@ -120,10 +117,9 @@ def test_mermaid_no_from_states():
     mermaid = PathVisualizer.generate_mermaid([t1])
     assert "[*] --> Idle : initialize" in mermaid
     print("OK: Mermaid initial transitions work")
-    return True
 
 
-def test_mermaid_path_visualization():
+def test_mermaid_path_visualization() -> None:
     """Generate path visualization with highlighted edges and targets."""
     s1 = State(id="idle", name="Idle")
     s2 = State(id="loading", name="Loading")
@@ -169,10 +165,9 @@ def test_mermaid_path_visualization():
     assert "classDef target" in mermaid_full
 
     print("OK: Mermaid path visualization works")
-    return True
 
 
-def test_mermaid_diff():
+def test_mermaid_diff() -> None:
     """Show before/after state differences."""
     s1 = State(id="login", name="Login")
     s2 = State(id="menu", name="Menu")
@@ -198,13 +193,12 @@ def test_mermaid_diff():
     assert "class Menu added" in mermaid
     assert "class Toolbar added" in mermaid
     print("OK: Mermaid diff works")
-    return True
 
 
 # ==================== Serialization Tests ====================
 
 
-def test_element_round_trip():
+def test_element_round_trip() -> None:
     """Element from_dict(to_dict()) round-trip."""
     elem = Element(id="btn1", name="Submit Button", type="button", metadata={"x": 10})
     data = elem.to_dict()
@@ -215,10 +209,9 @@ def test_element_round_trip():
     assert restored.type == elem.type
     assert restored.metadata == elem.metadata
     print("OK: Element round-trip serialization works")
-    return True
 
 
-def test_state_round_trip():
+def test_state_round_trip() -> None:
     """State from_dict(to_dict()) round-trip."""
     elem = Element(id="e1", name="E1")
     state = State(
@@ -245,14 +238,11 @@ def test_state_round_trip():
     assert restored.metadata == state.metadata
     assert len(restored.elements) == 1
     print("OK: State round-trip serialization works")
-    return True
 
 
-def test_state_round_trip_with_timeout():
+def test_state_round_trip_with_timeout() -> None:
     """State with timeout serializes and deserializes correctly."""
-    timeout = StateTimeout(
-        duration_seconds=30.0, on_timeout="t_timeout", auto_transition=False
-    )
+    timeout = StateTimeout(duration_seconds=30.0, on_timeout="t_timeout", auto_transition=False)
     state = State(id="loading", name="Loading", timeout=timeout)
     data = state.to_dict()
 
@@ -267,25 +257,21 @@ def test_state_round_trip_with_timeout():
     assert restored.timeout.on_timeout == "t_timeout"
     assert restored.timeout.auto_transition is False
     print("OK: State with timeout round-trip works")
-    return True
 
 
-def test_state_without_timeout_no_key():
+def test_state_without_timeout_no_key() -> None:
     """State without timeout should not have timeout key in dict."""
     state = State(id="s1", name="S1")
     data = state.to_dict()
     assert "timeout" not in data
     print("OK: State without timeout omits timeout key")
-    return True
 
 
-def test_state_group_round_trip():
+def test_state_group_round_trip() -> None:
     """StateGroup from_dict(to_dict()) round-trip."""
     s1 = State(id="s1", name="S1")
     s2 = State(id="s2", name="S2")
-    group = StateGroup(
-        id="g1", name="Group1", states={s1, s2}, metadata={"zone": "left"}
-    )
+    group = StateGroup(id="g1", name="Group1", states={s1, s2}, metadata={"zone": "left"})
 
     data = group.to_dict()
     state_lookup = {"s1": s1, "s2": s2}
@@ -298,10 +284,9 @@ def test_state_group_round_trip():
     assert s1 in restored.states
     assert s2 in restored.states
     print("OK: StateGroup round-trip serialization works")
-    return True
 
 
-def test_transition_round_trip():
+def test_transition_round_trip() -> None:
     """Transition from_dict(to_dict()) round-trip."""
     s1 = State(id="s1", name="S1")
     s2 = State(id="s2", name="S2")
@@ -334,10 +319,9 @@ def test_transition_round_trip():
     assert restored.action is None
     assert restored.incoming_actions == {}
     print("OK: Transition round-trip serialization works")
-    return True
 
 
-def test_transition_resolves_same_state_objects():
+def test_transition_resolves_same_state_objects() -> None:
     """Verify transitions resolve to correct state objects, not copies."""
     s1 = State(id="s1", name="S1")
     s2 = State(id="s2", name="S2")
@@ -360,10 +344,9 @@ def test_transition_resolves_same_state_objects():
     for ats in restored.activate_states:
         assert ats is s2
     print("OK: Transition resolves to same state objects")
-    return True
 
 
-def test_state_manager_round_trip():
+def test_state_manager_round_trip() -> None:
     """StateManager from_dict(to_dict()) produces equivalent state machine."""
     manager = StateManager()
 
@@ -406,10 +389,9 @@ def test_state_manager_round_trip():
     assert len(re_data["transitions"]) == len(data["transitions"])
 
     print("OK: StateManager round-trip serialization works")
-    return True
 
 
-def test_state_manager_round_trip_with_groups():
+def test_state_manager_round_trip_with_groups() -> None:
     """StateManager with groups serializes correctly."""
     manager = StateManager()
 
@@ -431,20 +413,18 @@ def test_state_manager_round_trip_with_groups():
     assert "g1" in restored.groups
     assert len(restored.groups["g1"].states) == 2
     print("OK: StateManager round-trip with groups works")
-    return True
 
 
-def test_state_manager_version_field():
+def test_state_manager_version_field() -> None:
     """Serialized data includes version field."""
     manager = StateManager()
     data = manager.to_dict()
     assert "version" in data
     assert data["version"] == 1
     print("OK: Serialization version field present")
-    return True
 
 
-def test_callbacks_not_serialized():
+def test_callbacks_not_serialized() -> None:
     """Verify callbacks are not included in serialized output."""
     s1 = State(id="s1", name="S1")
     trans = Transition(
@@ -465,13 +445,12 @@ def test_callbacks_not_serialized():
     assert restored.action is None
     assert restored.incoming_actions == {}
     print("OK: Callbacks are not serialized (documented behavior)")
-    return True
 
 
 # ==================== Timeout Tests ====================
 
 
-def test_state_timeout_check_before_duration():
+def test_state_timeout_check_before_duration() -> None:
     """State with timeout: check_timeout() returns False before duration."""
     timeout = StateTimeout(duration_seconds=10.0, on_timeout="t_timeout")
     state = State(id="loading", name="Loading", timeout=timeout)
@@ -483,10 +462,9 @@ def test_state_timeout_check_before_duration():
     state.on_activate()
     assert state.check_timeout() is False  # Just activated, not timed out yet
     print("OK: check_timeout() returns False before duration")
-    return True
 
 
-def test_state_timeout_check_after_duration():
+def test_state_timeout_check_after_duration() -> None:
     """State with timeout: check_timeout() returns True after duration."""
     timeout = StateTimeout(duration_seconds=0.05, on_timeout="t_timeout")
     state = State(id="loading", name="Loading", timeout=timeout)
@@ -495,20 +473,18 @@ def test_state_timeout_check_after_duration():
     time.sleep(0.08)
     assert state.check_timeout() is True
     print("OK: check_timeout() returns True after duration")
-    return True
 
 
-def test_state_no_timeout():
+def test_state_no_timeout() -> None:
     """State without timeout: check_timeout() always returns False."""
     state = State(id="idle", name="Idle")
     assert state.check_timeout() is False
     state.on_activate()  # No-op since no timeout
     assert state.check_timeout() is False
     print("OK: No timeout -> check_timeout() always False")
-    return True
 
 
-def test_timeout_reset_on_deactivate_reactivate():
+def test_timeout_reset_on_deactivate_reactivate() -> None:
     """Timeout resets on deactivate/reactivate."""
     timeout = StateTimeout(duration_seconds=0.05, on_timeout="t_timeout")
     state = State(id="loading", name="Loading", timeout=timeout)
@@ -525,10 +501,9 @@ def test_timeout_reset_on_deactivate_reactivate():
     state.on_activate()
     assert state.check_timeout() is False  # Fresh activation
     print("OK: Timeout resets on deactivate/reactivate")
-    return True
 
 
-def test_auto_transition_on_timeout():
+def test_auto_transition_on_timeout() -> None:
     """Auto-transition on timeout executes the timeout transition."""
     manager = StateManager()
 
@@ -565,10 +540,9 @@ def test_auto_transition_on_timeout():
     assert manager.is_active("error")
     assert not manager.is_active("loading")
     print("OK: Auto-transition on timeout works")
-    return True
 
 
-def test_manual_timeout_no_auto_transition():
+def test_manual_timeout_no_auto_transition() -> None:
     """Manual timeout (auto_transition=False): state flagged but no auto-transition."""
     manager = StateManager()
 
@@ -599,10 +573,9 @@ def test_manual_timeout_no_auto_transition():
     assert manager.is_active("loading")
     assert not manager.is_active("error")
     print("OK: Manual timeout (no auto-transition) works")
-    return True
 
 
-def test_timeout_serialization_round_trip():
+def test_timeout_serialization_round_trip() -> None:
     """StateTimeout survives StateManager serialization round-trip."""
     manager = StateManager()
     manager.add_state("loading", "Loading")
@@ -624,13 +597,12 @@ def test_timeout_serialization_round_trip():
     assert r_loading.timeout.on_timeout == "t_timeout"
     assert r_loading.timeout.auto_transition is False
     print("OK: Timeout survives StateManager round-trip")
-    return True
 
 
 # ==================== Runner ====================
 
 
-def run_all_tests():
+def run_all_tests() -> bool:
     """Run all tests and report results."""
     tests = [
         # Mermaid

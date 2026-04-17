@@ -11,7 +11,7 @@ from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import Transition, TransitionPhase
 
 
-def test_basic_transition() -> bool:
+def test_basic_transition() -> None:
     """Test a simple transition from one state to another."""
     print("\n1. Testing basic transition...")
 
@@ -40,7 +40,7 @@ def test_basic_transition() -> bool:
     print("   ✓ Basic transition successful")
 
 
-def test_multi_state_activation() -> bool:
+def test_multi_state_activation() -> None:
     """Test activating multiple states simultaneously."""
     print("\n2. Testing multi-state activation...")
 
@@ -73,7 +73,7 @@ def test_multi_state_activation() -> bool:
     print("   ✓ Multiple states activated simultaneously")
 
 
-def test_group_activation() -> bool:
+def test_group_activation() -> None:
     """Test atomic group activation."""
     print("\n3. Testing atomic group activation...")
 
@@ -113,7 +113,7 @@ def test_group_activation() -> bool:
     print("   ✓ Group activated atomically")
 
 
-def test_incoming_transitions() -> bool:
+def test_incoming_transitions() -> None:
     """Test that incoming transitions execute for ALL activated states."""
     print("\n4. Testing incoming transitions for all activated states...")
 
@@ -173,7 +173,7 @@ def test_incoming_transitions() -> bool:
     print("   ✓ All incoming transitions executed")
 
 
-def test_blocking_state() -> bool:
+def test_blocking_state() -> None:
     """Test blocking state prevents activation of blocked states."""
     print("\n5. Testing blocking state...")
 
@@ -198,13 +198,11 @@ def test_blocking_state() -> bool:
 
     assert not result.success
     failed_phase = result.get_failed_phase()
-    assert (
-        failed_phase == TransitionPhase.VALIDATE
-    )  # Blocking checked in VALIDATE phase
+    assert failed_phase == TransitionPhase.VALIDATE  # Blocking checked in VALIDATE phase
     print("   ✓ Blocking state correctly prevented activation")
 
 
-def test_phased_execution() -> bool:
+def test_phased_execution() -> None:
     """Test that all phases execute in correct order."""
     print("\n6. Testing phased execution order...")
 
@@ -352,11 +350,11 @@ def main() -> None:
         test_success_policies,
     ]
 
-    results = []
+    results: list[tuple[str, bool]] = []
     for test in tests:
         try:
-            success = test()
-            results.append((test.__name__, success))
+            test()
+            results.append((test.__name__, True))
         except Exception as e:
             print(f"   ✗ Test failed: {e}")
             results.append((test.__name__, False))
