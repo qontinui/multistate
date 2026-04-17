@@ -251,9 +251,7 @@ class StateReferenceResolver:
         state_lookup: Function to get State by ID
     """
 
-    def __init__(
-        self, history: StateHistory, state_lookup: Callable[[str], Optional[State]]
-    ):
+    def __init__(self, history: StateHistory, state_lookup: Callable[[str], Optional[State]]):
         """Initialize resolver.
 
         Args:

@@ -40,9 +40,7 @@ class StateGroup:
         # Update each state's group membership
         for state in self.states:
             if state.group and state.group != self.id:
-                raise ValueError(
-                    f"State '{state.name}' already belongs to group '{state.group}'"
-                )
+                raise ValueError(f"State '{state.name}' already belongs to group '{state.group}'")
             state.group = self.id
 
     def __hash__(self) -> int:
@@ -78,9 +76,7 @@ class StateGroup:
             ValueError: If state already belongs to another group
         """
         if state.group and state.group != self.id:
-            raise ValueError(
-                f"State '{state.name}' already belongs to group '{state.group}'"
-            )
+            raise ValueError(f"State '{state.name}' already belongs to group '{state.group}'")
         state.group = self.id
         self.states.add(state)
 
@@ -152,9 +148,7 @@ class StateGroup:
         Returns:
             True if atomicity property holds
         """
-        return self.is_fully_active(active_states) or self.is_fully_inactive(
-            active_states
-        )
+        return self.is_fully_active(active_states) or self.is_fully_inactive(active_states)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert group to dictionary representation.
@@ -170,9 +164,7 @@ class StateGroup:
         }
 
     @classmethod
-    def from_dict(
-        cls, data: Dict[str, Any], state_lookup: Dict[str, State]
-    ) -> "StateGroup":
+    def from_dict(cls, data: Dict[str, Any], state_lookup: Dict[str, State]) -> "StateGroup":
         """Reconstruct a StateGroup from its serialized representation.
 
         Args:

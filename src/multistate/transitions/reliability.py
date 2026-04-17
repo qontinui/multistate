@@ -240,9 +240,7 @@ class ReliabilityTracker:
         # Calculate multiplier based on failure rate
         # failure_rate=0.0 → multiplier=1.0 (no penalty)
         # failure_rate=1.0 → multiplier=cost_multiplier_on_failure (full penalty)
-        multiplier = 1.0 + (
-            stats.failure_rate * (self.cost_multiplier_on_failure - 1.0)
-        )
+        multiplier = 1.0 + (stats.failure_rate * (self.cost_multiplier_on_failure - 1.0))
 
         # Clamp to reasonable range
         multiplier = max(self.min_cost_multiplier, multiplier)

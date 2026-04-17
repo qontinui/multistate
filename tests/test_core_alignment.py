@@ -122,9 +122,7 @@ class TestFormalModelAlignment:
     def test_blocking_states(self) -> None:
         """Test: s_b ∈ S_Ξ ⟹ target(t) ∩ B(s_b) = ∅ (blocking)"""
         # Create states
-        modal = State(
-            "modal", "Modal Dialog", blocking=True, blocks={"toolbar", "sidebar"}
-        )
+        modal = State("modal", "Modal Dialog", blocking=True, blocks={"toolbar", "sidebar"})
         _ = State("toolbar", "Toolbar")
         _ = State("sidebar", "Sidebar")
         _ = State("footer", "Footer")
@@ -175,9 +173,7 @@ class TestPracticalScenarios:
         content.add_element(content_area)
 
         # Group them as workspace
-        workspace = StateGroup(
-            "workspace", "Main Workspace", states={toolbar, sidebar, content}
-        )
+        workspace = StateGroup("workspace", "Main Workspace", states={toolbar, sidebar, content})
 
         # Verify workspace structure
         assert len(workspace) == 3
@@ -204,9 +200,7 @@ class TestPracticalScenarios:
         content = State("content", "Content")
 
         # Create blocking modal
-        modal = State(
-            "modal", "Save Dialog", blocking=True, blocks={"toolbar", "content"}
-        )
+        modal = State("modal", "Save Dialog", blocking=True, blocks={"toolbar", "content"})
 
         # Before modal: normal states active
         active_states = {main_menu, toolbar, content}

@@ -122,9 +122,7 @@ class PathVisualizer:
         # Draw transitions
         for trans in transitions:
             # For each from state to each activated state
-            from_states = (
-                trans.from_states if trans.from_states else [State("*", "Any")]
-            )
+            from_states = trans.from_states if trans.from_states else [State("*", "Any")]
 
             for from_state in from_states:
                 for to_state in trans.get_all_states_to_activate():
@@ -138,9 +136,7 @@ class PathVisualizer:
                     attributes.append(f'label="{label}"')
 
                     attr_str = f" [{', '.join(attributes)}]"
-                    lines.append(
-                        f'  "{from_state.name}" -> "{to_state.name}"{attr_str};'
-                    )
+                    lines.append(f'  "{from_state.name}" -> "{to_state.name}"{attr_str};')
 
         # Legend
         lines.append("")
@@ -179,19 +175,13 @@ class PathVisualizer:
             ("States Visited", lambda p: sum(len(s) for s in p.states_sequence)),
             (
                 "Targets Reached",
-                lambda p: len(
-                    [s for s in p.targets if any(s in ss for ss in p.states_sequence)]
-                ),
+                lambda p: len([s for s in p.targets if any(s in ss for ss in p.states_sequence)]),
             ),
         ]
 
         for metric_name, metric_func in metrics:
             values = [str(metric_func(p)) if p else "N/A" for p in paths]
-            row = (
-                f"| {metric_name:<15} | "
-                + " | ".join(f"{v:^20}" for v in values)
-                + " |"
-            )
+            row = f"| {metric_name:<15} | " + " | ".join(f"{v:^20}" for v in values) + " |"
             lines.append(row)
 
         lines.append("-" * len(header))
@@ -265,13 +255,9 @@ class PathVisualizer:
             for from_state in sorted(from_states, key=lambda s: s.id):
                 for to_state in sorted(to_states, key=lambda s: s.id):
                     if trans in highlighted_transitions:
-                        lines.append(
-                            f"    {from_state.name} ==> {to_state.name} : {label}"
-                        )
+                        lines.append(f"    {from_state.name} ==> {to_state.name} : {label}")
                     else:
-                        lines.append(
-                            f"    {from_state.name} --> {to_state.name} : {label}"
-                        )
+                        lines.append(f"    {from_state.name} --> {to_state.name} : {label}")
 
             # Transitions with no from_states: show as initial transitions
             if not from_states:
@@ -359,9 +345,7 @@ class PathVisualizer:
 
         # Highlight targets
         if path.targets:
-            lines.append(
-                "    classDef target fill:#90EE90,stroke:#333,stroke-width:2px"
-            )
+            lines.append("    classDef target fill:#90EE90,stroke:#333,stroke-width:2px")
             for state in sorted(path.targets, key=lambda s: s.id):
                 lines.append(f"    class {state.name} target")
 
@@ -445,9 +429,7 @@ class PathVisualizer:
                 for node in by_depth[depth][:5]:  # Show first 5 at each depth
                     states = ", ".join(s.name for s in node.active_states)
                     targets = ", ".join(s.name for s in node.targets_reached)
-                    lines.append(
-                        f"  [{states}] | Reached: {{{targets}}} | Cost: {node.cost}"
-                    )
+                    lines.append(f"  [{states}] | Reached: {{{targets}}} | Cost: {node.cost}")
 
                 if len(by_depth[depth]) > 5:
                     lines.append(f"  ... and {len(by_depth[depth]) - 5} more")

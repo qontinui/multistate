@@ -9,8 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from multistate.testing.enums import (DeficiencyCategory, DeficiencySeverity,
-                                      ExecutionStatus)
+from multistate.testing.enums import DeficiencyCategory, DeficiencySeverity, ExecutionStatus
 
 
 @dataclass
@@ -224,10 +223,7 @@ class CoverageMetrics:
         Returns:
             True if 100% state and transition coverage
         """
-        return (
-            self.state_coverage_percent == 100.0
-            and self.transition_coverage_percent == 100.0
-        )
+        return self.state_coverage_percent == 100.0 and self.transition_coverage_percent == 100.0
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization.
@@ -525,11 +521,7 @@ class TransitionStatistics:
             "max_duration_ms": self.max_duration_ms,
             "avg_duration_ms": self.avg_duration_ms,
             "std_dev_duration_ms": self.std_dev_duration_ms,
-            "first_executed": (
-                self.first_executed.isoformat() if self.first_executed else None
-            ),
-            "last_executed": (
-                self.last_executed.isoformat() if self.last_executed else None
-            ),
+            "first_executed": (self.first_executed.isoformat() if self.first_executed else None),
+            "last_executed": (self.last_executed.isoformat() if self.last_executed else None),
             "success_rate": self.success_rate,
         }

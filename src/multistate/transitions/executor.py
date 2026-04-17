@@ -80,9 +80,7 @@ class TransitionExecutor:
         Returns:
             TransitionResult with complete phase tracking
         """
-        from multistate.transitions.transition import (PhaseResult,
-                                                       TransitionPhase,
-                                                       TransitionResult)
+        from multistate.transitions.transition import PhaseResult, TransitionPhase, TransitionResult
 
         result = TransitionResult(success=False)
         states_to_activate = transition.get_all_states_to_activate()
@@ -208,9 +206,7 @@ class TransitionExecutor:
                 incoming_success = True
 
                 if callbacks:
-                    incoming_success = callbacks.execute_incoming(
-                        transition.id, state.id
-                    )
+                    incoming_success = callbacks.execute_incoming(transition.id, state.id)
                 else:
                     # Check for incoming action in transition
                     incoming_action = transition.get_incoming_action_for_state(state)
@@ -235,14 +231,9 @@ class TransitionExecutor:
                 PhaseResult(
                     phase=TransitionPhase.INCOMING,
                     success=incoming_phase_success,
-                    message=(
-                        f"{successful_count}/{total_count} "
-                        "incoming transitions succeeded"
-                    ),
+                    message=(f"{successful_count}/{total_count} " "incoming transitions succeeded"),
                     data={
-                        "successful": {
-                            s.id for s in successfully_activated - failed_incoming
-                        },
+                        "successful": {s.id for s in successfully_activated - failed_incoming},
                         "failed": {s.id for s in failed_incoming},
                     },
                 )
@@ -340,9 +331,7 @@ class TransitionExecutor:
             and not reliability_recorded
         ):
             execution_time = time.time() - start_time
-            self.reliability_tracker.record_failure(
-                transition.id, execution_time=execution_time
-            )
+            self.reliability_tracker.record_failure(transition.id, execution_time=execution_time)
 
         return result
 
@@ -410,9 +399,7 @@ class TransitionExecutor:
 
         return True
 
-    def get_result_states(
-        self, transition: Transition, current_states: Set[State]
-    ) -> Set[State]:
+    def get_result_states(self, transition: Transition, current_states: Set[State]) -> Set[State]:
         """Get the resulting active states after executing transition.
 
         Args:

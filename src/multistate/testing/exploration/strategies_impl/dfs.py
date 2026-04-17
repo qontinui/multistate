@@ -4,8 +4,7 @@ import logging
 from collections import deque
 
 from multistate.testing.config import ExplorationConfig
-from multistate.testing.exploration.strategies_impl.base import \
-    ExplorationStrategy
+from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)
@@ -51,9 +50,7 @@ class DepthFirstExplorer(ExplorationStrategy):
 
         # Prioritize unexplored transitions
         executed_transitions = self.tracker._executed_transitions
-        unexplored = [
-            (f, t) for f, t in transitions if (f, t) not in executed_transitions
-        ]
+        unexplored = [(f, t) for f, t in transitions if (f, t) not in executed_transitions]
 
         if unexplored:
             _, next_state = unexplored[0]

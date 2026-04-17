@@ -21,9 +21,7 @@ def navigate_to_via_pathfinding(
     return [("navigate_path", target_state)]
 
 
-def navigate_to_via_menu(
-    state: WorldState, target_state: str
-) -> list[tuple[str, ...]] | None:
+def navigate_to_via_menu(state: WorldState, target_state: str) -> list[tuple[str, ...]] | None:
     """Navigate via menu. Only applicable if main_menu is active."""
     if "main_menu" not in state.active_states:
         return None
@@ -33,9 +31,7 @@ def navigate_to_via_menu(
     ]
 
 
-def fill_form_sequential(
-    state: WorldState, fields: dict[str, str]
-) -> list[tuple[str, ...]] | None:
+def fill_form_sequential(state: WorldState, fields: dict[str, str]) -> list[tuple[str, ...]] | None:
     """Fill form fields sequentially. fields maps element_id to value."""
     actions: list[tuple[str, ...]] = []
     for element_id, value in fields.items():
@@ -49,18 +45,14 @@ def handle_unexpected_dialog(
 ) -> list[tuple[str, ...]] | None:
     """Dismiss any active dialog/modal states."""
     dialog_states = [
-        s
-        for s in state.active_states
-        if s.startswith("dialog_") or s.startswith("modal_")
+        s for s in state.active_states if s.startswith("dialog_") or s.startswith("modal_")
     ]
     if not dialog_states:
         return None
     return [("dismiss_dialog", s) for s in dialog_states]
 
 
-def login_generic(
-    state: WorldState, username: str, password: str
-) -> list[tuple[str, ...]] | None:
+def login_generic(state: WorldState, username: str, password: str) -> list[tuple[str, ...]] | None:
     """Generic login: navigate to login screen, fill credentials, submit."""
     tasks: list[tuple[str, ...]] = []
     if "login_screen" not in state.active_states:
@@ -75,18 +67,14 @@ def login_generic(
     return tasks
 
 
-def scroll_to_element(
-    state: WorldState, element_id: str
-) -> list[tuple[str, ...]] | None:
+def scroll_to_element(state: WorldState, element_id: str) -> list[tuple[str, ...]] | None:
     """Scroll to make an element visible."""
     if state.element_visible.get(element_id, False):
         return []
     return [("wait_for_element", element_id)]
 
 
-def submit_form(
-    state: WorldState, submit_button_id: str
-) -> list[tuple[str, ...]] | None:
+def submit_form(state: WorldState, submit_button_id: str) -> list[tuple[str, ...]] | None:
     """Click submit button and wait for result."""
     return [("click_element", submit_button_id)]
 

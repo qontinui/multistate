@@ -8,8 +8,7 @@ import logging
 import random
 
 from multistate.testing.config import ExplorationConfig
-from multistate.testing.exploration.strategies_impl.base import \
-    ExplorationStrategy
+from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
 from multistate.testing.tracker import PathTracker
 
 # Optional numpy support

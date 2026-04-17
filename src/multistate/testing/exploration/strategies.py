@@ -8,9 +8,15 @@ For new code, prefer importing directly from strategies_impl subpackage.
 
 # Re-export all strategies for backward compatibility
 from multistate.testing.exploration.strategies_impl import (
-    AdaptiveExplorer, BreadthFirstExplorer, DepthFirstExplorer,
-    ExplorationStrategy, GreedyCoverageExplorer, HybridExplorer,
-    NoveltySeekingExplorer, RandomWalkExplorer)
+    AdaptiveExplorer,
+    BreadthFirstExplorer,
+    DepthFirstExplorer,
+    ExplorationStrategy,
+    GreedyCoverageExplorer,
+    HybridExplorer,
+    NoveltySeekingExplorer,
+    RandomWalkExplorer,
+)
 
 __all__ = [
     "ExplorationStrategy",

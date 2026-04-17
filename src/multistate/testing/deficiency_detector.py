@@ -9,10 +9,8 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from multistate.testing.enums import (DeficiencyCategory, DeficiencySeverity,
-                                      ExecutionStatus)
-from multistate.testing.models import (Deficiency, TransitionExecution,
-                                       TransitionStatistics)
+from multistate.testing.enums import DeficiencyCategory, DeficiencySeverity, ExecutionStatus
+from multistate.testing.models import Deficiency, TransitionExecution, TransitionStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -76,9 +74,7 @@ class DeficiencyDetector:
             if execution.error_message and "timeout" in execution.error_message.lower():
                 category = DeficiencyCategory.TIMEOUT
                 severity = DeficiencySeverity.HIGH
-            elif (
-                execution.error_message and "element" in execution.error_message.lower()
-            ):
+            elif execution.error_message and "element" in execution.error_message.lower():
                 category = DeficiencyCategory.UI_ELEMENT_MISSING
                 severity = DeficiencySeverity.HIGH
 
@@ -101,8 +97,7 @@ class DeficiencyDetector:
                 (
                     DeficiencyCategory.UNEXPECTED_STATE,
                     DeficiencySeverity.MEDIUM,
-                    f"Unexpected state: {execution.from_state} -> "
-                    f"{execution.actual_end_state}",
+                    f"Unexpected state: {execution.from_state} -> " f"{execution.actual_end_state}",
                     f"Expected to reach {execution.to_state}, "
                     f"but ended in {execution.actual_end_state}",
                 )
@@ -147,16 +142,12 @@ class DeficiencyDetector:
                 )
 
         # Check for consistently slow transitions
-        if (
-            stats.total_attempts >= 3
-            and stats.avg_duration_ms > self.performance_threshold_ms
-        ):
+        if stats.total_attempts >= 3 and stats.avg_duration_ms > self.performance_threshold_ms:
             deficiencies.append(
                 (
                     DeficiencyCategory.SLOW_TRANSITION,
                     DeficiencySeverity.MEDIUM,
-                    f"Consistently slow transition: "
-                    f"{stats.from_state} -> {stats.to_state}",
+                    f"Consistently slow transition: " f"{stats.from_state} -> {stats.to_state}",
                     f"Average duration: {stats.avg_duration_ms:.0f}ms "
                     f"(threshold: {self.performance_threshold_ms:.0f}ms)",
                 )
@@ -187,9 +178,7 @@ class DeficiencyDetector:
             try:
                 reachable = state_graph.get_reachable_states()
                 all_states = (
-                    set(state_graph.states.keys())
-                    if hasattr(state_graph, "states")
-                    else set()
+                    set(state_graph.states.keys()) if hasattr(state_graph, "states") else set()
                 )
 
                 for state_name in all_states:
@@ -199,8 +188,7 @@ class DeficiencyDetector:
                                 DeficiencyCategory.UNREACHABLE_STATE,
                                 DeficiencySeverity.HIGH,
                                 f"Unreachable state: {state_name}",
-                                f"State {state_name} cannot be reached "
-                                "from initial state",
+                                f"State {state_name} cannot be reached " "from initial state",
                                 [state_name],
                             )
                         )

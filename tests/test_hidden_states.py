@@ -6,9 +6,7 @@ import sys
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.dynamics.hidden_states import (DynamicTransition,
-                                               HiddenStateManager,
-                                               OcclusionType)
+from multistate.dynamics.hidden_states import DynamicTransition, HiddenStateManager, OcclusionType
 
 
 def test_modal_occlusion() -> bool:
@@ -123,9 +121,7 @@ def test_self_transition() -> bool:
     form = State("form", "Input Form")
 
     # Generate self-transition for refresh
-    self_trans = manager.generate_self_transition(
-        state=form, action="refresh", current_time=2.0
-    )
+    self_trans = manager.generate_self_transition(state=form, action="refresh", current_time=2.0)
 
     assert self_trans.is_self_transition
     assert form in self_trans.from_states

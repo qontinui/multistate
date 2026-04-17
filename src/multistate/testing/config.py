@@ -306,8 +306,7 @@ class ExplorationConfig:
         """
         if not HAS_YAML:
             raise ImportError(
-                "YAML support requires pyyaml. "
-                "Install with: pip install multistate[yaml]"
+                "YAML support requires pyyaml. " "Install with: pip install multistate[yaml]"
             )
 
         with open(yaml_path) as f:
@@ -343,8 +342,7 @@ class ExplorationConfig:
         """
         if not HAS_YAML:
             raise ImportError(
-                "YAML support requires pyyaml. "
-                "Install with: pip install multistate[yaml]"
+                "YAML support requires pyyaml. " "Install with: pip install multistate[yaml]"
             )
 
         with open(yaml_path, "w") as f:

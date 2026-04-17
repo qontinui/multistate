@@ -11,9 +11,7 @@ from typing import Any, Dict, Set
 from multistate.testing.tracker import PathTracker
 
 
-def explore_graph(
-    tracker: PathTracker, start_state: str, max_depth: int = 10
-) -> Set[str]:
+def explore_graph(tracker: PathTracker, start_state: str, max_depth: int = 10) -> Set[str]:
     """Explore the graph from a starting state using BFS.
 
     This is a simple utility for discovering states within a depth limit.
@@ -144,9 +142,7 @@ def find_terminal_states(tracker: PathTracker) -> Set[str]:
     return terminal
 
 
-def compute_shortest_distances(
-    tracker: PathTracker, start_state: str
-) -> Dict[str, int]:
+def compute_shortest_distances(tracker: PathTracker, start_state: str) -> Dict[str, int]:
     """Compute shortest distance (in transitions) from start to all reachable states.
 
     Uses BFS to find shortest paths.

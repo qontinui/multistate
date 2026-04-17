@@ -5,8 +5,12 @@ import sys
 
 sys.path.insert(0, "src")
 
-from multistate.manager import (InvalidStateError, InvalidTransitionError,
-                                StateManager, StateManagerConfig)
+from multistate.manager import (
+    InvalidStateError,
+    InvalidTransitionError,
+    StateManager,
+    StateManagerConfig,
+)
 from multistate.pathfinding.multi_target import SearchStrategy
 from multistate.transitions.executor import SuccessPolicy
 
@@ -155,17 +159,11 @@ def test_pathfinding_integration() -> bool:
         path_cost=1,
     )
 
-    manager.add_transition(
-        "t2", from_states=["main_menu"], activate_states=["editor"], path_cost=2
-    )
+    manager.add_transition("t2", from_states=["main_menu"], activate_states=["editor"], path_cost=2)
 
-    manager.add_transition(
-        "t3", from_states=["editor"], activate_states=["console"], path_cost=1
-    )
+    manager.add_transition("t3", from_states=["editor"], activate_states=["console"], path_cost=1)
 
-    manager.add_transition(
-        "t4", from_states=["editor"], activate_states=["debugger"], path_cost=1
-    )
+    manager.add_transition("t4", from_states=["editor"], activate_states=["debugger"], path_cost=1)
 
     # Start at login
     manager.activate_states({"login"})
@@ -395,9 +393,7 @@ def test_complex_scenario() -> bool:
     print("Test 10: Complex IDE Scenario")
     print("=" * 60)
 
-    config = StateManagerConfig(
-        success_policy=SuccessPolicy.LENIENT, log_transitions=False
-    )
+    config = StateManagerConfig(success_policy=SuccessPolicy.LENIENT, log_transitions=False)
     manager = StateManager(config)
 
     # IDE States

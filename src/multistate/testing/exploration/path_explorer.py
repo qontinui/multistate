@@ -12,14 +12,16 @@ from multistate.testing.config import ExplorationConfig
 from multistate.testing.exploration.backtracking import BacktrackingNavigator
 from multistate.testing.exploration.diversity import PathDiversityEngine
 from multistate.testing.exploration.failure_handler import FailureAwareExplorer
-from multistate.testing.exploration.strategies import (AdaptiveExplorer,
-                                                       BreadthFirstExplorer,
-                                                       DepthFirstExplorer,
-                                                       ExplorationStrategy,
-                                                       GreedyCoverageExplorer,
-                                                       HybridExplorer,
-                                                       NoveltySeekingExplorer,
-                                                       RandomWalkExplorer)
+from multistate.testing.exploration.strategies import (
+    AdaptiveExplorer,
+    BreadthFirstExplorer,
+    DepthFirstExplorer,
+    ExplorationStrategy,
+    GreedyCoverageExplorer,
+    HybridExplorer,
+    NoveltySeekingExplorer,
+    RandomWalkExplorer,
+)
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)
@@ -217,16 +219,12 @@ class PathExplorer:
         path = None
 
         if self.diversity_engine:
-            paths = self.diversity_engine.generate_diverse_paths(
-                self.current_state, target_state
-            )
+            paths = self.diversity_engine.generate_diverse_paths(self.current_state, target_state)
             if paths:
                 path = paths[0]  # Use first (shortest) path
 
         if not path and self.backtracker:
-            path = self.backtracker.find_backtrack_path(
-                self.current_state, target_state
-            )
+            path = self.backtracker.find_backtrack_path(self.current_state, target_state)
 
         if not path:
             logger.warning(f"No path found to {target_state}")
@@ -237,9 +235,7 @@ class PathExplorer:
             from_state = path[i]
             to_state = path[i + 1]
 
-            success, _, _ = self._execute_transition(
-                from_state, to_state, executor_callback
-            )
+            success, _, _ = self._execute_transition(from_state, to_state, executor_callback)
 
             if not success:
                 logger.warning(f"Path execution failed at {from_state} -> {to_state}")
@@ -276,8 +272,7 @@ class PathExplorer:
 
         if not strategy_class:
             raise ValueError(
-                f"Unknown strategy: {strategy_name}. "
-                f"Available: {list(strategies.keys())}"
+                f"Unknown strategy: {strategy_name}. " f"Available: {list(strategies.keys())}"
             )
 
         return strategy_class(self.config, self.tracker)  # type: ignore[abstract]
@@ -301,9 +296,7 @@ class PathExplorer:
         # If still None and failure handler available, try finding reliable alternative
         if next_state is None and self.failure_handler:
             logger.debug("Backtracking failed, trying reliable alternative")
-            next_state = self.failure_handler.get_reliable_alternative(
-                self.current_state
-            )
+            next_state = self.failure_handler.get_reliable_alternative(self.current_state)
 
         return next_state
 
@@ -329,9 +322,7 @@ class PathExplorer:
         while attempt <= max_attempts:
             # Check if should retry
             if attempt > 1 and self.failure_handler:
-                if not self.failure_handler.should_retry_transition(
-                    from_state, to_state, attempt
-                ):
+                if not self.failure_handler.should_retry_transition(from_state, to_state, attempt):
                     logger.info(f"Skipping retry for {from_state} -> {to_state}")
                     break
 
@@ -349,9 +340,7 @@ class PathExplorer:
                     success=success,
                     duration_ms=duration_ms,
                     metadata=metadata,
-                    error_message=(
-                        metadata.get("error_message") if not success else None
-                    ),
+                    error_message=(metadata.get("error_message") if not success else None),
                 )
 
                 # Update failure handler
@@ -430,9 +419,7 @@ class PathExplorer:
         Returns:
             True if recovery successful
         """
-        logger.warning(
-            f"Stuck at {self.current_state} for {self.stuck_count} iterations"
-        )
+        logger.warning(f"Stuck at {self.current_state} for {self.stuck_count} iterations")
 
         # Try backtracking first
         if self.backtracker:

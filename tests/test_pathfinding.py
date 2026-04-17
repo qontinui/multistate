@@ -6,8 +6,7 @@ import sys
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import (MultiTargetPathFinder,
-                                                 SearchStrategy)
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
 from multistate.transitions.transition import Transition
 
 
@@ -178,9 +177,7 @@ def test_multi_state_activation() -> bool:
         if len(path.states_sequence) >= 3:
             final_states = path.states_sequence[-1]
             activated_count = len(targets.intersection(final_states))
-            print(
-                f"✓ Final state has {activated_count}/3 targets active simultaneously"
-            )
+            print(f"✓ Final state has {activated_count}/3 targets active simultaneously")
     else:
         print("✗ No path found")
 

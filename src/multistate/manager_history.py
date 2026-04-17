@@ -8,8 +8,12 @@ import logging
 from typing import Any, Callable, Optional, Set
 
 from multistate.core.state import State
-from multistate.state_references import (StateHistory, StateReference,
-                                         StateReferenceResolver, StateSnapshot)
+from multistate.state_references import (
+    StateHistory,
+    StateReference,
+    StateReferenceResolver,
+    StateSnapshot,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +46,7 @@ class StateHistoryManager:
         self.state_resolver: Optional[StateReferenceResolver] = None
 
         if state_lookup_fn:
-            self.state_resolver = StateReferenceResolver(
-                self.state_history, state_lookup_fn
-            )
+            self.state_resolver = StateReferenceResolver(self.state_history, state_lookup_fn)
 
         logger.debug(f"StateHistoryManager initialized (max_size={max_history_size})")
 

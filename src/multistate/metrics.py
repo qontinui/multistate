@@ -191,9 +191,7 @@ class MetricsManager:
             TransitionMetrics instance for the transition
         """
         if transition_id not in self.transition_metrics:
-            self.transition_metrics[transition_id] = TransitionMetrics(
-                transition_id=transition_id
-            )
+            self.transition_metrics[transition_id] = TransitionMetrics(transition_id=transition_id)
         return self.transition_metrics[transition_id]
 
     def record_state_activation(self, state_id: str) -> None:
@@ -303,10 +301,7 @@ class MetricsManager:
         Returns:
             Dictionary mapping transition IDs to success rates (0.0-1.0)
         """
-        return {
-            tid: metrics.get_success_rate()
-            for tid, metrics in self.transition_metrics.items()
-        }
+        return {tid: metrics.get_success_rate() for tid, metrics in self.transition_metrics.items()}
 
     def get_currently_active_states(self) -> list[str]:
         """Get list of currently active states.
@@ -314,11 +309,7 @@ class MetricsManager:
         Returns:
             List of state IDs that are currently active
         """
-        return [
-            sid
-            for sid, metrics in self.state_metrics.items()
-            if metrics.is_currently_active
-        ]
+        return [sid for sid, metrics in self.state_metrics.items() if metrics.is_currently_active]
 
     def reset_all(self) -> None:
         """Reset all metrics to initial state."""
@@ -360,12 +351,8 @@ class MetricsManager:
             Dictionary with overview statistics
         """
         total_state_visits = sum(m.visit_count for m in self.state_metrics.values())
-        total_transitions = sum(
-            m.execution_count for m in self.transition_metrics.values()
-        )
-        total_successful = sum(
-            m.success_count for m in self.transition_metrics.values()
-        )
+        total_transitions = sum(m.execution_count for m in self.transition_metrics.values())
+        total_successful = sum(m.success_count for m in self.transition_metrics.values())
 
         return {
             "enabled": self.enabled,

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from multistate.planning.methods.navigation import (
-    navigate_via_back_button, navigate_via_breadcrumb,
-    navigate_via_keyboard_shortcut, navigate_via_search)
+    navigate_via_back_button,
+    navigate_via_breadcrumb,
+    navigate_via_keyboard_shortcut,
+    navigate_via_search,
+)
 from multistate.planning.planner import WorldState
 
 

@@ -188,12 +188,8 @@ class HiddenStateManager:
     def _calculate_overlap(self, box1: Dict, box2: Dict) -> float:
         """Calculate overlap percentage between two bounding boxes."""
         # Simple rectangle overlap calculation
-        x_overlap = max(
-            0, min(box1["right"], box2["right"]) - max(box1["left"], box2["left"])
-        )
-        y_overlap = max(
-            0, min(box1["bottom"], box2["bottom"]) - max(box1["top"], box2["top"])
-        )
+        x_overlap = max(0, min(box1["right"], box2["right"]) - max(box1["left"], box2["left"]))
+        y_overlap = max(0, min(box1["bottom"], box2["bottom"]) - max(box1["top"], box2["top"]))
 
         overlap_area = x_overlap * y_overlap
         box2_area = (box2["right"] - box2["left"]) * (box2["bottom"] - box2["top"])
@@ -252,9 +248,7 @@ class HiddenStateManager:
 
         This implements: f_dyn(Ξ) → T_reveal
         """
-        transition_id = (
-            f"reveal_{covering_state.id}_to_{'_'.join(s.id for s in hidden_states)}"
-        )
+        transition_id = f"reveal_{covering_state.id}_to_{'_'.join(s.id for s in hidden_states)}"
 
         return DynamicTransition(
             id=transition_id,
@@ -317,9 +311,7 @@ class HiddenStateManager:
                 hidden_ids = self.covering_to_hidden[state.id]
                 hidden_states = {s for s in active_states if s.id in hidden_ids}
                 if hidden_states:
-                    reveal = self.generate_reveal_transition(
-                        state, hidden_states, current_time
-                    )
+                    reveal = self.generate_reveal_transition(state, hidden_states, current_time)
                     valid_transitions.append(reveal)
 
         # Add non-expired dynamic transitions

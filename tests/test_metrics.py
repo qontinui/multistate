@@ -388,9 +388,7 @@ class TestStateManagerIntegration:
 
         manager.add_state("state1")
         manager.add_state("state2")
-        manager.add_transition(
-            "trans1", from_states=["state1"], activate_states=["state2"]
-        )
+        manager.add_transition("trans1", from_states=["state1"], activate_states=["state2"])
 
         manager.activate_states({"state1"})
         success = manager.execute_transition("trans1")
@@ -408,9 +406,7 @@ class TestStateManagerIntegration:
 
         manager.add_state("state1")
         manager.add_state("state2")
-        manager.add_transition(
-            "trans1", from_states=["state1"], activate_states=["state2"]
-        )
+        manager.add_transition("trans1", from_states=["state1"], activate_states=["state2"])
 
         manager.activate_states({"state1"})
         manager.execute_transition("trans1")
@@ -446,9 +442,7 @@ class TestStateManagerIntegration:
 
         manager.add_state("state1")
         manager.add_state("state2")
-        manager.add_transition(
-            "trans1", from_states=["state1"], activate_states=["state2"]
-        )
+        manager.add_transition("trans1", from_states=["state1"], activate_states=["state2"])
 
         # Successful execution
         manager.activate_states({"state1"})
@@ -468,9 +462,7 @@ class TestStateManagerIntegration:
 
         manager.add_state("state1")
         manager.add_state("state2")
-        manager.add_transition(
-            "trans1", from_states=["state1"], activate_states=["state2"]
-        )
+        manager.add_transition("trans1", from_states=["state1"], activate_states=["state2"])
 
         manager.activate_states({"state1"})
         manager.execute_transition("trans1")

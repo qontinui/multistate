@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-from multistate.planning.methods.dialogs import (cancel_dialog, confirm_dialog,
-                                                 dismiss_via_close_button,
-                                                 dismiss_via_escape)
+from multistate.planning.methods.dialogs import (
+    cancel_dialog,
+    confirm_dialog,
+    dismiss_via_close_button,
+    dismiss_via_escape,
+)
 from multistate.planning.planner import WorldState
 
 

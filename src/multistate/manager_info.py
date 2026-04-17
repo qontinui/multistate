@@ -56,9 +56,7 @@ class StateManagerInfo:
         for trans in transitions.values():
             from_state = getattr(trans, "from_state", None)
             if from_state:
-                transitions_per_state[from_state] = (
-                    transitions_per_state.get(from_state, 0) + 1
-                )
+                transitions_per_state[from_state] = transitions_per_state.get(from_state, 0) + 1
 
         avg_transitions = (
             sum(transitions_per_state.values()) / len(transitions_per_state)
@@ -73,9 +71,7 @@ class StateManagerInfo:
             "total_states": total_states,
             "total_transitions": total_transitions,
             "avg_transitions_per_state": avg_transitions,
-            "max_transitions_from_state": max(
-                transitions_per_state.values(), default=0
-            ),
+            "max_transitions_from_state": max(transitions_per_state.values(), default=0),
             "cyclomatic_complexity": cyclomatic_complexity,
         }
 

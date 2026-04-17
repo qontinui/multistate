@@ -45,9 +45,7 @@ class WorldStateAdapter:
             blackboard={},
         )
 
-    def apply_transition(
-        self, state: WorldState, transition_id: str
-    ) -> WorldState | None:
+    def apply_transition(self, state: WorldState, transition_id: str) -> WorldState | None:
         """Simulate a transition on a WorldState without executing it.
 
         Checks the transition exists and is currently available, then

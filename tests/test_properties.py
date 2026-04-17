@@ -113,9 +113,7 @@ class PropertyTests:
                 final_states.update(result.activated_states)
                 final_states.difference_update(result.deactivated_states)
 
-                atomicity_holds = all(
-                    g.validate_atomicity(final_states) for g in groups
-                )
+                atomicity_holds = all(g.validate_atomicity(final_states) for g in groups)
 
                 if atomicity_holds:
                     passed += 1
@@ -124,9 +122,7 @@ class PropertyTests:
                     print(f"  ✗ Iteration {i}: Atomicity violated!")
             else:
                 # If transition failed, original atomicity should be preserved
-                atomicity_preserved = all(
-                    g.validate_atomicity(active_states) for g in groups
-                )
+                atomicity_preserved = all(g.validate_atomicity(active_states) for g in groups)
                 if atomicity_preserved:
                     passed += 1
                 else:
@@ -242,11 +238,7 @@ class PropertyTests:
 
             # Should fail at validation
             failed_phase = result.get_failed_phase()
-            if (
-                not result.success
-                and failed_phase is not None
-                and failed_phase.value == "validate"
-            ):
+            if not result.success and failed_phase is not None and failed_phase.value == "validate":
                 passed += 1
             else:
                 failed += 1

@@ -4,8 +4,7 @@ import logging
 from collections import deque
 
 from multistate.testing.config import ExplorationConfig
-from multistate.testing.exploration.strategies_impl.base import \
-    ExplorationStrategy
+from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)
@@ -54,9 +53,7 @@ class BreadthFirstExplorer(ExplorationStrategy):
         # Get next state from queue
         if self.queue:
             next_state = self.queue.popleft()
-            logger.debug(
-                f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})"
-            )
+            logger.debug(f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})")
             return next_state
 
         logger.debug("BFS queue exhausted")

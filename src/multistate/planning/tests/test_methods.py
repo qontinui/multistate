@@ -3,11 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from multistate.planning.methods.generic import (fill_form_sequential,
-                                                 handle_unexpected_dialog,
-                                                 login_generic,
-                                                 navigate_to_via_menu,
-                                                 navigate_to_via_pathfinding)
+from multistate.planning.methods.generic import (
+    fill_form_sequential,
+    handle_unexpected_dialog,
+    login_generic,
+    navigate_to_via_menu,
+    navigate_to_via_pathfinding,
+)
 
 
 @dataclass

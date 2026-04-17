@@ -174,9 +174,7 @@ class PlanExecutor:
                         )
 
                     current_state = actual_state
-                    replan_result = self.planner.find_plan(
-                        current_state, original_tasks
-                    )
+                    replan_result = self.planner.find_plan(current_state, original_tasks)
 
                     if not replan_result.success:
                         return ExecutionResult(

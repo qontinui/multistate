@@ -15,9 +15,7 @@ from multistate.planning.planner import WorldState
 Method = Callable[..., list[tuple[str, ...]] | None]
 
 
-def navigate_via_breadcrumb(
-    state: WorldState, target_state: str
-) -> list[tuple[str, ...]] | None:
+def navigate_via_breadcrumb(state: WorldState, target_state: str) -> list[tuple[str, ...]] | None:
     """Navigate via breadcrumb trail (if breadcrumb bar is visible)."""
     if not state.element_visible.get("breadcrumb_bar", False):
         return None
@@ -27,9 +25,7 @@ def navigate_via_breadcrumb(
     ]
 
 
-def navigate_via_back_button(
-    state: WorldState, target_state: str
-) -> list[tuple[str, ...]] | None:
+def navigate_via_back_button(state: WorldState, target_state: str) -> list[tuple[str, ...]] | None:
     """Navigate back (if back button is visible and target is in history)."""
     if not state.element_visible.get("btn_back", False):
         return None
@@ -52,9 +48,7 @@ def navigate_via_keyboard_shortcut(
     ]
 
 
-def navigate_via_search(
-    state: WorldState, target_state: str
-) -> list[tuple[str, ...]] | None:
+def navigate_via_search(state: WorldState, target_state: str) -> list[tuple[str, ...]] | None:
     """Navigate via search/command palette."""
     if not state.element_visible.get("search_bar", False):
         return None

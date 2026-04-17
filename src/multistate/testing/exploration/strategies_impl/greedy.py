@@ -2,8 +2,7 @@
 
 import logging
 
-from multistate.testing.exploration.strategies_impl.base import \
-    ExplorationStrategy
+from multistate.testing.exploration.strategies_impl.base import ExplorationStrategy
 
 logger = logging.getLogger(__name__)
 
