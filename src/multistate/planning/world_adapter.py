@@ -37,10 +37,24 @@ class WorldStateAdapter:
         active = self.manager.get_active_states()
         available = set(self.manager.get_available_transitions())
 
+        # Derive element visibility from the state machine: elements
+        # belonging to active states are considered visible unless
+        # overridden by explicit UI Bridge data.
+        sm_visible: dict[str, bool] = {}
+        for state_id in active:
+            state_obj = self.manager.states.get(state_id)
+            if state_obj is not None:
+                for elem in state_obj.elements:
+                    sm_visible[elem.id] = True
+
+        # UI Bridge overrides take precedence over state-machine inference
+        if ui_elements:
+            sm_visible.update(ui_elements)
+
         return WorldState(
             active_states=active,
             available_transitions=available,
-            element_visible=dict(ui_elements) if ui_elements else {},
+            element_visible=sm_visible,
             element_values=dict(ui_values) if ui_values else {},
             blackboard={},
         )
