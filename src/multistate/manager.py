@@ -17,6 +17,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from multistate.core.element import Element
 from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
+from multistate.core.trigger_introspection import BlockedTrigger, PermittedTrigger
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
 from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path, SearchStrategy
 from multistate.state_references import StateHistory, StateReference, StateReferenceResolver
@@ -744,17 +745,159 @@ class StateManager:
 
     # ==================== Analysis ====================
 
+    # ----- Trigger introspection -----
+
+    @staticmethod
+    def _guard_names(transition: Transition) -> List[str]:
+        """Extract declared guard names from a transition.
+
+        Guards are an optional, forward-compatible concept surfaced through
+        ``transition.metadata['guards']``.  Each entry may be a string name
+        or a callable (in which case ``__name__`` is used, falling back to
+        ``repr``).  Entries that aren't strings or callables are skipped.
+        """
+        raw = transition.metadata.get("guards") if transition.metadata else None
+        if not raw:
+            return []
+
+        names: List[str] = []
+        for item in raw:
+            if isinstance(item, str):
+                names.append(item)
+            elif callable(item):
+                names.append(getattr(item, "__name__", None) or repr(item))
+            # Silently skip non-name, non-callable entries.
+        return names
+
+    def _evaluate_guards(self, transition: Transition) -> Tuple[bool, Optional[str]]:
+        """Run any callable guards attached to a transition.
+
+        Returns a tuple ``(all_passed, failure_reason)`` where
+        ``failure_reason`` is either ``None`` or a structured string suitable
+        for :attr:`BlockedTrigger.reason`.
+
+        Guards are looked up under ``transition.metadata['guards']``.  Only
+        callable entries are evaluated; string-only entries are treated as
+        declarative names (documented but not enforced here).
+        """
+        raw = transition.metadata.get("guards") if transition.metadata else None
+        if not raw:
+            return True, None
+
+        for item in raw:
+            if not callable(item):
+                continue
+            guard_name = getattr(item, "__name__", None) or repr(item)
+            try:
+                passed = bool(item(self))
+            except Exception as exc:  # noqa: BLE001 - we deliberately capture all
+                return False, f"guard_error:{guard_name}:{type(exc).__name__}"
+            if not passed:
+                return False, f"guard_failed:{guard_name}"
+
+        return True, None
+
+    def _evaluate_all_triggers(
+        self,
+    ) -> Tuple[List[PermittedTrigger], List[BlockedTrigger]]:
+        """Evaluate every registered transition against the active state set.
+
+        Returns:
+            Tuple ``(permitted, blocked)``.  Each transition appears in
+            exactly one of the two lists.  Blocked entries carry a
+            structured ``reason`` explaining why.
+        """
+        permitted: List[PermittedTrigger] = []
+        blocked: List[BlockedTrigger] = []
+
+        for transition in self.transitions.values():
+            from_ids = sorted(s.id for s in transition.from_states)
+            to_ids = sorted(s.id for s in transition.get_all_states_to_activate())
+            guard_names = self._guard_names(transition)
+            path_cost: Optional[float] = transition.path_cost
+
+            # 1. Required (from_) state check — report the most specific reason.
+            missing_from: Optional[str] = None
+            if transition.from_states and not transition.from_states.intersection(
+                self.active_states
+            ):
+                # Deterministic choice: the lexicographically first from_state ID.
+                missing_from = from_ids[0] if from_ids else None
+
+            if missing_from is not None:
+                blocked.append(
+                    BlockedTrigger(
+                        transition_id=transition.id,
+                        from_states=from_ids,
+                        to_states=to_ids,
+                        guards=guard_names,
+                        path_cost=path_cost,
+                        reason=f"required_state_inactive:{missing_from}",
+                    )
+                )
+                continue
+
+            # 2. Callable guards.
+            guards_ok, guard_reason = self._evaluate_guards(transition)
+            if not guards_ok:
+                assert guard_reason is not None
+                blocked.append(
+                    BlockedTrigger(
+                        transition_id=transition.id,
+                        from_states=from_ids,
+                        to_states=to_ids,
+                        guards=guard_names,
+                        path_cost=path_cost,
+                        reason=guard_reason,
+                    )
+                )
+                continue
+
+            # 3. Delegate remaining checks to the executor (blocking states, etc.).
+            if not self.executor.can_execute(transition, self.active_states):
+                blocked.append(
+                    BlockedTrigger(
+                        transition_id=transition.id,
+                        from_states=from_ids,
+                        to_states=to_ids,
+                        guards=guard_names,
+                        path_cost=path_cost,
+                        reason="executor_refused",
+                    )
+                )
+                continue
+
+            permitted.append(
+                PermittedTrigger(
+                    transition_id=transition.id,
+                    from_states=from_ids,
+                    to_states=to_ids,
+                    guards=guard_names,
+                    path_cost=path_cost,
+                )
+            )
+
+        return permitted, blocked
+
+    def permitted_triggers(self) -> List[PermittedTrigger]:
+        """Return transitions currently permitted from the active state set."""
+        permitted, _ = self._evaluate_all_triggers()
+        return permitted
+
+    def blocked_triggers(self) -> List[BlockedTrigger]:
+        """Return transitions currently blocked, each annotated with a reason."""
+        _, blocked = self._evaluate_all_triggers()
+        return blocked
+
     def get_available_transitions(self) -> List[str]:
         """Get transitions that can execute from current state.
 
+        Backward-compatible thin wrapper around :meth:`permitted_triggers`.
+
         Returns:
-            List of transition IDs
+            List of transition IDs.
         """
-        available = []
-        for tid in self.transitions:
-            if self.can_execute(tid):
-                available.append(tid)
-        return available
+        return [t.transition_id for t in self.permitted_triggers()]
 
     def get_reachable_states(self, max_depth: Optional[int] = None) -> Set[str]:
         """Get all states reachable from current configuration.
