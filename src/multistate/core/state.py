@@ -189,6 +189,15 @@ class State:
         }
         if self.timeout:
             d["timeout"] = self.timeout.to_dict()
+        if self.htn_config is not None:
+            from dataclasses import asdict, is_dataclass
+
+            if is_dataclass(self.htn_config) and not isinstance(self.htn_config, type):
+                d["htn_config"] = asdict(self.htn_config)
+            elif hasattr(self.htn_config, "to_dict"):
+                d["htn_config"] = self.htn_config.to_dict()
+            else:
+                d["htn_config"] = self.htn_config  # assume it's already a dict
         return d
 
     @classmethod
@@ -222,6 +231,9 @@ class State:
         if "timeout" in data:
             timeout = StateTimeout.from_dict(data["timeout"])
 
+        # htn_config stays as a dict; caller can convert to HTNStateConfig if needed
+        htn_config = data.get("htn_config")
+
         return cls(
             id=data["id"],
             name=data.get("name", data["id"]),
@@ -233,4 +245,5 @@ class State:
             blocks=set(data.get("blocks", [])),
             metadata=dict(data.get("metadata", {})),
             timeout=timeout,
+            htn_config=htn_config,
         )

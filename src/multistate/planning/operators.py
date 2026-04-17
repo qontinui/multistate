@@ -12,7 +12,10 @@ from multistate.planning.planner import Operator, WorldState
 def navigate_transition(state: WorldState, transition_id: str) -> WorldState | None:
     """Fire *transition_id* if it is currently available.
 
-    Sets ``blackboard["_last_transition"]`` to *transition_id*.
+    During planning, this operator does not simulate state activation/deactivation
+    effects — it only verifies the transition is available and marks it in the
+    blackboard. Actual state changes are handled by the executor's action handler
+    which calls StateManager.execute_transition() at runtime.
     """
     if transition_id not in state.available_transitions:
         return None
