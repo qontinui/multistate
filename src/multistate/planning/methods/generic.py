@@ -52,14 +52,18 @@ def handle_unexpected_dialog(
     return [("dismiss_dialog", s) for s in dialog_states]
 
 
-def login_generic(state: WorldState, username: str, password: str) -> list[tuple[str, ...]] | None:
-    """Generic login: navigate to login screen, fill credentials, submit."""
-    tasks: list[tuple[str, ...]] = []
+def login_generic(state: WorldState, username: str, password: str) -> list[tuple] | None:
+    """Generic login: navigate to login screen, fill credentials, submit.
+
+    Emits ``fill_form`` as a compound subtask with a ``dict`` argument
+    so the planner can select among form-filling strategies.
+    """
+    tasks: list[tuple] = []
     if "login_screen" not in state.active_states:
         tasks.append(("navigate_to", "login_screen"))
     tasks.extend(
         [
-            ("fill_form", {"username_field": username, "password_field": password}),  # type: ignore[list-item]
+            ("fill_form", {"username_field": username, "password_field": password}),
             ("click_element", "btn_login"),
             ("wait_for_state", "dashboard"),
         ]

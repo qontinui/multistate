@@ -23,6 +23,9 @@ def _make_executor(
     """Build a PlanExecutor with mocked planner and adapter."""
     if planner is None:
         planner = MagicMock(spec=HTNPlanner)
+    # Executor accesses planner.operators for post-action state simulation
+    if not hasattr(planner, "operators") or isinstance(planner.operators, MagicMock):
+        planner.operators = {}
     if adapter is None:
         adapter = MagicMock(spec=WorldStateAdapter)
         adapter.snapshot.return_value = WorldState()

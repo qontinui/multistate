@@ -7,9 +7,12 @@ primitive operators, producing executable plans over a WorldState.
 from __future__ import annotations
 
 import copy
+import logging
 import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -156,6 +159,11 @@ class HTNPlanner:
             try:
                 new_state = operator(state, *task_args)
             except TypeError:
+                logger.debug(
+                    "Operator %s skipped: arity mismatch with args %s",
+                    task_name,
+                    task_args,
+                )
                 new_state = None  # Argument mismatch → treat as not applicable
             if new_state is not None:
                 rest = self._seek_plan(new_state, remaining, depth + 1, nodes)
@@ -168,6 +176,12 @@ class HTNPlanner:
                 try:
                     subtasks = method(state, *task_args)
                 except TypeError:
+                    logger.debug(
+                        "Method %s for task %s skipped: arity mismatch with args %s",
+                        getattr(method, "__name__", "?"),
+                        task_name,
+                        task_args,
+                    )
                     subtasks = None  # Argument mismatch → method not applicable
                 if subtasks is not None:
                     merged = subtasks + remaining

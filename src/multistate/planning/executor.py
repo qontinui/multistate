@@ -52,9 +52,11 @@ class PlanExecutor:
         adapter: World state adapter for refreshing state snapshots.
         action_handlers: Mapping of action name to callable handler.
         max_replans: Maximum number of replan attempts before giving up.
+        not_interruptable: Action names that suppress divergence checks
+            (e.g., multi-keystroke actions that shouldn't be interrupted).
     """
 
-    _NOT_INTERRUPTABLE: frozenset[str] = frozenset({"type_text"})
+    _DEFAULT_NOT_INTERRUPTABLE: frozenset[str] = frozenset({"type_text"})
 
     def __init__(
         self,
@@ -62,11 +64,15 @@ class PlanExecutor:
         adapter: WorldStateAdapter,
         action_handlers: dict[str, Callable],
         max_replans: int = 5,
+        not_interruptable: frozenset[str] | None = None,
     ) -> None:
         self.planner = planner
         self.adapter = adapter
         self.action_handlers = action_handlers
         self.max_replans = max_replans
+        self.not_interruptable = (
+            not_interruptable if not_interruptable is not None else self._DEFAULT_NOT_INTERRUPTABLE
+        )
 
     def execute(
         self,
@@ -159,10 +165,23 @@ class PlanExecutor:
             steps.append(ExecutionStep(action=action, status=StepStatus.SUCCESS))
             remaining.pop(0)
 
+            # Compute expected state by simulating the operator's effect.
+            # This prevents false-positive divergence when an action
+            # legitimately changes active_states (e.g. navigate_path).
+            expected_state = current_state
+            operator = self.planner.operators.get(action_name)
+            if operator is not None:
+                try:
+                    simulated = operator(current_state, *action_args)
+                    if simulated is not None:
+                        expected_state = simulated
+                except (TypeError, Exception):
+                    pass  # Can't simulate — use pre-action state as baseline
+
             # State divergence check (skip for non-interruptable actions)
-            if remaining and action_name not in self._NOT_INTERRUPTABLE:
+            if remaining and action_name not in self.not_interruptable:
                 actual_state = self._refresh_state(blackboard)
-                if self._state_diverged(current_state, actual_state):
+                if self._state_diverged(expected_state, actual_state):
                     # Attempt replanning due to divergence
                     if replans >= self.max_replans:
                         return ExecutionResult(
