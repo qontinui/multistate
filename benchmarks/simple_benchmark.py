@@ -8,8 +8,7 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import (MultiTargetPathFinder,
-                                                 SearchStrategy)
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
 from multistate.transitions.transition import Transition
 
 
@@ -73,10 +72,7 @@ def benchmark_scaling() -> None:
 
         if path:
             steps = len(path.transitions_sequence)
-            print(
-                f"{num_targets:<10} {elapsed:<15.2f} "
-                f"{path.total_cost:<12.1f} {steps}"
-            )
+            print(f"{num_targets:<10} {elapsed:<15.2f} " f"{path.total_cost:<12.1f} {steps}")
         else:
             print(f"{num_targets:<10} No path found")
 

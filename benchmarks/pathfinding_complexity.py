@@ -8,20 +8,18 @@ import os
 import random
 import sys
 import time
+
 # import matplotlib.pyplot as plt  # Optional for plotting
 from typing import Dict, List, Tuple
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import (MultiTargetPathFinder,
-                                                 SearchStrategy)
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
 from multistate.transitions.transition import Transition
 
 
-def create_grid_scenario(
-    width: int, height: int
-) -> Tuple[Dict[str, State], List[Transition]]:
+def create_grid_scenario(width: int, height: int) -> Tuple[Dict[str, State], List[Transition]]:
     """Create a grid-based state space for benchmarking.
 
     Args:
@@ -323,9 +321,7 @@ def plot_complexity_results(results: Dict[str, list[float | int]]) -> None:
     ax = axes[1, 0]
     ax2 = ax.twinx()
     l1 = ax.plot(results["num_targets"], results["path_cost"], "b-", label="Path Cost")
-    l2 = ax2.plot(
-        results["num_targets"], results["path_length"], "r-", label="Path Length"
-    )
+    l2 = ax2.plot(results["num_targets"], results["path_length"], "r-", label="Path Length")
     ax.set_xlabel("Number of Targets")
     ax.set_ylabel("Path Cost", color="b")
     ax2.set_ylabel("Path Length (steps)", color="r")
@@ -401,10 +397,7 @@ Key Insight:
     )
 
     # Create visualization
-    print(
-        "\n(Matplotlib not available for plotting - "
-        "install with: pip install matplotlib)"
-    )
+    print("\n(Matplotlib not available for plotting - " "install with: pip install matplotlib)")
 
     print("\n" + "#" * 60)
     print("# BENCHMARK COMPLETE")

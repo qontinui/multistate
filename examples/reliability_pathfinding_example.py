@@ -11,8 +11,7 @@ import sys
 sys.path.insert(0, "src")
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import (MultiTargetPathFinder,
-                                                 SearchStrategy)
+from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStrategy
 from multistate.transitions.executor import TransitionExecutor
 from multistate.transitions.reliability import ReliabilityTracker
 from multistate.transitions.transition import Transition
@@ -71,10 +70,7 @@ def main() -> None:
     # Execute reliable path 10 times (all succeed)
     for i in range(10):
         result = executor.execute(reliable_path, {start})
-        print(
-            f"   Reliable path attempt {i + 1}: "
-            f"{'SUCCESS' if result.success else 'FAILED'}"
-        )
+        print(f"   Reliable path attempt {i + 1}: " f"{'SUCCESS' if result.success else 'FAILED'}")
 
     # Execute unreliable path 10 times (half fail)
     active = {start}
@@ -86,8 +82,7 @@ def main() -> None:
         else:
             active = {start}
         print(
-            f"   Unreliable path attempt {i + 1}: "
-            f"{'SUCCESS' if result.success else 'FAILED'}"
+            f"   Unreliable path attempt {i + 1}: " f"{'SUCCESS' if result.success else 'FAILED'}"
         )
 
     # Show reliability stats
