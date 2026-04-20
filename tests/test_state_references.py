@@ -10,7 +10,7 @@ from multistate.manager import StateManager, StateManagerConfig
 from multistate.state_references import StateHistory, StateReference, StateSnapshot
 
 
-def test_state_snapshot() -> bool:
+def test_state_snapshot() -> None:
     """Test StateSnapshot creation and representation."""
     print("\n" + "=" * 60)
     print("Test 1: StateSnapshot")
@@ -29,10 +29,9 @@ def test_state_snapshot() -> bool:
 
     print(f"Snapshot: {snapshot}")
     print("[PASS] StateSnapshot works correctly")
-    return True
 
 
-def test_state_history_basic() -> bool:
+def test_state_history_basic() -> None:
     """Test basic StateHistory operations."""
     print("\n" + "=" * 60)
     print("Test 2: StateHistory Basic Operations")
@@ -65,10 +64,9 @@ def test_state_history_basic() -> bool:
     print(f"History length: {history.get_history_length()}")
 
     print("[PASS] StateHistory basic operations work")
-    return True
 
 
-def test_state_history_expected() -> bool:
+def test_state_history_expected() -> None:
     """Test expected states tracking."""
     print("\n" + "=" * 60)
     print("Test 3: Expected States Tracking")
@@ -88,10 +86,8 @@ def test_state_history_expected() -> bool:
     assert history.get_expected_states() == set()
     print("[PASS] Expected states cleared")
 
-    return True
 
-
-def test_state_history_changes() -> bool:
+def test_state_history_changes() -> None:
     """Test state change detection."""
     print("\n" + "=" * 60)
     print("Test 4: State Change Detection")
@@ -114,10 +110,8 @@ def test_state_history_changes() -> bool:
     print(f"Removed states: {removed}")
     print("[PASS] State change detection works")
 
-    return True
 
-
-def test_state_history_max_size() -> bool:
+def test_state_history_max_size() -> None:
     """Test history size limit."""
     print("\n" + "=" * 60)
     print("Test 5: History Size Limit")
@@ -144,10 +138,9 @@ def test_state_history_max_size() -> bool:
     print(f"Previous state: {previous}")
 
     print("[PASS] History size limit works")
-    return True
 
 
-def test_reference_resolver() -> bool:
+def test_reference_resolver() -> None:
     """Test StateReferenceResolver."""
     print("\n" + "=" * 60)
     print("Test 6: StateReferenceResolver")
@@ -193,10 +186,9 @@ def test_reference_resolver() -> bool:
     print(f"CURRENT: {[s.id for s in current_states]}")
 
     print("[PASS] StateReferenceResolver works")
-    return True
 
 
-def test_manager_with_history() -> bool:
+def test_manager_with_history() -> None:
     """Test StateManager with history enabled."""
     print("\n" + "=" * 60)
     print("Test 7: StateManager with History")
@@ -245,10 +237,9 @@ def test_manager_with_history() -> bool:
     print(f"Previous states: {[s.id for s in previous]}")
 
     print("[PASS] StateManager with history works")
-    return True
 
 
-def test_expected_states_in_transition() -> bool:
+def test_expected_states_in_transition() -> None:
     """Test expected states are set during transitions."""
     print("\n" + "=" * 60)
     print("Test 8: Expected States in Transitions")
@@ -293,10 +284,9 @@ def test_expected_states_in_transition() -> bool:
     print(f"Active states: {active}")
 
     print("[PASS] Expected states tracking in transitions works")
-    return True
 
 
-def test_history_transitions_to_state() -> bool:
+def test_history_transitions_to_state() -> None:
     """Test finding transitions that led to a state."""
     print("\n" + "=" * 60)
     print("Test 9: Transitions to State Tracking")
@@ -337,10 +327,9 @@ def test_history_transitions_to_state() -> bool:
     print(f"Transitions to editor: {transitions}")
 
     print("[PASS] Transitions to state tracking works")
-    return True
 
 
-def test_manager_without_history() -> bool:
+def test_manager_without_history() -> None:
     """Test that StateManager works without history enabled."""
     print("\n" + "=" * 60)
     print("Test 10: StateManager without History")
@@ -373,7 +362,6 @@ def test_manager_without_history() -> bool:
         print(f"[PASS] Expected error raised: {type(e).__name__}")
 
     print("[PASS] StateManager works correctly without history")
-    return True
 
 
 def run_all_tests() -> bool:
@@ -400,8 +388,8 @@ def run_all_tests() -> bool:
 
     for test in tests:
         try:
-            if test():
-                passed += 1
+            test()
+            passed += 1
         except Exception as e:
             print(f"\n[FAIL] {test.__name__} FAILED: {e}")
             import traceback
