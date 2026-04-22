@@ -37,7 +37,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
 
 3. **Make your changes:**
    - Write clear, documented code
-   - Follow existing code style (black, ruff)
+   - Follow existing code style (ruff format + ruff check)
    - Add tests for new functionality
    - Update documentation if needed
 
@@ -45,7 +45,7 @@ Be respectful, constructive, and collaborative. We're all here to build somethin
 
    ```bash
    poetry run pytest
-   poetry run black .
+   poetry run ruff format .
    poetry run ruff check --fix .
    poetry run mypy src/
    ```
@@ -72,7 +72,7 @@ poetry install --with dev
 poetry run pytest
 
 # Run linting
-poetry run black .
+poetry run ruff format .
 poetry run ruff check --fix .
 
 # Run type checking
@@ -81,10 +81,10 @@ poetry run mypy src/
 
 ## Code Style
 
-- **Python**: Follow PEP 8, enforced by `black` and `ruff`
+- **Python**: Follow PEP 8, enforced by `ruff format` and `ruff check`
 - **Type hints**: Required for all public APIs
 - **Docstrings**: Google style for all public functions/classes
-- **Line length**: 88 characters (black default)
+- **Line length**: 88 characters
 
 ## Testing
 
