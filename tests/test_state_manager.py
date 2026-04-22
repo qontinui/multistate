@@ -15,7 +15,7 @@ from multistate.pathfinding.multi_target import SearchStrategy
 from multistate.transitions.executor import SuccessPolicy
 
 
-def test_basic_state_management() -> bool:
+def test_basic_state_management() -> None:
     """Test basic state operations."""
     print("\n" + "=" * 60)
     print("Test 1: Basic State Management")
@@ -41,10 +41,8 @@ def test_basic_state_management() -> bool:
     assert not manager.is_active("login")
     print("✓ State deactivation works")
 
-    return True
 
-
-def test_transition_execution() -> bool:
+def test_transition_execution() -> None:
     """Test transition execution."""
     print("\n" + "=" * 60)
     print("Test 2: Transition Execution")
@@ -97,10 +95,8 @@ def test_transition_execution() -> bool:
     available = manager.get_available_transitions()
     print(f"Available transitions: {available}")
 
-    return True
 
-
-def test_groups() -> bool:
+def test_groups() -> None:
     """Test state groups."""
     print("\n" + "=" * 60)
     print("Test 3: State Groups")
@@ -132,10 +128,8 @@ def test_groups() -> bool:
     assert "workspace_ui" in info
     print("✓ Groups tracked correctly")
 
-    return True
 
-
-def test_pathfinding_integration() -> bool:
+def test_pathfinding_integration() -> None:
     """Test pathfinding with StateManager."""
     print("\n" + "=" * 60)
     print("Test 4: Pathfinding Integration")
@@ -187,10 +181,8 @@ def test_pathfinding_integration() -> bool:
     assert manager.is_active("editor")
     print("✓ navigate_to() convenience method works")
 
-    return True
 
-
-def test_blocking_states() -> bool:
+def test_blocking_states() -> None:
     """Test blocking state behavior."""
     print("\n" + "=" * 60)
     print("Test 5: Blocking States")
@@ -218,10 +210,8 @@ def test_blocking_states() -> bool:
     assert not manager.is_active("sidebar")
     print("✓ Blocking state cleared others")
 
-    return True
 
-
-def test_callbacks() -> bool:
+def test_callbacks() -> None:
     """Test transition callbacks."""
     print("\n" + "=" * 60)
     print("Test 6: Transition Callbacks")
@@ -262,10 +252,8 @@ def test_callbacks() -> bool:
     assert "menu_initialized" in callback_log
     print("✓ Callbacks executed correctly")
 
-    return True
 
-
-def test_reachability_analysis() -> bool:
+def test_reachability_analysis() -> None:
     """Test state reachability analysis."""
     print("\n" + "=" * 60)
     print("Test 7: Reachability Analysis")
@@ -300,10 +288,8 @@ def test_reachability_analysis() -> bool:
     print(f"Reachable states from s1: {sorted(reachable)}")
     print("✓ Reachability analysis correct")
 
-    return True
 
-
-def test_error_handling() -> bool:
+def test_error_handling() -> None:
     """Test error handling."""
     print("\n" + "=" * 60)
     print("Test 8: Error Handling")
@@ -344,10 +330,8 @@ def test_error_handling() -> bool:
     assert not success  # But should fail
     print("✓ Relaxed config allows invalid attempts")
 
-    return True
 
-
-def test_history_tracking() -> bool:
+def test_history_tracking() -> None:
     """Test transition history."""
     print("\n" + "=" * 60)
     print("Test 9: History Tracking")
@@ -384,10 +368,8 @@ def test_history_tracking() -> bool:
     print(f"History: {manager.transition_history}")
     print("✓ History tracked correctly")
 
-    return True
 
-
-def test_complex_scenario() -> bool:
+def test_complex_scenario() -> None:
     """Test a complex real-world scenario."""
     print("\n" + "=" * 60)
     print("Test 10: Complex IDE Scenario")
@@ -499,8 +481,6 @@ def test_complex_scenario() -> bool:
         f"{complexity['reachable_states']} reachable"
     )
 
-    return True
-
 
 def main() -> None:
     """Run all StateManager tests."""
@@ -521,28 +501,27 @@ def main() -> None:
         test_complex_scenario,
     ]
 
-    results = []
+    failed: list[str] = []
     for test in tests:
         try:
-            success = test()
-            results.append((test.__name__, success))
+            test()
         except Exception as e:
             print(f"✗ Test failed with exception: {e}")
             import traceback
 
             traceback.print_exc()
-            results.append((test.__name__, False))
+            failed.append(test.__name__)
 
     # Summary
     print("\n" + "#" * 60)
     print("# Summary")
     print("#" * 60)
 
-    passed = sum(1 for _, success in results if success)
-    total = len(results)
+    passed = len(tests) - len(failed)
+    total = len(tests)
     print(f"Tests passed: {passed}/{total}")
 
-    if passed == total:
+    if not failed:
         print("\n✓ All StateManager tests passed!")
         print("\nThe high-level API provides:")
         print("- Simple state and transition management")
@@ -554,7 +533,6 @@ def main() -> None:
         print("- History tracking")
         print("- Comprehensive error handling")
     else:
-        failed = [name for name, success in results if not success]
         print(f"\n✗ Failed tests: {', '.join(failed)}")
 
 
