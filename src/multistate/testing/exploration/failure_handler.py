@@ -73,7 +73,7 @@ class FailureAwareExplorer:
         # Check max retries
         if attempt > self.max_retries:
             logger.warning(
-                f"Max retries ({self.max_retries}) exceeded for " f"{from_state} -> {to_state}"
+                f"Max retries ({self.max_retries}) exceeded for {from_state} -> {to_state}"
             )
             return False
 
@@ -112,7 +112,7 @@ class FailureAwareExplorer:
         backoff_ms *= 1 + jitter
 
         logger.debug(
-            f"Backoff for {from_state} -> {to_state} (attempt {attempt}): " f"{backoff_ms:.0f}ms"
+            f"Backoff for {from_state} -> {to_state} (attempt {attempt}): {backoff_ms:.0f}ms"
         )
 
         return backoff_ms
@@ -185,7 +185,7 @@ class FailureAwareExplorer:
             del self.skipped_transitions[transition_key]
             from_state, to_state = transition_key
             logger.info(
-                f"Cooldown expired for {from_state} -> {to_state}, " "transition available again"
+                f"Cooldown expired for {from_state} -> {to_state}, transition available again"
             )
 
     def get_failure_statistics(self) -> dict[str, Any]:

@@ -85,7 +85,7 @@ class ScreenshotManager:
             # Validate screenshot is a numpy array
             if not isinstance(screenshot, np.ndarray):
                 logger.warning(
-                    f"Screenshot is not a numpy array: {type(screenshot)}. " "Skipping save."
+                    f"Screenshot is not a numpy array: {type(screenshot)}. Skipping save."
                 )
                 return None
 

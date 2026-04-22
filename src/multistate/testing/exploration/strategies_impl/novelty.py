@@ -65,8 +65,7 @@ class NoveltySeekingExplorer(ExplorationStrategy):
         _, next_state = sorted_transitions[0]
 
         logger.debug(
-            f"Novelty: {current_state} -> {next_state} "
-            f"(local_visited: {len(self.local_visited)})"
+            f"Novelty: {current_state} -> {next_state} (local_visited: {len(self.local_visited)})"
         )
 
         return next_state

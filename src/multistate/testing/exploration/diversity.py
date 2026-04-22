@@ -55,9 +55,7 @@ class PathDiversityEngine:
         # Filter for diversity
         diverse_paths = self._filter_diverse_paths(k_shortest)
 
-        logger.info(
-            f"Generated {len(diverse_paths)} diverse paths: " f"{start_state} -> {end_state}"
-        )
+        logger.info(f"Generated {len(diverse_paths)} diverse paths: {start_state} -> {end_state}")
 
         return diverse_paths
 

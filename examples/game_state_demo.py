@@ -168,9 +168,7 @@ class RPGGameDemo:
             )
 
             # Self-transition to close
-            self.hidden_manager.register_self_transition(
-                self.manager.get_state(ui_state), "close"
-            )
+            self.hidden_manager.register_self_transition(self.manager.get_state(ui_state), "close")
 
     def discover_area(self, area: str) -> None:
         """Dynamically discover a new area."""
@@ -303,7 +301,7 @@ class RPGGameDemo:
         if path:
             print("Optimal quest path found:")
             for i, transition in enumerate(path.transitions_sequence):
-                print(f"  {i+1}. {transition.name} (cost: {transition.path_cost})")
+                print(f"  {i + 1}. {transition.name} (cost: {transition.path_cost})")
 
             print(f"\nTotal cost: {path.total_cost}")
             print("This is more efficient than visiting each location separately!")
@@ -320,9 +318,7 @@ class RPGGameDemo:
 
         print(f"\nSequential total: {total_sequential}")
         assert path is not None
-        print(
-            f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units"
-        )
+        print(f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units")
 
     def demonstrate_combat_with_abilities(self) -> None:
         """Demonstrate combat with cooldowns and buffs."""

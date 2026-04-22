@@ -301,7 +301,7 @@ class MicroservicesDemo:
         for i in range(6):
             metrics.request_count += 1
             metrics.error_count += 1
-            print(f"  Request {i+1}: ❌ Failed")
+            print(f"  Request {i + 1}: ❌ Failed")
 
             if metrics.error_count >= metrics.failure_threshold:
                 self.trigger_circuit_breaker(failing_service)
@@ -356,7 +356,7 @@ class MicroservicesDemo:
         if path:
             print("\nOptimal transaction flow:")
             for i, transition in enumerate(path.transitions_sequence):
-                print(f"  {i+1}. {transition.name} (cost: {transition.path_cost})")
+                print(f"  {i + 1}. {transition.name} (cost: {transition.path_cost})")
 
             print(f"\nTotal coordination cost: {path.total_cost}")
 

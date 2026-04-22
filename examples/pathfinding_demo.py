@@ -272,7 +272,7 @@ def analyze_complexity_scaling() -> None:
     for k in range(1, 8):
         analysis = finder.analyze_complexity(num_states=12, num_targets=k)
         space = analysis["total_search_space"]
-        growth = f"{space/prev_space:.1f}x" if prev_space > 0 else "baseline"
+        growth = f"{space / prev_space:.1f}x" if prev_space > 0 else "baseline"
         print(f"{k:<10} {space:<20,} {growth}")
         prev_space = space
 

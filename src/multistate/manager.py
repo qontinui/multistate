@@ -136,9 +136,9 @@ class StateManager:
         self.metrics = MetricsManager(enabled=self.config.enable_metrics)
 
         # Transition history
-        self.transition_history: List[Tuple[str, bool, Dict[str, Any]]] = (
-            []
-        )  # (transition_id, success, metadata)
+        self.transition_history: List[
+            Tuple[str, bool, Dict[str, Any]]
+        ] = []  # (transition_id, success, metadata)
 
         # Setup logging
         self._setup_logging()

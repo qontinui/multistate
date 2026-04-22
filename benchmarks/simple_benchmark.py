@@ -24,9 +24,9 @@ def create_simple_graph() -> tuple[dict[str, State], list[Transition]]:
         transitions.append(
             Transition(
                 id=f"t{i}",
-                name=f"s{i} to s{i+1}",
+                name=f"s{i} to s{i + 1}",
                 from_states={states[f"s{i}"]},
-                activate_states={states[f"s{i+1}"]},
+                activate_states={states[f"s{i + 1}"]},
                 path_cost=1,
             )
         )
@@ -37,9 +37,9 @@ def create_simple_graph() -> tuple[dict[str, State], list[Transition]]:
             transitions.append(
                 Transition(
                     id=f"tc{i}",
-                    name=f"s{i} to s{i+2}",
+                    name=f"s{i} to s{i + 2}",
                     from_states={states[f"s{i}"]},
-                    activate_states={states[f"s{i+2}"]},
+                    activate_states={states[f"s{i + 2}"]},
                     path_cost=1.5,
                 )
             )
@@ -72,7 +72,7 @@ def benchmark_scaling() -> None:
 
         if path:
             steps = len(path.transitions_sequence)
-            print(f"{num_targets:<10} {elapsed:<15.2f} " f"{path.total_cost:<12.1f} {steps}")
+            print(f"{num_targets:<10} {elapsed:<15.2f} {path.total_cost:<12.1f} {steps}")
         else:
             print(f"{num_targets:<10} No path found")
 
@@ -105,7 +105,7 @@ def compare_approaches() -> None:
         elapsed = (time.time() - start_time) * 1000
 
         if path:
-            print(f"  Target {i+1}: cost={path.total_cost:.1f}, time={elapsed:.2f}ms")
+            print(f"  Target {i + 1}: cost={path.total_cost:.1f}, time={elapsed:.2f}ms")
             total_cost += path.total_cost
             total_time += elapsed
             current = path.states_sequence[-1] if path.states_sequence else current

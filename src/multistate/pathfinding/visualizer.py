@@ -192,7 +192,7 @@ class PathVisualizer:
             if path:
                 lines.append(f"\n{label}:")
                 for j, trans in enumerate(path.transitions_sequence):
-                    lines.append(f"  {j+1}. {trans.name} (cost={trans.path_cost})")
+                    lines.append(f"  {j + 1}. {trans.name} (cost={trans.path_cost})")
             else:
                 lines.append(f"\n{label}: No path found")
 
@@ -407,7 +407,8 @@ class PathVisualizer:
 
     @staticmethod
     def visualize_search_tree(
-        search_nodes: List, max_depth: int = 5  # List of PathNode objects
+        search_nodes: List,
+        max_depth: int = 5,  # List of PathNode objects
     ) -> str:
         """Visualize the search tree exploration."""
         lines = []

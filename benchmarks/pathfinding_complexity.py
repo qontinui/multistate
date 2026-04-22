@@ -45,11 +45,11 @@ def create_grid_scenario(width: int, height: int) -> Tuple[Dict[str, State], Lis
 
             # Right transition
             if x < width - 1:
-                right = states[f"s_{x+1}_{y}"]
+                right = states[f"s_{x + 1}_{y}"]
                 transitions.append(
                     Transition(
                         id=f"t_{x}_{y}_right",
-                        name=f"({x},{y}) → ({x+1},{y})",
+                        name=f"({x},{y}) → ({x + 1},{y})",
                         from_states={current},
                         activate_states={right},
                         path_cost=1,
@@ -58,11 +58,11 @@ def create_grid_scenario(width: int, height: int) -> Tuple[Dict[str, State], Lis
 
             # Down transition
             if y < height - 1:
-                down = states[f"s_{x}_{y+1}"]
+                down = states[f"s_{x}_{y + 1}"]
                 transitions.append(
                     Transition(
                         id=f"t_{x}_{y}_down",
-                        name=f"({x},{y}) → ({x},{y+1})",
+                        name=f"({x},{y}) → ({x},{y + 1})",
                         from_states={current},
                         activate_states={down},
                         path_cost=1,
@@ -71,11 +71,11 @@ def create_grid_scenario(width: int, height: int) -> Tuple[Dict[str, State], Lis
 
             # Diagonal transition (more expensive)
             if x < width - 1 and y < height - 1:
-                diag = states[f"s_{x+1}_{y+1}"]
+                diag = states[f"s_{x + 1}_{y + 1}"]
                 transitions.append(
                     Transition(
                         id=f"t_{x}_{y}_diag",
-                        name=f"({x},{y}) → ({x+1},{y+1})",
+                        name=f"({x},{y}) → ({x + 1},{y + 1})",
                         from_states={current},
                         activate_states={diag},
                         path_cost=1.4,  # √2 approximation
@@ -192,9 +192,9 @@ def benchmark_grid_scaling(max_size: int = 10) -> Dict[str, list[float | int]]:
         # Fixed 3 targets at corners
         start = {states["s_0_0"]}
         targets = {
-            states[f"s_{size-1}_0"],  # Top-right
-            states[f"s_0_{size-1}"],  # Bottom-left
-            states[f"s_{size-1}_{size-1}"],  # Bottom-right
+            states[f"s_{size - 1}_0"],  # Top-right
+            states[f"s_0_{size - 1}"],  # Bottom-left
+            states[f"s_{size - 1}_{size - 1}"],  # Bottom-right
         }
 
         # Benchmark
@@ -252,7 +252,7 @@ def compare_single_vs_multi() -> None:
         elapsed = (time.time() - start_time) * 1000
 
         if path:
-            print(f"  Target {i+1}: cost={path.total_cost:.1f}, time={elapsed:.2f}ms")
+            print(f"  Target {i + 1}: cost={path.total_cost:.1f}, time={elapsed:.2f}ms")
             total_single_cost += path.total_cost
             total_single_time += elapsed
             current = path.states_sequence[-1] if path.states_sequence else current
@@ -397,7 +397,7 @@ Key Insight:
     )
 
     # Create visualization
-    print("\n(Matplotlib not available for plotting - " "install with: pip install matplotlib)")
+    print("\n(Matplotlib not available for plotting - install with: pip install matplotlib)")
 
     print("\n" + "#" * 60)
     print("# BENCHMARK COMPLETE")

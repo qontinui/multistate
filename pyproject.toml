@@ -92,10 +92,6 @@ ignore_missing_imports = true
 module = "multistate.testing.config"
 disable_error_code = ["import-untyped"]
 
-[tool.black]
-line-length = 100
-target-version = ["py310"]
-
 [tool.ruff]
 line-length = 100
 

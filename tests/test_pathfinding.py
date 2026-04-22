@@ -288,7 +288,8 @@ def analyze_complexity() -> None:
     # Analyze for different target counts
     for num_targets in [1, 2, 3, 4, 5]:
         analysis = finder.analyze_complexity(
-            num_states=7, num_targets=num_targets  # Our test scenario has 7 states
+            num_states=7,
+            num_targets=num_targets,  # Our test scenario has 7 states
         )
 
         print(f"\nWith {num_targets} target(s):")

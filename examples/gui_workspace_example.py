@@ -28,9 +28,7 @@ class GUIWorkspaceDemo:
 
     def __init__(self) -> None:
         """Initialize the GUI workspace demo."""
-        self.executor = TransitionExecutor(
-            success_policy=SuccessPolicy.STRICT, strict_mode=True
-        )
+        self.executor = TransitionExecutor(success_policy=SuccessPolicy.STRICT, strict_mode=True)
         self.active_states: Set[State] = set()
         self.incoming_registry: dict[str, IncomingTransition] = {}
 
@@ -265,9 +263,9 @@ class GUIWorkspaceDemo:
 
     def execute_transition(self, transition: Transition) -> bool:
         """Execute a transition and update active states."""
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Executing: {transition.name}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         print(f"Current active states: {self._format_states(self.active_states)}")
         to_activate = self._format_states(transition.get_all_states_to_activate())

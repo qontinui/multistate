@@ -231,7 +231,7 @@ class TransitionExecutor:
                 PhaseResult(
                     phase=TransitionPhase.INCOMING,
                     success=incoming_phase_success,
-                    message=(f"{successful_count}/{total_count} " "incoming transitions succeeded"),
+                    message=(f"{successful_count}/{total_count} incoming transitions succeeded"),
                     data={
                         "successful": {s.id for s in successfully_activated - failed_incoming},
                         "failed": {s.id for s in failed_incoming},

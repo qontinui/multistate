@@ -272,7 +272,7 @@ class PathExplorer:
 
         if not strategy_class:
             raise ValueError(
-                f"Unknown strategy: {strategy_name}. " f"Available: {list(strategies.keys())}"
+                f"Unknown strategy: {strategy_name}. Available: {list(strategies.keys())}"
             )
 
         return strategy_class(self.config, self.tracker)  # type: ignore[abstract]
