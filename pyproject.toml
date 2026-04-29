@@ -3,7 +3,7 @@ name = "multistate"
 version = "0.1.1"
 description = "A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions"
 authors = ["Joshua Spinak <jspinak@alum.mit.edu>"]
-license = "MIT"
+license = "AGPL-3.0-or-later"
 readme = "README.md"
 homepage = "https://github.com/qontinui/multistate"
 repository = "https://github.com/qontinui/multistate"
@@ -20,7 +20,7 @@ keywords = [
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

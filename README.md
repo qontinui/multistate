@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/multistate.svg)](https://badge.fury.io/py/multistate)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://qontinui.github.io/multistate/)
 
 A Python library for managing multiple simultaneous active states with intelligent pathfinding and coordinated transitions.
@@ -81,4 +81,4 @@ Please note that this project is released with a [Code of Conduct](CODE_OF_CONDU
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+Licensed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later). See [LICENSE](LICENSE) for full terms.
