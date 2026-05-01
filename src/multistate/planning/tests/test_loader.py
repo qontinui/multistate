@@ -20,7 +20,9 @@ class FakeWorldState:
 
 
 class TestMethodLoader:
-    def _write_config(self, dir_path: Path, filename: str, data: dict[str, Any]) -> Path:
+    def _write_config(
+        self, dir_path: Path, filename: str, data: dict[str, Any]
+    ) -> Path:
         filepath = dir_path / filename
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f)

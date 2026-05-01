@@ -123,7 +123,9 @@ class TestHTNPlanner:
         """Methods with wrong arity should be skipped, not crash the planner."""
         planner = HTNPlanner()
 
-        def method_requires_two_args(state: WorldState, a: str, b: str) -> Optional[list[tuple]]:
+        def method_requires_two_args(
+            state: WorldState, a: str, b: str
+        ) -> Optional[list[tuple]]:
             return [("noop",)]
 
         def method_requires_zero_args(state: WorldState) -> Optional[list[tuple]]:
@@ -141,7 +143,9 @@ class TestHTNPlanner:
         """Operators with wrong arity should return None, not crash."""
         planner = HTNPlanner()
 
-        def op_requires_two_args(state: WorldState, a: str, b: str) -> Optional[WorldState]:
+        def op_requires_two_args(
+            state: WorldState, a: str, b: str
+        ) -> Optional[WorldState]:
             return state.copy()
 
         planner.register_operator("op", op_requires_two_args)

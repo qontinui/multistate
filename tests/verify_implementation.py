@@ -114,7 +114,9 @@ def verify_blocking_states() -> bool:
     """Verify blocking state behavior"""
     print("\n5. Testing blocking states...")
 
-    modal = State("modal", "Save Dialog", blocking=True, blocks={"toolbar", "sidebar", "content"})
+    modal = State(
+        "modal", "Save Dialog", blocking=True, blocks={"toolbar", "sidebar", "content"}
+    )
 
     assert modal.is_blocking()
     assert len(modal.get_blocked_states()) == 3

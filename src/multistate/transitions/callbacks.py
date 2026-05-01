@@ -33,7 +33,9 @@ class TransitionCallbacks:
         """
         self.outgoing_callbacks[transition_id] = callback
 
-    def register_incoming(self, transition_id: str, state_id: str, callback: Callable) -> None:
+    def register_incoming(
+        self, transition_id: str, state_id: str, callback: Callable
+    ) -> None:
         """Register incoming phase callback for specific state.
 
         Args:
@@ -52,7 +54,9 @@ class TransitionCallbacks:
         """
         self.validation_callbacks[transition_id] = callback
 
-    def register_exit(self, transition_id: str, state_id: str, callback: Callable) -> None:
+    def register_exit(
+        self, transition_id: str, state_id: str, callback: Callable
+    ) -> None:
         """Register exit phase callback for specific state.
 
         Args:
@@ -92,7 +96,9 @@ class TransitionCallbacks:
                 return False
         return True
 
-    def execute_incoming(self, transition_id: str, state_id: str, **kwargs: Any) -> bool:
+    def execute_incoming(
+        self, transition_id: str, state_id: str, **kwargs: Any
+    ) -> bool:
         """Execute incoming callback if registered.
 
         Returns:

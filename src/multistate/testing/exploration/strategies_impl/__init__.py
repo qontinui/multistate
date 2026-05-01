@@ -10,8 +10,12 @@ from multistate.testing.exploration.strategies_impl.bfs import BreadthFirstExplo
 from multistate.testing.exploration.strategies_impl.dfs import DepthFirstExplorer
 from multistate.testing.exploration.strategies_impl.greedy import GreedyCoverageExplorer
 from multistate.testing.exploration.strategies_impl.hybrid import HybridExplorer
-from multistate.testing.exploration.strategies_impl.novelty import NoveltySeekingExplorer
-from multistate.testing.exploration.strategies_impl.random_walk import RandomWalkExplorer
+from multistate.testing.exploration.strategies_impl.novelty import (
+    NoveltySeekingExplorer,
+)
+from multistate.testing.exploration.strategies_impl.random_walk import (
+    RandomWalkExplorer,
+)
 
 __all__ = [
     "ExplorationStrategy",

@@ -19,7 +19,9 @@ from multistate.pathfinding.multi_target import MultiTargetPathFinder, SearchStr
 from multistate.transitions.transition import Transition
 
 
-def create_grid_scenario(width: int, height: int) -> Tuple[Dict[str, State], List[Transition]]:
+def create_grid_scenario(
+    width: int, height: int
+) -> Tuple[Dict[str, State], List[Transition]]:
     """Create a grid-based state space for benchmarking.
 
     Args:
@@ -321,7 +323,9 @@ def plot_complexity_results(results: Dict[str, list[float | int]]) -> None:
     ax = axes[1, 0]
     ax2 = ax.twinx()
     l1 = ax.plot(results["num_targets"], results["path_cost"], "b-", label="Path Cost")
-    l2 = ax2.plot(results["num_targets"], results["path_length"], "r-", label="Path Length")
+    l2 = ax2.plot(
+        results["num_targets"], results["path_length"], "r-", label="Path Length"
+    )
     ax.set_xlabel("Number of Targets")
     ax.set_ylabel("Path Cost", color="b")
     ax2.set_ylabel("Path Length (steps)", color="r")
@@ -371,8 +375,7 @@ def main() -> None:
     print("THEORETICAL COMPLEXITY ANALYSIS")
     print("=" * 60)
 
-    print(
-        """
+    print("""
 For multi-target pathfinding with:
   - V states in the graph
   - k target states to reach
@@ -393,25 +396,24 @@ Complexity:
 Key Insight:
   The exponential factor 2^k makes this problem NP-hard
   for large k, but practical for small target sets (k < 10).
-    """
-    )
+    """)
 
     # Create visualization
-    print("\n(Matplotlib not available for plotting - install with: pip install matplotlib)")
+    print(
+        "\n(Matplotlib not available for plotting - install with: pip install matplotlib)"
+    )
 
     print("\n" + "#" * 60)
     print("# BENCHMARK COMPLETE")
     print("#" * 60)
-    print(
-        """
+    print("""
 Conclusions:
 1. Complexity grows exponentially with number of targets
 2. Dijkstra/A* find optimal solutions but take longer
 3. BFS is fastest but may not find cost-optimal paths
 4. Multi-target is significantly more efficient than sequential
 5. Practical for k < 10 targets in moderate-sized graphs
-    """
-    )
+    """)
 
 
 if __name__ == "__main__":

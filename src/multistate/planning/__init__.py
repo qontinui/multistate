@@ -8,7 +8,12 @@ sequences.
 from __future__ import annotations
 
 from multistate.planning.blackboard import Blackboard, BlackboardPlan
-from multistate.planning.executor import ExecutionResult, ExecutionStep, PlanExecutor, StepStatus
+from multistate.planning.executor import (
+    ExecutionResult,
+    ExecutionStep,
+    PlanExecutor,
+    StepStatus,
+)
 from multistate.planning.htn_state import HTNState, HTNStateConfig
 from multistate.planning.methods.dialogs import DIALOG_METHODS
 from multistate.planning.methods.forms import FORM_METHODS

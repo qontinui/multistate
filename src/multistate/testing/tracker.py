@@ -18,7 +18,11 @@ from typing import Any, Literal
 
 from multistate.testing.coverage_analyzer import CoverageAnalyzer
 from multistate.testing.deficiency_detector import DeficiencyDetector
-from multistate.testing.enums import DeficiencyCategory, DeficiencySeverity, ExecutionStatus
+from multistate.testing.enums import (
+    DeficiencyCategory,
+    DeficiencySeverity,
+    ExecutionStatus,
+)
 from multistate.testing.export_handlers import ExportHandlers
 from multistate.testing.models import (
     CoverageMetrics,
@@ -191,12 +195,16 @@ class PathTracker:
             # Save screenshot if provided
             screenshot_path = None
             if screenshot is not None:
-                screenshot_path = self._screenshot_manager.save_screenshot(execution_id, screenshot)
+                screenshot_path = self._screenshot_manager.save_screenshot(
+                    execution_id, screenshot
+                )
 
             # Determine attempt number
             transition_key = (from_state, to_state)
             if transition_key in self._transition_stats:
-                attempt_number = self._transition_stats[transition_key].total_attempts + 1
+                attempt_number = (
+                    self._transition_stats[transition_key].total_attempts + 1
+                )
             else:
                 attempt_number = 1
 
@@ -210,7 +218,8 @@ class PathTracker:
                 duration_ms=duration_ms,
                 attempt_number=attempt_number,
                 error_message=error_message,
-                actual_end_state=actual_end_state or (to_state if success else from_state),
+                actual_end_state=actual_end_state
+                or (to_state if success else from_state),
                 screenshot_path=screenshot_path,
                 variables_snapshot=variables.copy() if variables else None,
                 metadata=metadata or {},
@@ -329,7 +338,9 @@ class PathTracker:
         Returns:
             List of TransitionStatistics for unstable transitions
         """
-        threshold = min_threshold if min_threshold is not None else self.stability_threshold
+        threshold = (
+            min_threshold if min_threshold is not None else self.stability_threshold
+        )
 
         with self._lock:
             unstable = []
@@ -600,7 +611,9 @@ class PathTracker:
 
         # Update average (incremental)
         n = stats.total_attempts
-        stats.avg_duration_ms = (stats.avg_duration_ms * (n - 1) + execution.duration_ms) / n
+        stats.avg_duration_ms = (
+            stats.avg_duration_ms * (n - 1) + execution.duration_ms
+        ) / n
 
         # Update timestamps
         if stats.first_executed is None:
@@ -640,7 +653,9 @@ class PathTracker:
             execution: Execution to analyze
         """
         # Detect execution-level deficiencies
-        deficiency_tuples = self._deficiency_detector.detect_execution_deficiencies(execution)
+        deficiency_tuples = self._deficiency_detector.detect_execution_deficiencies(
+            execution
+        )
 
         for category, severity, title, description in deficiency_tuples:
             self._add_deficiency(
@@ -658,7 +673,9 @@ class PathTracker:
         transition_key = (execution.from_state, execution.to_state)
         if transition_key in self._transition_stats:
             stats = self._transition_stats[transition_key]
-            stat_deficiencies = self._deficiency_detector.detect_transition_deficiencies(stats)
+            stat_deficiencies = (
+                self._deficiency_detector.detect_transition_deficiencies(stats)
+            )
 
             for category, severity, title, description in stat_deficiencies:
                 self._add_deficiency(

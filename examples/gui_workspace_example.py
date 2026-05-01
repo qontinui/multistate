@@ -28,7 +28,9 @@ class GUIWorkspaceDemo:
 
     def __init__(self) -> None:
         """Initialize the GUI workspace demo."""
-        self.executor = TransitionExecutor(success_policy=SuccessPolicy.STRICT, strict_mode=True)
+        self.executor = TransitionExecutor(
+            success_policy=SuccessPolicy.STRICT, strict_mode=True
+        )
         self.active_states: Set[State] = set()
         self.incoming_registry: dict[str, IncomingTransition] = {}
 

@@ -242,7 +242,9 @@ def test_state_round_trip() -> None:
 
 def test_state_round_trip_with_timeout() -> None:
     """State with timeout serializes and deserializes correctly."""
-    timeout = StateTimeout(duration_seconds=30.0, on_timeout="t_timeout", auto_transition=False)
+    timeout = StateTimeout(
+        duration_seconds=30.0, on_timeout="t_timeout", auto_transition=False
+    )
     state = State(id="loading", name="Loading", timeout=timeout)
     data = state.to_dict()
 
@@ -271,7 +273,9 @@ def test_state_group_round_trip() -> None:
     """StateGroup from_dict(to_dict()) round-trip."""
     s1 = State(id="s1", name="S1")
     s2 = State(id="s2", name="S2")
-    group = StateGroup(id="g1", name="Group1", states={s1, s2}, metadata={"zone": "left"})
+    group = StateGroup(
+        id="g1", name="Group1", states={s1, s2}, metadata={"zone": "left"}
+    )
 
     data = group.to_dict()
     state_lookup = {"s1": s1, "s2": s2}

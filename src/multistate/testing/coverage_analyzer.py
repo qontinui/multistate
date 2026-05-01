@@ -54,7 +54,9 @@ class CoverageAnalyzer:
         visited_count = len(visited_states)
         unvisited_states = []
         if hasattr(state_graph, "states"):
-            unvisited_states = [name for name in state_graph.states if name not in visited_states]
+            unvisited_states = [
+                name for name in state_graph.states if name not in visited_states
+            ]
 
         # Transition coverage
         all_transitions = self._extract_all_transitions(state_graph)

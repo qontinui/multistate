@@ -19,8 +19,16 @@ from multistate.core.state import State, StateTimeout
 from multistate.core.state_group import StateGroup
 from multistate.core.trigger_introspection import BlockedTrigger, PermittedTrigger
 from multistate.metrics import MetricsManager, StateMetrics, TransitionMetrics
-from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path, SearchStrategy
-from multistate.state_references import StateHistory, StateReference, StateReferenceResolver
+from multistate.pathfinding.multi_target import (
+    MultiTargetPathFinder,
+    Path,
+    SearchStrategy,
+)
+from multistate.state_references import (
+    StateHistory,
+    StateReference,
+    StateReferenceResolver,
+)
 from multistate.transitions.callbacks import TransitionCallbacks
 from multistate.transitions.executor import SuccessPolicy, TransitionExecutor
 from multistate.transitions.transition import Transition
@@ -130,15 +138,17 @@ class StateManager:
         self.state_resolver: Optional[StateReferenceResolver] = None
         if self.config.enable_state_history:
             self.state_history = StateHistory(max_history=self.config.max_history_size)
-            self.state_resolver = StateReferenceResolver(self.state_history, self._state_lookup)
+            self.state_resolver = StateReferenceResolver(
+                self.state_history, self._state_lookup
+            )
 
         # Metrics tracking
         self.metrics = MetricsManager(enabled=self.config.enable_metrics)
 
         # Transition history
-        self.transition_history: List[
-            Tuple[str, bool, Dict[str, Any]]
-        ] = []  # (transition_id, success, metadata)
+        self.transition_history: List[Tuple[str, bool, Dict[str, Any]]] = (
+            []
+        )  # (transition_id, success, metadata)
 
         # Setup logging
         self._setup_logging()
@@ -279,7 +289,9 @@ class StateManager:
         self.logger.info(f"Activated states: {state_ids}")
 
         # Record to history
-        self._record_state_snapshot(metadata={"action": "activate", "states": list(state_ids)})
+        self._record_state_snapshot(
+            metadata={"action": "activate", "states": list(state_ids)}
+        )
 
     def deactivate_states(self, state_ids: Set[str]) -> None:
         """Directly deactivate states.
@@ -301,7 +313,9 @@ class StateManager:
         self.logger.info(f"Deactivated states: {state_ids}")
 
         # Record to history
-        self._record_state_snapshot(metadata={"action": "deactivate", "states": list(state_ids)})
+        self._record_state_snapshot(
+            metadata={"action": "deactivate", "states": list(state_ids)}
+        )
 
     def get_active_states(self) -> Set[str]:
         """Get currently active state IDs."""
@@ -357,8 +371,12 @@ class StateManager:
         activate_objs = {self.get_state(s) for s in (activate_states or [])}
         exit_objs = {self.get_state(s) for s in (exit_states or [])}
 
-        activate_group_objs = {self.groups[g] for g in (activate_groups or []) if g in self.groups}
-        exit_group_objs = {self.groups[g] for g in (exit_groups or []) if g in self.groups}
+        activate_group_objs = {
+            self.groups[g] for g in (activate_groups or []) if g in self.groups
+        }
+        exit_group_objs = {
+            self.groups[g] for g in (exit_groups or []) if g in self.groups
+        }
 
         # Create transition
         transition = Transition(
@@ -429,11 +447,15 @@ class StateManager:
         # Check if can execute
         if not self.config.allow_invalid_transitions:
             if not self.can_execute(transition_id):
-                raise InvalidTransitionError(f"Cannot execute '{transition_id}' from current state")
+                raise InvalidTransitionError(
+                    f"Cannot execute '{transition_id}' from current state"
+                )
 
         # Set expected states before execution
         if self.state_history:
-            expected_result = self.executor.get_result_states(transition, self.active_states)
+            expected_result = self.executor.get_result_states(
+                transition, self.active_states
+            )
             expected_ids = {s.id for s in expected_result}
             self.state_history.set_expected_states(expected_ids)
 
@@ -448,7 +470,9 @@ class StateManager:
         execution_time = time.perf_counter() - start_time
 
         # Record transition metrics
-        self.metrics.record_transition_execution(transition_id, result.success, execution_time)
+        self.metrics.record_transition_execution(
+            transition_id, result.success, execution_time
+        )
 
         # Update active states if successful
         if result.success:
@@ -569,7 +593,9 @@ class StateManager:
 
         # Use different strategy if specified
         if strategy and strategy != self.config.default_search_strategy:
-            pathfinder = MultiTargetPathFinder(list(self.transitions.values()), strategy)
+            pathfinder = MultiTargetPathFinder(
+                list(self.transitions.values()), strategy
+            )
         else:
             pathfinder = self.pathfinder
 
@@ -955,7 +981,9 @@ class StateManager:
             "active_states": len(self.active_states),
             "available_transitions": len(self.get_available_transitions()),
             "reachable_states": len(self.get_reachable_states()),
-            "max_group_size": max((len(g.states) for g in self.groups.values()), default=0),
+            "max_group_size": max(
+                (len(g.states) for g in self.groups.values()), default=0
+            ),
             "transition_density": (
                 len(self.transitions) / (len(self.states) ** 2) if self.states else 0
             ),
@@ -996,7 +1024,9 @@ class StateManager:
             lines.append("\nState Groups:")
             for group in sorted(self.groups.values(), key=lambda g: g.name):
                 active_count = sum(1 for s in group.states if s in self.active_states)
-                lines.append(f"  - {group.name}: {active_count}/{len(group.states)} active")
+                lines.append(
+                    f"  - {group.name}: {active_count}/{len(group.states)} active"
+                )
 
         # Statistics
         lines.append("\nStatistics:")

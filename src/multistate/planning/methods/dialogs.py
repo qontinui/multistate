@@ -17,7 +17,9 @@ Method = Callable[..., list[tuple[str, ...]] | None]
 def dismiss_via_escape(state: WorldState) -> list[tuple[str, ...]] | None:
     """Dismiss dialog by pressing Escape key."""
     dialog_states = [
-        s for s in state.active_states if s.startswith("dialog_") or s.startswith("modal_")
+        s
+        for s in state.active_states
+        if s.startswith("dialog_") or s.startswith("modal_")
     ]
     if not dialog_states:
         return None
@@ -30,7 +32,9 @@ def dismiss_via_escape(state: WorldState) -> list[tuple[str, ...]] | None:
 def dismiss_via_close_button(state: WorldState) -> list[tuple[str, ...]] | None:
     """Dismiss dialog by clicking its close button."""
     dialog_states = [
-        s for s in state.active_states if s.startswith("dialog_") or s.startswith("modal_")
+        s
+        for s in state.active_states
+        if s.startswith("dialog_") or s.startswith("modal_")
     ]
     if not dialog_states:
         return None

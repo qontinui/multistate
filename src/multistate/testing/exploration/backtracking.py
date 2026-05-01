@@ -60,7 +60,9 @@ class BacktrackingNavigator:
                 f"Backtrack path found: {current_state} -> {target_state} ({len(path)} steps)"
             )
         else:
-            logger.warning(f"No backtrack path found from {current_state} to {target_state}")
+            logger.warning(
+                f"No backtrack path found from {current_state} to {target_state}"
+            )
 
         return path
 

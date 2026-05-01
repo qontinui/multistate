@@ -181,13 +181,17 @@ def test_integration_with_path_explorer() -> bool:
     # Let's look at PathExplorer signature first
     from multistate.testing.exploration.path_explorer import PathExplorer
 
-    config = ExplorationConfig(strategy="novelty", max_iterations=10, coverage_target=0.8)
+    config = ExplorationConfig(
+        strategy="novelty", max_iterations=10, coverage_target=0.8
+    )
     tracker = PathTracker(graph)
 
     explorer = PathExplorer(config, tracker, initial_state="start")
 
     # Define simple executor
-    def execute_transition(from_state: str, to_state: str) -> tuple[bool, float, dict[str, str]]:
+    def execute_transition(
+        from_state: str, to_state: str
+    ) -> tuple[bool, float, dict[str, str]]:
         """Simulate transition execution."""
         return True, 100.0, {}
 

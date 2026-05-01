@@ -35,7 +35,9 @@ class PathDiversityEngine:
         self.variation_rate = config.diversity_variation_rate
         self.min_difference = config.diversity_min_difference
 
-    def generate_diverse_paths(self, start_state: str, end_state: str) -> list[list[str]]:
+    def generate_diverse_paths(
+        self, start_state: str, end_state: str
+    ) -> list[list[str]]:
         """Generate k diverse paths between two states.
 
         Args:
@@ -55,7 +57,9 @@ class PathDiversityEngine:
         # Filter for diversity
         diverse_paths = self._filter_diverse_paths(k_shortest)
 
-        logger.info(f"Generated {len(diverse_paths)} diverse paths: {start_state} -> {end_state}")
+        logger.info(
+            f"Generated {len(diverse_paths)} diverse paths: {start_state} -> {end_state}"
+        )
 
         return diverse_paths
 
@@ -91,7 +95,9 @@ class PathDiversityEngine:
 
         return diverse_variations
 
-    def _k_shortest_paths(self, start: str, goal: str, k: int) -> list[tuple[float, list[str]]]:
+    def _k_shortest_paths(
+        self, start: str, goal: str, k: int
+    ) -> list[tuple[float, list[str]]]:
         """Find k shortest paths using Yen's algorithm.
 
         Args:
@@ -139,7 +145,9 @@ class PathDiversityEngine:
                             removed_edges.add((path[i], path[i + 1]))
 
                 # Find spur path
-                spur_path = self._dijkstra_path(spur_node, goal, avoid_edges=removed_edges)
+                spur_path = self._dijkstra_path(
+                    spur_node, goal, avoid_edges=removed_edges
+                )
 
                 if spur_path and len(spur_path) > 1:
                     # Combine root and spur paths
@@ -427,7 +435,9 @@ class PathDiversityEngine:
 
         return intersection / union
 
-    def get_least_explored_path(self, start_state: str, end_state: str) -> list[str] | None:
+    def get_least_explored_path(
+        self, start_state: str, end_state: str
+    ) -> list[str] | None:
         """Get path with most unexplored transitions.
 
         Args:

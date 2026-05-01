@@ -124,9 +124,13 @@ class TestPlanExecutor:
         assert result.success is True
         assert result.replans == 1
         # First step failed, then replanned step succeeded
-        failed_steps = [s for s in result.steps_executed if s.status == StepStatus.FAILED]
+        failed_steps = [
+            s for s in result.steps_executed if s.status == StepStatus.FAILED
+        ]
         assert len(failed_steps) == 1
-        success_steps = [s for s in result.steps_executed if s.status == StepStatus.SUCCESS]
+        success_steps = [
+            s for s in result.steps_executed if s.status == StepStatus.SUCCESS
+        ]
         assert len(success_steps) == 1
 
     def test_execute_max_replans_exceeded(self) -> None:
@@ -155,7 +159,9 @@ class TestPlanExecutor:
         assert result.success is False
         assert result.error == "Max replans exceeded"
         # Should have attempted action 3 times (initial + 2 replans)
-        failed_steps = [s for s in result.steps_executed if s.status == StepStatus.FAILED]
+        failed_steps = [
+            s for s in result.steps_executed if s.status == StepStatus.FAILED
+        ]
         assert len(failed_steps) == 3
 
     def test_execute_plan_exhausted(self) -> None:
@@ -192,7 +198,9 @@ class TestPlanExecutor:
 
         call_count = 0
 
-        def changing_snapshot(ui_elements: object = None, ui_values: object = None) -> WorldState:
+        def changing_snapshot(
+            ui_elements: object = None, ui_values: object = None
+        ) -> WorldState:
             nonlocal call_count
             call_count += 1
             # First refresh after action_a succeeds returns diverged state

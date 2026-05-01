@@ -32,7 +32,9 @@ class Blackboard:
         self._depth: int = depth
 
         if self._depth > self.MAX_DEPTH:
-            raise ValueError(f"Blackboard depth {self._depth} exceeds MAX_DEPTH {self.MAX_DEPTH}")
+            raise ValueError(
+                f"Blackboard depth {self._depth} exceeds MAX_DEPTH {self.MAX_DEPTH}"
+            )
 
     def get(self, name: str, default: Any = None) -> Any:
         """Check local _data first (under lock), then parent chain."""

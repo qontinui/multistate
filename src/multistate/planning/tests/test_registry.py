@@ -52,7 +52,9 @@ def test_planner_with_all_methods_navigates() -> None:
     assert result.success
 
     # Navigate via breadcrumb
-    state = WorldState(element_visible={"breadcrumb_bar": True, "breadcrumb_dashboard": True})
+    state = WorldState(
+        element_visible={"breadcrumb_bar": True, "breadcrumb_dashboard": True}
+    )
     result = planner.find_plan(state, [("navigate_to", "dashboard")])
     assert result.success
 

@@ -7,7 +7,11 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from multistate.core.state import State
-from multistate.pathfinding.multi_target import MultiTargetPathFinder, Path, SearchStrategy
+from multistate.pathfinding.multi_target import (
+    MultiTargetPathFinder,
+    Path,
+    SearchStrategy,
+)
 from multistate.pathfinding.visualizer import PathVisualizer
 from multistate.transitions.transition import Transition
 
@@ -294,8 +298,7 @@ def main() -> None:
     print("# KEY TAKEAWAYS")
     print("#" * 80)
 
-    print(
-        """
+    print("""
 1. Multi-target pathfinding finds optimal paths to ALL targets
 2. More efficient than sequential single-target searches
 3. Leverages multi-state transitions effectively
@@ -304,8 +307,7 @@ def main() -> None:
    - BFS: Fewest transitions
    - Dijkstra: Lowest cost
    - A*: Balance with heuristic guidance
-    """
-    )
+    """)
 
 
 if __name__ == "__main__":

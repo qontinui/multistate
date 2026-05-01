@@ -53,7 +53,9 @@ class BreadthFirstExplorer(ExplorationStrategy):
         # Get next state from queue
         if self.queue:
             next_state = self.queue.popleft()
-            logger.debug(f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})")
+            logger.debug(
+                f"BFS: {current_state} -> {next_state} (queue: {len(self.queue)})"
+            )
             return next_state
 
         logger.debug("BFS queue exhausted")

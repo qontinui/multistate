@@ -198,7 +198,9 @@ def test_blocking_state() -> None:
 
     assert not result.success
     failed_phase = result.get_failed_phase()
-    assert failed_phase == TransitionPhase.VALIDATE  # Blocking checked in VALIDATE phase
+    assert (
+        failed_phase == TransitionPhase.VALIDATE
+    )  # Blocking checked in VALIDATE phase
     print("   ✓ Blocking state correctly prevented activation")
 
 

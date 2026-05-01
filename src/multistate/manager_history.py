@@ -46,7 +46,9 @@ class StateHistoryManager:
         self.state_resolver: Optional[StateReferenceResolver] = None
 
         if state_lookup_fn:
-            self.state_resolver = StateReferenceResolver(self.state_history, state_lookup_fn)
+            self.state_resolver = StateReferenceResolver(
+                self.state_history, state_lookup_fn
+            )
 
         logger.debug(f"StateHistoryManager initialized (max_size={max_history_size})")
 

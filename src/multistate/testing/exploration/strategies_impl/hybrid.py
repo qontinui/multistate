@@ -8,8 +8,12 @@ from multistate.testing.exploration.strategies_impl.base import ExplorationStrat
 from multistate.testing.exploration.strategies_impl.bfs import BreadthFirstExplorer
 from multistate.testing.exploration.strategies_impl.dfs import DepthFirstExplorer
 from multistate.testing.exploration.strategies_impl.greedy import GreedyCoverageExplorer
-from multistate.testing.exploration.strategies_impl.novelty import NoveltySeekingExplorer
-from multistate.testing.exploration.strategies_impl.random_walk import RandomWalkExplorer
+from multistate.testing.exploration.strategies_impl.novelty import (
+    NoveltySeekingExplorer,
+)
+from multistate.testing.exploration.strategies_impl.random_walk import (
+    RandomWalkExplorer,
+)
 from multistate.testing.tracker import PathTracker
 
 logger = logging.getLogger(__name__)
@@ -133,7 +137,9 @@ class HybridExplorer(ExplorationStrategy):
     def _switch_strategy_dynamically(self) -> None:
         """Dynamically switch to a different strategy."""
         # Try strategies in order, skip current one
-        available = [s for s in self.strategies.keys() if s != self.current_strategy_name]
+        available = [
+            s for s in self.strategies.keys() if s != self.current_strategy_name
+        ]
 
         if available:
             new_strategy = available[0]

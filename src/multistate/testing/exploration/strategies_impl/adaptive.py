@@ -80,11 +80,14 @@ class AdaptiveExplorer(ExplorationStrategy):
         else:
             # Exploit: best Q-value
             q_values = [
-                (to_state, self.q_table[(current_state, to_state)]) for _, to_state in transitions
+                (to_state, self.q_table[(current_state, to_state)])
+                for _, to_state in transitions
             ]
             q_values.sort(key=lambda x: x[1], reverse=True)
             next_state, q_val = q_values[0]
-            logger.debug(f"Q-learning exploit: {current_state} -> {next_state} (Q={q_val:.2f})")
+            logger.debug(
+                f"Q-learning exploit: {current_state} -> {next_state} (Q={q_val:.2f})"
+            )
 
         # Store for learning update
         self.last_state = current_state
@@ -128,7 +131,8 @@ class AdaptiveExplorer(ExplorationStrategy):
         next_transitions = self.get_available_transitions(self.last_action)
         if next_transitions:
             max_next_q = max(
-                self.q_table[(self.last_action, to_state)] for _, to_state in next_transitions
+                self.q_table[(self.last_action, to_state)]
+                for _, to_state in next_transitions
             )
         else:
             max_next_q = 0.0

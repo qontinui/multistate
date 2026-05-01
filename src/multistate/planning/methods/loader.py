@@ -87,7 +87,9 @@ class MethodLoader:
         actions_template: list[list[str]] = config.get("actions", [])
         method_name: str = config.get("name", "unnamed_method")
 
-        def method(state: WorldState, *args: Any, **kwargs: Any) -> list[tuple[str, ...]] | None:
+        def method(
+            state: WorldState, *args: Any, **kwargs: Any
+        ) -> list[tuple[str, ...]] | None:
             # Check preconditions
             if not _check_preconditions(state, preconditions):
                 return None
@@ -105,7 +107,8 @@ class MethodLoader:
             for action_parts in actions_template:
                 try:
                     interpolated = tuple(
-                        part.format(**subs) if "{" in part else part for part in action_parts
+                        part.format(**subs) if "{" in part else part
+                        for part in action_parts
                     )
                 except KeyError:
                     return None  # precondition not met (missing template variable)

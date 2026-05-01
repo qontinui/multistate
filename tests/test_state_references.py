@@ -41,7 +41,9 @@ def test_state_history_basic() -> None:
 
     # Record some snapshots
     history.record_snapshot({"login"}, transition_id="start")
-    history.record_snapshot({"main_menu"}, transition_id="login_success", metadata={"step": 1})
+    history.record_snapshot(
+        {"main_menu"}, transition_id="login_success", metadata={"step": 1}
+    )
     history.record_snapshot({"main_menu", "toolbar"}, transition_id="open_toolbar")
 
     # Check current state
@@ -308,7 +310,9 @@ def test_history_transitions_to_state() -> None:
         exit_states=["login"],
     )
 
-    manager.add_transition("open_editor", from_states=["main_menu"], activate_states=["editor"])
+    manager.add_transition(
+        "open_editor", from_states=["main_menu"], activate_states=["editor"]
+    )
 
     # Execute sequence
     manager.activate_states({"login"})

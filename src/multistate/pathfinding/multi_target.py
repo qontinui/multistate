@@ -179,7 +179,9 @@ class MultiTargetPathFinder:
 
         # Check if we already have all targets
         if target_states.issubset(current_states):
-            return Path(states_sequence=[current_states], targets=target_states, total_cost=0)
+            return Path(
+                states_sequence=[current_states], targets=target_states, total_cost=0
+            )
 
         if self.strategy == SearchStrategy.BFS:
             return self._bfs_search(current_states, target_states)
@@ -190,7 +192,9 @@ class MultiTargetPathFinder:
 
         return None
 
-    def _bfs_search(self, current_states: Set[State], target_states: Set[State]) -> Optional[Path]:
+    def _bfs_search(
+        self, current_states: Set[State], target_states: Set[State]
+    ) -> Optional[Path]:
         """BFS implementation for multi-target pathfinding.
 
         Key insight: We need to track (active_states, targets_reached)
@@ -198,7 +202,9 @@ class MultiTargetPathFinder:
         """
         # Initial node
         targets_in_current = target_states.intersection(current_states)
-        start_node = PathNode(active_states=current_states, targets_reached=targets_in_current)
+        start_node = PathNode(
+            active_states=current_states, targets_reached=targets_in_current
+        )
 
         # BFS queue
         queue = deque([start_node])
@@ -389,7 +395,9 @@ class MultiTargetPathFinder:
 
         return available
 
-    def _apply_transition(self, current_states: Set[State], transition: Transition) -> Set[State]:
+    def _apply_transition(
+        self, current_states: Set[State], transition: Transition
+    ) -> Set[State]:
         """Simulate applying a transition to get new active states."""
         new_states = current_states.copy()
 
@@ -444,6 +452,8 @@ class MultiTargetPathFinder:
             "target_progress_configurations": target_progress_configs,
             "total_search_space": search_space,
             "complexity_class": f"O(V * 2^k) where V={num_states}, k={num_targets}",
-            "comparison_to_single": (f"Single target: O(V), Multi: O(V * 2^{num_targets})"),
+            "comparison_to_single": (
+                f"Single target: O(V), Multi: O(V * 2^{num_targets})"
+            ),
             "exponential_in_targets": True,
         }

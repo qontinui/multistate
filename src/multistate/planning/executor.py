@@ -71,7 +71,9 @@ class PlanExecutor:
         self.action_handlers = action_handlers
         self.max_replans = max_replans
         self.not_interruptable = (
-            not_interruptable if not_interruptable is not None else self._DEFAULT_NOT_INTERRUPTABLE
+            not_interruptable
+            if not_interruptable is not None
+            else self._DEFAULT_NOT_INTERRUPTABLE
         )
 
     def execute(
@@ -193,7 +195,9 @@ class PlanExecutor:
                         )
 
                     current_state = actual_state
-                    replan_result = self.planner.find_plan(current_state, original_tasks)
+                    replan_result = self.planner.find_plan(
+                        current_state, original_tasks
+                    )
 
                     if not replan_result.success:
                         return ExecutionResult(

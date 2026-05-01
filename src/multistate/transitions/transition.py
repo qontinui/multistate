@@ -266,19 +266,29 @@ class Transition:
         group_lookup = group_lookup or {}
 
         from_states = {
-            state_lookup[sid] for sid in data.get("from_states", []) if sid in state_lookup
+            state_lookup[sid]
+            for sid in data.get("from_states", [])
+            if sid in state_lookup
         }
         activate_states = {
-            state_lookup[sid] for sid in data.get("activate_states", []) if sid in state_lookup
+            state_lookup[sid]
+            for sid in data.get("activate_states", [])
+            if sid in state_lookup
         }
         exit_states = {
-            state_lookup[sid] for sid in data.get("exit_states", []) if sid in state_lookup
+            state_lookup[sid]
+            for sid in data.get("exit_states", [])
+            if sid in state_lookup
         }
         activate_groups = {
-            group_lookup[gid] for gid in data.get("activate_groups", []) if gid in group_lookup
+            group_lookup[gid]
+            for gid in data.get("activate_groups", [])
+            if gid in group_lookup
         }
         exit_groups = {
-            group_lookup[gid] for gid in data.get("exit_groups", []) if gid in group_lookup
+            group_lookup[gid]
+            for gid in data.get("exit_groups", [])
+            if gid in group_lookup
         }
 
         return cls(
@@ -302,7 +312,9 @@ class IncomingTransition:
     This ensures initialization logic runs for ALL newly activated states.
     """
 
-    def __init__(self, state_id: str, action: Callable[[], None], name: Optional[str] = None):
+    def __init__(
+        self, state_id: str, action: Callable[[], None], name: Optional[str] = None
+    ):
         """Initialize incoming transition.
 
         Args:

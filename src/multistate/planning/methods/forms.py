@@ -14,7 +14,9 @@ from multistate.planning.planner import WorldState
 Method = Callable[..., list[tuple[str, ...]] | None]
 
 
-def fill_form_tab_order(state: WorldState, fields: dict[str, str]) -> list[tuple[str, ...]] | None:
+def fill_form_tab_order(
+    state: WorldState, fields: dict[str, str]
+) -> list[tuple[str, ...]] | None:
     """Fill form using Tab to move between fields (more reliable than clicking)."""
     actions: list[tuple[str, ...]] = []
     first = True

@@ -20,7 +20,11 @@ from typing import Dict, List, Set
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from multistate.dynamics.hidden_states import DynamicTransition, HiddenStateManager, OcclusionType
+from multistate.dynamics.hidden_states import (
+    DynamicTransition,
+    HiddenStateManager,
+    OcclusionType,
+)
 from multistate.manager import StateManager, StateManagerConfig
 from multistate.pathfinding.multi_target import SearchStrategy
 
@@ -91,7 +95,9 @@ class MicroservicesDemo:
         self.manager.add_state("user_service", "User Service", group="core")
         self.manager.add_state("order_service", "Order Service", group="business")
         self.manager.add_state("payment_service", "Payment Service", group="business")
-        self.manager.add_state("inventory_service", "Inventory Service", group="business")
+        self.manager.add_state(
+            "inventory_service", "Inventory Service", group="business"
+        )
 
         # Data layer
         self.manager.add_state("database_primary", "Primary Database", group="data")
@@ -190,7 +196,9 @@ class MicroservicesDemo:
                     path_cost=2.0,  # Discovered services have higher cost initially
                 )
 
-            print(f"🔍 Discovered service: {service_name} with {len(endpoints)} endpoints")
+            print(
+                f"🔍 Discovered service: {service_name} with {len(endpoints)} endpoints"
+            )
 
             # Initialize metrics for discovered service
             self.context.services[service_name] = ServiceMetrics()
@@ -539,8 +547,7 @@ class MicroservicesDemo:
         print("\n" + "#" * 60)
         print("# KEY CONCEPTS DEMONSTRATED")
         print("#" * 60)
-        print(
-            """
+        print("""
 1. SERVICE DISCOVERY: Dynamic route generation
 2. CIRCUIT BREAKERS: Temporal transitions for recovery
 3. DISTRIBUTED TRANSACTIONS: Multi-target coordination
@@ -548,8 +555,7 @@ class MicroservicesDemo:
 5. HEALTH CHECKS: Self-transitions for monitoring
 6. GRACEFUL DEGRADATION: Group deactivation
 7. FALLBACK PATTERNS: Alternative paths
-        """
-        )
+        """)
 
 
 def main() -> None:

@@ -72,7 +72,9 @@ def benchmark_scaling() -> None:
 
         if path:
             steps = len(path.transitions_sequence)
-            print(f"{num_targets:<10} {elapsed:<15.2f} {path.total_cost:<12.1f} {steps}")
+            print(
+                f"{num_targets:<10} {elapsed:<15.2f} {path.total_cost:<12.1f} {steps}"
+            )
         else:
             print(f"{num_targets:<10} No path found")
 
@@ -137,8 +139,7 @@ def main() -> None:
     print("\n" + "#" * 60)
     print("# KEY INSIGHTS")
     print("#" * 60)
-    print(
-        """
+    print("""
 1. Search space grows as O(V * 2^k) where:
    - V = number of states
    - k = number of targets
@@ -152,8 +153,7 @@ def main() -> None:
    - Game AI navigating to multiple objectives
    - Robot path planning with multiple goals
    - UI automation reaching multiple states
-    """
-    )
+    """)
 
 
 if __name__ == "__main__":

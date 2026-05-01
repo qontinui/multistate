@@ -168,7 +168,9 @@ class RPGGameDemo:
             )
 
             # Self-transition to close
-            self.hidden_manager.register_self_transition(self.manager.get_state(ui_state), "close")
+            self.hidden_manager.register_self_transition(
+                self.manager.get_state(ui_state), "close"
+            )
 
     def discover_area(self, area: str) -> None:
         """Dynamically discover a new area."""
@@ -318,7 +320,9 @@ class RPGGameDemo:
 
         print(f"\nSequential total: {total_sequential}")
         assert path is not None
-        print(f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units")
+        print(
+            f"Multi-target saves: {total_sequential - path.total_cost:.1f} cost units"
+        )
 
     def demonstrate_combat_with_abilities(self) -> None:
         """Demonstrate combat with cooldowns and buffs."""
@@ -443,8 +447,7 @@ class RPGGameDemo:
         print("\n" + "#" * 60)
         print("# KEY GAME CONCEPTS DEMONSTRATED")
         print("#" * 60)
-        print(
-            """
+        print("""
 1. FOG OF WAR: Areas hidden until discovered
 2. MULTI-TARGET QUESTS: Optimal path to all objectives
 3. TEMPORAL ABILITIES: Cooldowns and buff durations
@@ -452,8 +455,7 @@ class RPGGameDemo:
 5. DYNAMIC DISCOVERY: New areas create transitions
 6. SIMULTANEOUS STATES: Inventory + map + combat
 7. GROUP TRANSITIONS: UI overlays activate together
-        """
-        )
+        """)
 
 
 def main() -> None:
